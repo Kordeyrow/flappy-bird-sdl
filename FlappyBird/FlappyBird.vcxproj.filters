@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="flappy\flappy_bird.cpp">
+    <ClCompile Include="entities\flappy_bird.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="math\vector2.cpp">
@@ -30,9 +30,15 @@
     <ClCompile Include="system_component\drawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="entities\pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="system_component\updatable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="flappy\flappy_bird.h">
+    <ClInclude Include="entities\flappy_bird.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="math\vector2.h">
@@ -42,6 +48,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="system_component\drawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entities\pipe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="system_component\updatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,15 +2,16 @@
 #include <map>
 #include "SDL.h"
 #include <SDL_image.h>
-#include "flappy/flappy_bird.h"
-#include "res_manager/texture_manager.h"
+#include <entities/flappy_bird.h>
+#include <res_manager/texture_manager.h>
+#include <system_component/updatable.h>
+#include <entities/pipe.h>
 
 // func decl
 bool init();
 uint32_t get_current_time();
 void draw_backgroung();
 void draw_sprites();
-void render();
 
 // SDL
 SDL_Window* window;
@@ -19,26 +20,47 @@ SDL_Renderer* renderer;
 TextureManager* texture_manager;
 // Sprites
 std::vector<Drawable*> sprites;
+// Entities
+std::vector<Updatable*> updatables;
 
 int main(int argc, char** argv)
 {
     std::cout << "Hello World!\n";
 
+	// init
 	init();
 	texture_manager = new TextureManager(renderer);
 	texture_manager->load_init_textures();
 
-	Vector2 player_size = Vector2{ 40,32 };
+	// get window data
 	double window_w = (double)SDL_GetWindowSurface(window)->w;
 	double window_h = (double)SDL_GetWindowSurface(window)->h;
+
+	// player
+	Vector2 player_size = Vector2{ 48, 36 };
+	Vector2 player_start_pos = Vector2{ window_w /2 -player_size.x /2, window_h /2 -player_size.y /2 };
 	FlappyBird player{
 		texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
-		Vector2{ window_w / 2 - player_size.x / 2, window_h / 2 - player_size.y / 2 },
+		player_start_pos,
 		player_size
 	};
 	player.jump();
 	sprites.push_back(&player);
+	updatables.push_back(&player);
 
+	// pipe
+	int height_bias = 150;
+	Vector2 pipe_size = Vector2{ 64, 320 };
+	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias };
+	Pipe pipe{
+		texture_manager->get_texture(TextureManager::PIPE),
+		pipe_start_pos,
+		pipe_size
+	};
+	sprites.push_back(&pipe);
+	updatables.push_back(&pipe);
+
+	// game loop
 	uint32_t previous_time = get_current_time();
     while (true) {
 		// time
@@ -69,9 +91,14 @@ int main(int argc, char** argv)
 		}
 
         // update
-        player.update(elapsed_time);
+		for (auto u : updatables) {
+			u->update(elapsed_time);
+		}
 
-		render();
+		//reder
+		draw_backgroung();
+		draw_sprites();
+		SDL_RenderPresent(renderer);
     }
 
 
@@ -147,13 +174,6 @@ bool init()
 	//// TODO: 
 
 	//return true;
-}
-
-void render()
-{
-	draw_backgroung();
-	draw_sprites();
-	SDL_RenderPresent(renderer);
 }
 
 void draw_sprites()

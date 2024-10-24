@@ -9,7 +9,8 @@
 class TextureManager {
 public:
 	enum TEXTURE_PATH_KEY {
-		TEXTURE_FLAPPY_BIRD_UP_WING
+		TEXTURE_FLAPPY_BIRD_UP_WING,
+		PIPE
 	};
 	TextureManager(SDL_Renderer* _renderer)
 	{
@@ -43,10 +44,12 @@ public:
 private:
 	// config
 	std::map<TEXTURE_PATH_KEY, const char*> textures_paths{
-		{ static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "../res/sprites/yellowbird-upflap.png" }
+		{ static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "../res/sprites/yellowbird-upflap.png" },
+		{ static_cast<TEXTURE_PATH_KEY>(PIPE), "../res/sprites/pipe-green.png" }
 	};
-	std::array<TEXTURE_PATH_KEY, 1> textures_to_load_on_init{
-		static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING)
+	std::array<TEXTURE_PATH_KEY, 2> textures_to_load_on_init{
+		static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING),
+		static_cast<TEXTURE_PATH_KEY>(PIPE)
 	};
 	// shared
 	SDL_Renderer* renderer;

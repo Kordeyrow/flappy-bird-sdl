@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -147,17 +147,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="entities\pipe.cpp" />
     <ClCompile Include="system_component\drawable.cpp" />
-    <ClCompile Include="flappy\flappy_bird.cpp" />
+    <ClCompile Include="entities\flappy_bird.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\vector2.cpp" />
     <ClCompile Include="res_manager\texture_manager.cpp" />
+    <ClCompile Include="system_component\updatable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="entities\pipe.h" />
     <ClInclude Include="system_component\drawable.h" />
-    <ClInclude Include="flappy\flappy_bird.h" />
+    <ClInclude Include="entities\flappy_bird.h" />
     <ClInclude Include="math\vector2.h" />
     <ClInclude Include="res_manager\texture_manager.h" />
+    <ClInclude Include="system_component\updatable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

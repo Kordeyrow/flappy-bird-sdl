@@ -1,14 +1,15 @@
 #pragma once
 #include "SDL.h"
 #include <iostream>
-#include "../math/vector2.h"
-#include "../system_component/drawable.h"
+#include <math/vector2.h>
+#include <system_component/drawable.h>
+#include <system_component/updatable.h>
 
-class FlappyBird : public Drawable {
+class FlappyBird : public Drawable, public Updatable {
 public:
     FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size) : Drawable{ texture, position, size } {}
 
-    void update(double elapsed_time) {
+    void update(double elapsed_time) override {
         // gravity
         speed_y += relative_gravity * elapsed_time;
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
