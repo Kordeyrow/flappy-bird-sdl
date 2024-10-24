@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include "SDL.h"
+#include <SDL_image.h>
 #include "flappy/flappy_bird.h"
 #include "res_manager/texture_manager.h"
 
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
 	texture_manager = new TextureManager(renderer);
 	texture_manager->load_init_textures();
 
-	Vector2 player_size = Vector2{ 30,30 };
+	Vector2 player_size = Vector2{ 40,32 };
 	double window_w = (double)SDL_GetWindowSurface(window)->w;
 	double window_h = (double)SDL_GetWindowSurface(window)->h;
 	FlappyBird player{
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 		Vector2{ window_w / 2 - player_size.x / 2, window_h / 2 - player_size.y / 2 },
 		player_size
 	};
-
+	player.jump();
 	sprites.push_back(&player);
 
 	uint32_t previous_time = get_current_time();
@@ -83,6 +84,7 @@ int main(int argc, char** argv)
 	texture_manager->kill();
 	texture_manager = nullptr;
 
+	IMG_Quit();
     SDL_Quit();
 
     return 0;
@@ -98,6 +100,11 @@ bool init()
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
 		system("pause");
+		return false;
+	}
+
+	if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) < 0) {
+		std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
 		return false;
 	}
 

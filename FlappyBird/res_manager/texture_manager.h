@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <SDL.h>
+#include <SDL_image.h>
 
 class TextureManager {
 public:
@@ -42,7 +43,7 @@ public:
 private:
 	// config
 	std::map<TEXTURE_PATH_KEY, const char*> textures_paths{
-		{ static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "../res/sprites/yellowbird-upflap.bmp" }
+		{ static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "../res/sprites/yellowbird-upflap.png" }
 	};
 	std::array<TEXTURE_PATH_KEY, 1> textures_to_load_on_init{
 		static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING)
@@ -55,14 +56,26 @@ private:
 	SDL_Texture* load_texture(TEXTURE_PATH_KEY key)
 	{
 		// Load bitmap into surface
-		SDL_Surface* buffer = SDL_LoadBMP(textures_paths[key]);
+		SDL_Surface* buffer = IMG_Load(textures_paths[key]);
 		if (!buffer) {
 			std::cout << "Error loading sprite: " << SDL_GetError() << std::endl;
 			return nullptr;
 		}
 
 		// Create texture
+
+		/*buffer->format->Amask = 0xFF000000;
+		buffer->format->Ashift = 24;*/
+
+		/*Uint32 colorkey = SDL_MapRGB(buffer->format, 255, 255, 255);
+		SDL_SetColorKey(buffer, SDL_TRUE, colorkey);*/
+
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, buffer);
+		
+		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+		//SDL_SetTextureAlphaMod(texture, 140);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
 		// Free surface as it's no longer needed
 		SDL_FreeSurface(buffer);
 		buffer = nullptr;
