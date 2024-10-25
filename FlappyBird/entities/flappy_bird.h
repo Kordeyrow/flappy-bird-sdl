@@ -34,10 +34,16 @@ public:
     }
 
     void die() {
-        std::cout << "die" << std::endl;
+        if (dead) {
+            return;
+        }
+        dead = true;
+
+        std::cout << "died" << std::endl;
     }
 
 private:
+    bool dead = false;
     float speed_y = 0;
     const int inverted_y_axis = -1;
     const float jump_force = 4;

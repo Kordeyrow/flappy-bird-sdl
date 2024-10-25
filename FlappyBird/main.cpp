@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <cstdlib>
 #include <map>
 #include "SDL.h"
 #include <SDL_image.h>
@@ -13,6 +14,7 @@ bool init();
 uint32_t get_current_time();
 void draw_backgroung();
 void draw_sprites();
+void spawn_pipe(double w, double h);
 
 // SDL
 SDL_Window* window;
@@ -23,6 +25,7 @@ TextureManager* texture_manager;
 std::vector<Drawable*> sprites;
 // Entities
 std::vector<Updatable*> updatables;
+
 
 int main(int argc, char** argv)
 {
@@ -50,23 +53,16 @@ int main(int argc, char** argv)
 	updatables.push_back(player);
 
 	// pipe
-	int height_bias = 150;
-	Vector2 pipe_size = Vector2{ 64, 320 };
-	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias };
-	Pipe* pipe = new Pipe{
-		texture_manager->get_texture(TextureManager::PIPE),
-		pipe_start_pos,
-		pipe_size
-	};
-	sprites.push_back(pipe);
-	updatables.push_back(pipe);
+	double spawn_delay_seconds = 1.35;
+	double spawn_delay_seconds_count = 0;
+	spawn_pipe(window_w, window_h);
 
 	// game loop
 	uint32_t previous_time = get_current_time();
     while (true) {
 		// time
 		auto current_time = get_current_time();
-		auto elapsed_time = (current_time - previous_time) / 1000.0f; // Convert to seconds.
+		auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
 		previous_time = current_time;
 
         // input
@@ -93,12 +89,18 @@ int main(int argc, char** argv)
 
         // update
 		for (auto u : updatables) {
-			u->update(elapsed_time);
+			u->update(elapsed_time_seconds);
+		}
+		// spawn pipes
+		spawn_delay_seconds_count += elapsed_time_seconds;
+		if (spawn_delay_seconds_count >= spawn_delay_seconds) {
+			spawn_delay_seconds_count = 0;
+			spawn_pipe(window_w, window_h);
 		}
 
 		// physics
 		static double total_elapsed_time = 0;
-		total_elapsed_time += elapsed_time;
+		total_elapsed_time += elapsed_time_seconds;
 		if (total_elapsed_time > 0.02) {
 			total_elapsed_time -= 0.02;
 
@@ -144,6 +146,21 @@ int main(int argc, char** argv)
     SDL_Quit();
 
     return 0;
+}
+
+void spawn_pipe(double window_w, double window_h) {
+	int height_bias = 50;
+	double random_height = 200;
+	int random_height_percent = rand() % 101;
+	Vector2 pipe_size = Vector2{ 64, 320 };
+	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias +random_height *random_height_percent /100 };
+	Pipe* pipe = new Pipe{
+		texture_manager->get_texture(TextureManager::PIPE),
+		pipe_start_pos,
+		pipe_size
+	};
+	sprites.push_back(pipe);
+	updatables.push_back(pipe);
 }
 
 uint32_t get_current_time()
