@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <map>
 #include "SDL.h"
 #include <SDL_image.h>
@@ -99,6 +100,9 @@ int main(int argc, char** argv)
 		static double total_elapsed_time = 0;
 		total_elapsed_time += elapsed_time;
 		if (total_elapsed_time > 0.02) {
+			total_elapsed_time -= 0.02;
+
+			// get colliders
 			std::vector<Collider*> cols;
 			for (auto u : updatables) {
 				Collider* col = dynamic_cast<Collider*>(u);
@@ -107,6 +111,7 @@ int main(int argc, char** argv)
 				}
 			}
 
+			// check collision
 			for (size_t i = 0; i < cols.size(); i++)
 			{
 				for (size_t j = i+1; j < cols.size(); j++)
@@ -172,38 +177,19 @@ bool init()
 		return false;
 	}
 
-	//texture_manager = new TextureManager(renderer);
+	return true;
+}
 
-	////// load init_resources
-	//// 
-	//// init vectors_reserve
-	//sprite_list.reserve(10);
-	////
-	//if (texture_manager->load_init_textures() == false) {
-	//	return false;
-	//}
-
-	//physics.init();
-
-	//// create bird_player
-	//bird_player = new BirdPlayer(texture_manager, Vector2{ 0, 0 }, Vector2{ 40, 40 });
-	//auto bird_player_go = &(Gameobject&)bird_player;
-	//auto bird_player_sp = bird_player_go->get_component<Sprite>();
-	//physics.add((Rigidbody*)bird_player);
-	//enabled_gameobjects.push_back(bird_player_go);
-	//// TODO: create sprite factory (to centralize "push_back")
-	//if (bird_player_sp) {
-	//	sprite_list.push_back(bird_player_sp);
-	//}
-	//// TODO: 
-
-	//return true;
+static void sort_sprites_by_layer(std::vector<Drawable*>& sprites) {
+	std::sort(sprites.begin(), sprites.end(), [](Drawable* a, Drawable* b) {
+		return a->layer_index() > b->layer_index();
+		});
 }
 
 void draw_sprites()
 {
-	// TODO: sort by z index
-	//
+	sort_sprites_by_layer(sprites);
+
 	for (auto s : sprites) {
 		auto rect = s->get_rect();
 		SDL_RenderCopyEx(renderer, s->get_texture(), NULL, &rect, s->get_rotation(), NULL, SDL_FLIP_NONE);

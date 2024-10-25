@@ -12,7 +12,7 @@ class FlappyBird : public Transform, public Drawable, public Updatable, public E
 public:
     FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size) 
         : Transform{ position, size },
-        Drawable{ texture, this },
+        Drawable{ texture, this, -10},
         Entity{ std::set<TAG>{ PLAYER } },
         Collider{ this, this } {
     
