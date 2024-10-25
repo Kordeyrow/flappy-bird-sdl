@@ -15,7 +15,7 @@ public:
         : Transform{ position, size },
         Drawable{ texture, this },
         Entity{},
-        Collider { this, this } {}
+        Collider{ this, this, Vector2{0.95, 0.95} } {}
 
     void update(double elapsed_time) override {
         // gravity

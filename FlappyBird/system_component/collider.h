@@ -5,9 +5,8 @@
 
 class Collider {
 public:
-	Collider(Entity* owner, Transform* t)
-		: _owner{ owner},
-		collider_transform{ t } {}
+	Collider(Entity* owner, Transform* t, Vector2 relative_size)
+		: _owner{ owner }, transform{ t }, relative_size{ relative_size } {}
 
 	virtual void collided(Collider* other) = 0;
 
@@ -15,20 +14,37 @@ public:
 		return _owner;
 	}
 
-	bool is_colliding(Collider* other) const {
-		Transform* other_transform = other->collider_transform;
+    bool is_colliding(Collider* other) const {
+        Transform* other_transform = other->transform;
 
-		if (collider_transform->position.x < other_transform->position.x + other_transform->size.x &&
-			collider_transform->position.x + collider_transform->size.x > other_transform->position.x &&
-			collider_transform->position.y < other_transform->position.y + other_transform->size.y &&
-			collider_transform->position.y + collider_transform->size.y > other_transform->position.y) {
-			return true;
-		}
+        // Calculate the scaled collision transform size
+        Vector2 scaled_size = transform->size * relative_size;
 
-		return false;
-	}
+        // Calculate the bounding box for this collider
+        float x1 = transform->position.x;
+        float y1 = transform->position.y;
+        float w1 = scaled_size.x;
+        float h1 = scaled_size.y;
 
-	Transform* collider_transform;
+        // Calculate the bounding box for the other collider
+        float x2 = other_transform->position.x;
+        float y2 = other_transform->position.y;
+        float w2 = other_transform->size.x;
+        float h2 = other_transform->size.y;
+
+        // AABB (Axis-Aligned Bounding Box) collision check
+        if (x1 < x2 + w2 &&
+            x1 + w1 > x2 &&
+            y1 < y2 + h2 &&
+            y1 + h1 > y2) {
+            return true; // Colliders are intersecting
+        }
+
+        return false; // No collision
+    }
+
+	Transform* transform;
+	Vector2 relative_size;
 
 private:
 	Entity* _owner;

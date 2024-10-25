@@ -14,7 +14,7 @@ public:
         : Transform{ position, size },
         Drawable{ texture, this, -10},
         Entity{ std::set<TAG>{ PLAYER } },
-        Collider{ this, this } {
+        Collider{ this, this, Vector2{0.8, 0.8} } {
     
     }
 
