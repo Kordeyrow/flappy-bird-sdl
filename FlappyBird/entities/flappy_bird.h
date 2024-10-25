@@ -18,7 +18,7 @@ public:
         ground_y{ ground_y } {}
 
     void update(double elapsed_time) override {
-        if (_freeze) {
+        if (_fallen) {
             return;
         }
 
@@ -27,7 +27,7 @@ public:
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
 
         if (position.y >= ground_y) {
-            _freeze = true;
+            _fallen = true;
             position.y = ground_y;
         }
     }
@@ -58,9 +58,13 @@ public:
         return _dead;
     }
 
+    bool fallen() const {
+        return _fallen;
+    }
+
 private:
     double ground_y;
-    bool _freeze = false;
+    bool _fallen = false;
     bool _dead = false;
     float speed_y = 0;
     const int inverted_y_axis = -1;

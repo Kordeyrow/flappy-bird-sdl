@@ -147,7 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="state\game.cpp" />
+    <ClCompile Include="core\game.cpp" />
+    <ClCompile Include="core\game_base.cpp" />
     <ClCompile Include="system_component\entity.cpp" />
     <ClCompile Include="system_component\collider.cpp" />
     <ClCompile Include="entities\pipe.cpp" />
@@ -160,7 +161,8 @@
     <ClCompile Include="system_component\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="state\game.h" />
+    <ClInclude Include="core\game.h" />
+    <ClInclude Include="core\game_base.h" />
     <ClInclude Include="system_component\entity.h" />
     <ClInclude Include="system_component\collider.h" />
     <ClInclude Include="entities\pipe.h" />

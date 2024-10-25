@@ -9,11 +9,11 @@
 #include <system_component/collider.h>
 #include <entities/flappy_bird.h>
 #include <entities/flappy_bird.h>
-#include <state/game.cpp>
+#include <core/game_base.h>
 
 class Pipe : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    Pipe(Game* game, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
+    Pipe(GameBase* game, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : game{ game},
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },
@@ -44,7 +44,7 @@ public:
     }
 
 private:
-    Game* game;
+    GameBase* game;
     bool collided_with_player = false;
     float speed_x = -100;
     const float jump_force = 4;
