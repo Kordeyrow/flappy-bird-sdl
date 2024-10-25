@@ -9,6 +9,7 @@
 #include <res_manager/texture_manager.h>
 #include <system_component/updatable.h>
 #include <entities/pipe.h>
+#include <state/game.cpp>
 
 // func decl
 bool init();
@@ -27,10 +28,12 @@ std::vector<Drawable*> sprites;
 // Entities
 std::vector<Updatable*> updatables;
 
+Game game;
+
 
 int main(int argc, char** argv)
 {
-    std::cout << "Hello World!\n";
+    //std::cout << "Hello World!" << std::endl;
 
 	// init
 	init();
@@ -46,6 +49,7 @@ int main(int argc, char** argv)
 	Vector2 player_start_pos = Vector2{ window_w /2 -player_size.x /2, window_h /2 -player_size.y /2 };
 	FlappyBird* player = new FlappyBird{
 		texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
+		window_h - player_size.y,
 		player_start_pos,
 		player_size
 	};
@@ -94,36 +98,43 @@ int main(int argc, char** argv)
 		for (auto u : updatables) {
 			u->update(elapsed_time_seconds);
 		}
-		// spawn pipes
-		spawn_delay_seconds_count += elapsed_time_seconds;
-		if (spawn_delay_seconds_count >= real_spawn_gap_seconds) {
-			spawn_delay_seconds_count = 0;
-			spawn_pipe(window_w, window_h, speed_x);
+
+		if (player->dead()) {
+			game.set_game_over();
 		}
 
-		// physics
-		static double total_elapsed_time = 0;
-		total_elapsed_time += elapsed_time_seconds;
-		if (total_elapsed_time > 0.02) {
-			total_elapsed_time -= 0.02;
-
-			// get colliders
-			std::vector<Collider*> cols;
-			for (auto u : updatables) {
-				Collider* col = dynamic_cast<Collider*>(u);
-				if (col) {
-					cols.push_back(col);
-				}
+		if (!game.game_over()) {
+			// spawn pipes
+			spawn_delay_seconds_count += elapsed_time_seconds;
+			if (spawn_delay_seconds_count >= real_spawn_gap_seconds) {
+				spawn_delay_seconds_count = 0;
+				spawn_pipe(window_w, window_h, speed_x);
 			}
 
-			// check collision
-			for (size_t i = 0; i < cols.size(); i++)
-			{
-				for (size_t j = i+1; j < cols.size(); j++)
+			// physics
+			static double total_elapsed_time = 0;
+			total_elapsed_time += elapsed_time_seconds;
+			if (total_elapsed_time > 0.02) {
+				total_elapsed_time -= 0.02;
+
+				// get colliders
+				std::vector<Collider*> cols;
+				for (auto u : updatables) {
+					Collider* col = dynamic_cast<Collider*>(u);
+					if (col) {
+						cols.push_back(col);
+					}
+				}
+
+				// check collision
+				for (size_t i = 0; i < cols.size(); i++)
 				{
-					if (cols[i]->is_colliding(cols[j])) {
-						cols[i]->collided(cols[j]);
-						cols[j]->collided(cols[i]);
+					for (size_t j = i + 1; j < cols.size(); j++)
+					{
+						if (cols[i]->is_colliding(cols[j])) {
+							cols[i]->collided(cols[j]);
+							cols[j]->collided(cols[i]);
+						}
 					}
 				}
 			}
@@ -161,6 +172,7 @@ void spawn_pipe(double window_w, double window_h, float speed_x) {
 	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias +random_height *random_height_percent /100 };
 	
 	Pipe* pipe_down = new Pipe{
+		&game,
 		texture_manager->get_texture(TextureManager::PIPE),
 		pipe_start_pos,
 		pipe_size,
@@ -170,6 +182,7 @@ void spawn_pipe(double window_w, double window_h, float speed_x) {
 	updatables.push_back(pipe_down);
 
 	Pipe* pipe_up = new Pipe{
+		&game,
 		texture_manager->get_texture(TextureManager::PIPE),
 		pipe_start_pos + Vector2{0, -height -gap_size},
 		pipe_size,

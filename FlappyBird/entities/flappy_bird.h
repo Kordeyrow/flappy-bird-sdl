@@ -10,18 +10,26 @@
 
 class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size, SDL_RendererFlip flip = SDL_FLIP_NONE)
+    FlappyBird(SDL_Texture* texture, double ground_y, Vector2 position, Vector2 size, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
         Drawable{ texture, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
-        Collider{ this, this, Vector2{0.8, 0.8} } {
-    
-    }
+        Collider{ this, this, Vector2{0.8, 0.8} }, 
+        ground_y{ ground_y } {}
 
     void update(double elapsed_time) override {
+        if (_freeze) {
+            return;
+        }
+
         // gravity
         speed_y += relative_gravity * elapsed_time;
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
+
+        if (position.y >= ground_y) {
+            _freeze = true;
+            position.y = ground_y;
+        }
     }
 
     void collided(Collider* other) override {
@@ -29,21 +37,31 @@ public:
     }
 
     void jump() {
+        if (_dead) {
+            return;
+        }
+
         //std::cout << "jump" << std::endl;
         speed_y = jump_force * world_space_proportion;
     }
 
     void die() {
-        if (dead) {
+        if (_dead) {
             return;
         }
-        dead = true;
+        _dead = true;
 
-        std::cout << "died" << std::endl;
+        //std::cout << "died" << std::endl;
+    }
+
+    bool dead() const {
+        return _dead;
     }
 
 private:
-    bool dead = false;
+    double ground_y;
+    bool _freeze = false;
+    bool _dead = false;
     float speed_y = 0;
     const int inverted_y_axis = -1;
     const float jump_force = 4;

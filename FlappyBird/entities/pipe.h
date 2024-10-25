@@ -8,22 +8,29 @@
 #include <system_component/entity.h>
 #include <system_component/collider.h>
 #include <entities/flappy_bird.h>
+#include <entities/flappy_bird.h>
+#include <state/game.cpp>
 
 class Pipe : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    Pipe(SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
-        : Transform{ position, size },
+    Pipe(Game* game, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
+        : game{ game},
+        Transform{ position, size },
         Drawable{ texture, this, 0, flip },
         Entity{}, speed_x{ speed_x },
         Collider{ this, this, Vector2{0.95, 0.95} } {}
 
     void update(double elapsed_time) override {
+        if (game->game_over()) {
+            return;
+        }
+
         // gravity
         position = Vector2{ position.x + speed_x * elapsed_time, position.y };
     }
 
     void collided(Collider* other) override {
-        if (collided_with_player) {
+        if (game->game_over() || collided_with_player) {
             return;
         }
 
@@ -37,6 +44,7 @@ public:
     }
 
 private:
+    Game* game;
     bool collided_with_player = false;
     float speed_x = -100;
     const float jump_force = 4;
