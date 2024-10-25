@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="system_component\entity.cpp" />
+    <ClCompile Include="system_component\collider.cpp" />
     <ClCompile Include="entities\pipe.cpp" />
     <ClCompile Include="system_component\drawable.cpp" />
     <ClCompile Include="entities\flappy_bird.cpp" />
@@ -154,14 +156,18 @@
     <ClCompile Include="math\vector2.cpp" />
     <ClCompile Include="res_manager\texture_manager.cpp" />
     <ClCompile Include="system_component\updatable.cpp" />
+    <ClCompile Include="system_component\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="system_component\entity.h" />
+    <ClInclude Include="system_component\collider.h" />
     <ClInclude Include="entities\pipe.h" />
     <ClInclude Include="system_component\drawable.h" />
     <ClInclude Include="entities\flappy_bird.h" />
     <ClInclude Include="math\vector2.h" />
     <ClInclude Include="res_manager\texture_manager.h" />
     <ClInclude Include="system_component\updatable.h" />
+    <ClInclude Include="system_component\transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

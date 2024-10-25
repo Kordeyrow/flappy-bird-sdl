@@ -39,26 +39,26 @@ int main(int argc, char** argv)
 	// player
 	Vector2 player_size = Vector2{ 48, 36 };
 	Vector2 player_start_pos = Vector2{ window_w /2 -player_size.x /2, window_h /2 -player_size.y /2 };
-	FlappyBird player{
+	FlappyBird* player = new FlappyBird{
 		texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
 		player_start_pos,
 		player_size
 	};
-	player.jump();
-	sprites.push_back(&player);
-	updatables.push_back(&player);
+	player->jump();
+	sprites.push_back(player);
+	updatables.push_back(player);
 
 	// pipe
 	int height_bias = 150;
 	Vector2 pipe_size = Vector2{ 64, 320 };
 	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias };
-	Pipe pipe{
+	Pipe* pipe = new Pipe{
 		texture_manager->get_texture(TextureManager::PIPE),
 		pipe_start_pos,
 		pipe_size
 	};
-	sprites.push_back(&pipe);
-	updatables.push_back(&pipe);
+	sprites.push_back(pipe);
+	updatables.push_back(pipe);
 
 	// game loop
 	uint32_t previous_time = get_current_time();
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
                     break; 
                 case SDL_KEYDOWN:
                     if (k == SDLK_SPACE) {
-                        player.jump();
+                        player->jump();
                     }
                     break;
                 case SDL_KEYUP:
@@ -93,6 +93,30 @@ int main(int argc, char** argv)
         // update
 		for (auto u : updatables) {
 			u->update(elapsed_time);
+		}
+
+		// physics
+		static double total_elapsed_time = 0;
+		total_elapsed_time += elapsed_time;
+		if (total_elapsed_time > 0.02) {
+			std::vector<Collider*> cols;
+			for (auto u : updatables) {
+				Collider* col = dynamic_cast<Collider*>(u);
+				if (col) {
+					cols.push_back(col);
+				}
+			}
+
+			for (size_t i = 0; i < cols.size(); i++)
+			{
+				for (size_t j = i+1; j < cols.size(); j++)
+				{
+					if (cols[i]->is_colliding(cols[j])) {
+						cols[i]->collided(cols[j]);
+						cols[j]->collided(cols[i]);
+					}
+				}
+			}
 		}
 
 		//reder
@@ -181,7 +205,7 @@ void draw_sprites()
 	// TODO: sort by z index
 	//
 	for (auto s : sprites) {
-		auto& rect = s->get_rect();
+		auto rect = s->get_rect();
 		SDL_RenderCopyEx(renderer, s->get_texture(), NULL, &rect, s->get_rotation(), NULL, SDL_FLIP_NONE);
 	}
 }

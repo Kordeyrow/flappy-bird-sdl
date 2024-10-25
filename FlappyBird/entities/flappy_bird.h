@@ -2,12 +2,21 @@
 #include "SDL.h"
 #include <iostream>
 #include <math/vector2.h>
+#include <system_component/transform.h>
 #include <system_component/drawable.h>
 #include <system_component/updatable.h>
+#include <system_component/entity.h>
+#include <system_component/collider.h>
 
-class FlappyBird : public Drawable, public Updatable {
+class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size) : Drawable{ texture, position, size } {}
+    FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size) 
+        : Transform{ position, size },
+        Drawable{ texture, this },
+        Entity{ std::set<TAG>{ PLAYER } },
+        Collider{ this, this } {
+    
+    }
 
     void update(double elapsed_time) override {
         // gravity
@@ -15,9 +24,17 @@ public:
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
     }
 
+    void collided(Collider* other) override {
+
+    }
+
     void jump() {
         //std::cout << "jump" << std::endl;
         speed_y = jump_force * world_space_proportion;
+    }
+
+    void die() {
+        std::cout << "die" << std::endl;
     }
 
 private:
