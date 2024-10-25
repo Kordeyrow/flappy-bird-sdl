@@ -6,8 +6,8 @@
 class Drawable {
 
 public:
-	Drawable(SDL_Texture* texture, Transform* t, int layer_index = 0)
-		: texture{ texture }, draw_transform{ t }, _layer_index{ layer_index } {}
+	Drawable(SDL_Texture* texture, Transform* t, int layer_index = 0, SDL_RendererFlip flip = SDL_FLIP_NONE)
+		: texture{ texture }, draw_transform{ t }, _layer_index{ layer_index }, _flip { flip } {}
 
 	SDL_Texture* get_texture() const {
 		return texture;
@@ -25,7 +25,12 @@ public:
 		return _layer_index;
 	}
 
+	SDL_RendererFlip flip() const {
+		return _flip;
+	}
+
 protected:
+	SDL_RendererFlip _flip;
 	int _layer_index;
 	SDL_Texture* texture;
 	Transform* draw_transform;

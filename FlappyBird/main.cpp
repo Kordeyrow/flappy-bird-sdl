@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <stdlib.h>
 #include <map>
 #include "SDL.h"
 #include <SDL_image.h>
@@ -14,7 +15,7 @@ bool init();
 uint32_t get_current_time();
 void draw_backgroung();
 void draw_sprites();
-void spawn_pipe(double w, double h);
+void spawn_pipe(double w, double h, float speed_x);
 
 // SDL
 SDL_Window* window;
@@ -53,9 +54,11 @@ int main(int argc, char** argv)
 	updatables.push_back(player);
 
 	// pipe
-	double spawn_delay_seconds = 1.35;
+	float speed_x = -100;
+	double spawn_gap = 0.0145;
+	double real_spawn_gap_seconds = spawn_gap * abs(speed_x);
 	double spawn_delay_seconds_count = 0;
-	spawn_pipe(window_w, window_h);
+	spawn_pipe(window_w, window_h, speed_x);
 
 	// game loop
 	uint32_t previous_time = get_current_time();
@@ -93,9 +96,9 @@ int main(int argc, char** argv)
 		}
 		// spawn pipes
 		spawn_delay_seconds_count += elapsed_time_seconds;
-		if (spawn_delay_seconds_count >= spawn_delay_seconds) {
+		if (spawn_delay_seconds_count >= real_spawn_gap_seconds) {
 			spawn_delay_seconds_count = 0;
-			spawn_pipe(window_w, window_h);
+			spawn_pipe(window_w, window_h, speed_x);
 		}
 
 		// physics
@@ -148,19 +151,33 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void spawn_pipe(double window_w, double window_h) {
+void spawn_pipe(double window_w, double window_h, float speed_x) {
 	int height_bias = 50;
 	double random_height = 200;
 	int random_height_percent = rand() % 101;
-	Vector2 pipe_size = Vector2{ 64, 320 };
+	double height = 320;
+	double gap_size = 140;
+	Vector2 pipe_size = Vector2{ 64, height };
 	Vector2 pipe_start_pos = Vector2{ window_w +pipe_size.x /2, window_h /2 -pipe_size.y /2 +height_bias +random_height *random_height_percent /100 };
-	Pipe* pipe = new Pipe{
+	
+	Pipe* pipe_down = new Pipe{
 		texture_manager->get_texture(TextureManager::PIPE),
 		pipe_start_pos,
-		pipe_size
+		pipe_size,
+		speed_x
 	};
-	sprites.push_back(pipe);
-	updatables.push_back(pipe);
+	sprites.push_back(pipe_down);
+	updatables.push_back(pipe_down);
+
+	Pipe* pipe_up = new Pipe{
+		texture_manager->get_texture(TextureManager::PIPE),
+		pipe_start_pos + Vector2{0, -height -gap_size},
+		pipe_size,
+		speed_x,
+		SDL_FLIP_VERTICAL
+	};
+	sprites.push_back(pipe_up);
+	updatables.push_back(pipe_up);
 }
 
 uint32_t get_current_time()
@@ -209,7 +226,7 @@ void draw_sprites()
 
 	for (auto s : sprites) {
 		auto rect = s->get_rect();
-		SDL_RenderCopyEx(renderer, s->get_texture(), NULL, &rect, s->get_rotation(), NULL, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(renderer, s->get_texture(), NULL, &rect, s->get_rotation(), NULL, s->flip());
 	}
 }
 

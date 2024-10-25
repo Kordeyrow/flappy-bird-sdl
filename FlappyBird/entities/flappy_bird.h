@@ -10,9 +10,9 @@
 
 class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size) 
+    FlappyBird(SDL_Texture* texture, Vector2 position, Vector2 size, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
-        Drawable{ texture, this, -10},
+        Drawable{ texture, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
         Collider{ this, this, Vector2{0.8, 0.8} } {
     

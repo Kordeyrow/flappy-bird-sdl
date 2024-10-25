@@ -11,10 +11,10 @@
 
 class Pipe : public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    Pipe(SDL_Texture* texture, Vector2 position, Vector2 size)
+    Pipe(SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
-        Drawable{ texture, this },
-        Entity{},
+        Drawable{ texture, this, 0, flip },
+        Entity{}, speed_x{ speed_x },
         Collider{ this, this, Vector2{0.95, 0.95} } {}
 
     void update(double elapsed_time) override {
@@ -26,6 +26,8 @@ public:
         if (collided_with_player) {
             return;
         }
+
+        // check collision with player 
         bool other_is_player = other->owner()->tags().find(PLAYER) != other->owner()->tags().end();
         if (other_is_player) {
             FlappyBird* player = static_cast<FlappyBird*>(other->owner());
