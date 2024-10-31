@@ -9,28 +9,48 @@
 #include <system_component/collider.h>
 #include <entities/flappy_bird.h>
 #include <entities/flappy_bird.h>
-#include <core/game_base.h>
+#include <state_machine_base/state_machine.h>
+#include <core/gameplay_base.h>
+#include <utils/class_type_check.h>
 
-class Pipe : public Transform, public Drawable, public Updatable, public Entity, public Collider {
+class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
-    Pipe(GameBase* game, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
-        : game{ game},
+    Pipe(StateMachineEventEmitter* game_sm_emitter, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
+        : game_sm_emitter{ game_sm_emitter },
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },
         Entity{}, speed_x{ speed_x },
-        Collider{ this, this, Vector2{0.95, 0.95} } {}
+        Collider{ this, this, Vector2{0.95, 0.95} } 
+    {
+        auto current_state = game_sm_emitter->subscribe(this);
+        check_new_game_state(current_state);
+    }
+
+    ~Pipe() {
+        game_sm_emitter->unsubscribe(this);
+    }
+
+    void check_new_game_state(State* state) {
+        if (ClassTypeCheck::is_class_type<GameplayBase>(state)) {
+            stop = true;
+        }
+    }
+
+    // Inherited via StateMachineListener
+    void on_state_changed(State* old_state, State* new_state) override {
+        check_new_game_state(new_state);
+    }
 
     void update(double elapsed_time) override {
-        if (game->game_over()) {
+        if (stop) {
             return;
         }
-
-        // gravity
+        // move left
         position = Vector2{ position.x + speed_x * elapsed_time, position.y };
     }
 
     void collided(Collider* other) override {
-        if (game->game_over() || collided_with_player) {
+        if (stop || collided_with_player) {
             return;
         }
 
@@ -44,7 +64,8 @@ public:
     }
 
 private:
-    GameBase* game;
+    bool stop = false;
+    StateMachineEventEmitter* game_sm_emitter;
     bool collided_with_player = false;
     float speed_x = -100;
     const float jump_force = 4;

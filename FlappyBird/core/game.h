@@ -10,31 +10,64 @@
 #include <res_manager/texture_manager.h>
 #include <system_component/updatable.h>
 #include <entities/pipe.h>
-#include <core/game_base.h>
+#include <state_machine_base/state_machine.h>
+#include "gameplay_base.h"
 
-class Game : public GameBase {
+class Menu : public GameState {
 public:
-	bool game_over() override {
-		return _game_over;
-	}
+	Menu(StateMachineEventEmitter* emitter) : GameState{ emitter } {}
 
-	void set_game_over() {
-		_game_over = true;
-	}
+	void enter() override {
+
+	};
+
+	State* run() override {
+		return this;
+	};
+
+	void exit() override {
+
+	};
+};
+
+class GameOver : public GameState {
+public:
+	GameOver(StateMachineEventEmitter* emitter) : GameState{ emitter } {}
+
+	void enter() override {
+
+	};
+
+	State* run() override {
+		return this;
+	};
+
+	void exit() override {
+
+	};
+};
+
+class Gameplay : public GameplayBase {
+public:
+	Gameplay(StateMachineEventEmitter* emitter) : GameplayBase{ emitter } {}
 
 	// SDL
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	// Texture
+
+	// Managers
 	TextureManager* texture_manager;
-	// Sprites
+
+	// Gameobjects
 	std::vector<Drawable*> sprites;
-	// Entities
 	std::vector<Updatable*> updatables;
 
+	void enter() override {
 
-	int run()
-	{
+	};
+
+	State* run() override {
+
 		//std::cout << "Hello World!" << std::endl;
 
 		// init
@@ -108,40 +141,38 @@ public:
 			}
 
 			if (player->dead()) {
-				set_game_over();
+				return new GameOver(emitter);
 			}
 
-			if (!game_over()) {
-				// spawn pipes
-				spawn_delay_seconds_count += elapsed_time_seconds;
-				if (spawn_delay_seconds_count >= real_spawn_gap_seconds) {
-					spawn_delay_seconds_count = 0;
-					spawn_pipe(window_w, window_h, speed_x);
+			// spawn pipes
+			spawn_delay_seconds_count += elapsed_time_seconds;
+			if (spawn_delay_seconds_count >= real_spawn_gap_seconds) {
+				spawn_delay_seconds_count = 0;
+				spawn_pipe(window_w, window_h, speed_x);
+			}
+
+			// physics
+			total_elapsed_time += elapsed_time_seconds;
+			if (total_elapsed_time > 0.02) {
+				total_elapsed_time -= 0.02;
+
+				// get colliders
+				std::vector<Collider*> cols;
+				for (auto u : updatables) {
+					Collider* col = dynamic_cast<Collider*>(u);
+					if (col) {
+						cols.push_back(col);
+					}
 				}
 
-				// physics
-				total_elapsed_time += elapsed_time_seconds;
-				if (total_elapsed_time > 0.02) {
-					total_elapsed_time -= 0.02;
-
-					// get colliders
-					std::vector<Collider*> cols;
-					for (auto u : updatables) {
-						Collider* col = dynamic_cast<Collider*>(u);
-						if (col) {
-							cols.push_back(col);
-						}
-					}
-
-					// check collision
-					for (size_t i = 0; i < cols.size(); i++)
+				// check collision
+				for (size_t i = 0; i < cols.size(); i++)
+				{
+					for (size_t j = i + 1; j < cols.size(); j++)
 					{
-						for (size_t j = i + 1; j < cols.size(); j++)
-						{
-							if (cols[i]->is_colliding(cols[j])) {
-								cols[i]->collided(cols[j]);
-								cols[j]->collided(cols[i]);
-							}
+						if (cols[i]->is_colliding(cols[j])) {
+							cols[i]->collided(cols[j]);
+							cols[j]->collided(cols[i]);
 						}
 					}
 				}
@@ -166,8 +197,8 @@ public:
 		IMG_Quit();
 		SDL_Quit();
 
-		return 0;
-	}
+		return this;
+	};
 
 	void spawn_pipe(double window_w, double window_h, float speed_x) {
 		int height_bias = 50;
@@ -179,7 +210,7 @@ public:
 		Vector2 pipe_start_pos = Vector2{ window_w + pipe_size.x / 2, window_h / 2 - pipe_size.y / 2 + height_bias + random_height * random_height_percent / 100 };
 
 		Pipe* pipe_down = new Pipe{
-			this,
+			emitter,
 			texture_manager->get_texture(TextureManager::PIPE),
 			pipe_start_pos,
 			pipe_size,
@@ -189,7 +220,7 @@ public:
 		updatables.push_back(pipe_down);
 
 		Pipe* pipe_up = new Pipe{
-			this,
+			emitter,
 			texture_manager->get_texture(TextureManager::PIPE),
 			pipe_start_pos + Vector2{0, -height - gap_size},
 			pipe_size,
@@ -261,8 +292,55 @@ public:
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	}
 
+	void exit() override {
 
-protected:
-	bool _game_over = false;
+	};
+};
+
+class Closing : public GameState {
+public:
+	Closing(StateMachineEventEmitter* emitter) : GameState{ emitter } {}
+
+	void enter() override {
+
+	};
+
+	State* run() override {
+		return this;
+	};
+
+	void exit() override {
+
+	};
+};
+
+class Closed : public GameState {
+public:
+	Closed(StateMachineEventEmitter* emitter) : GameState{ emitter } {}
+
+	void enter() override {
+
+	};
+
+	State* run() override {
+		return this;
+	};
+
+	void exit() override {
+
+	};
+};
+
+class Game {
+public:
+	void run()
+	{
+		StateMachine state_machine {};
+		state_machine.init(new Gameplay{ &state_machine });
+
+		while (state_machine.current_state_is_type<Closed>()) {
+			state_machine.run();
+		}
+	}
 };
 

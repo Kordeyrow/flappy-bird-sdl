@@ -147,8 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="state_machine_base\listener_id.cpp" />
+    <ClCompile Include="state_machine_base\state_machine_listener_base.cpp" />
+    <ClCompile Include="utils\class_type_check.cpp" />
     <ClCompile Include="core\game.cpp" />
-    <ClCompile Include="core\game_base.cpp" />
+    <ClCompile Include="core\gameplay_base.cpp" />
+    <ClCompile Include="core\game_state.cpp" />
+    <ClCompile Include="state_machine_base\state_machine.cpp" />
     <ClCompile Include="system_component\entity.cpp" />
     <ClCompile Include="system_component\collider.cpp" />
     <ClCompile Include="entities\pipe.cpp" />
@@ -161,8 +166,13 @@
     <ClCompile Include="system_component\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="state_machine_base\listener_id.h" />
+    <ClInclude Include="state_machine_base\state_machine_listener_base.h" />
+    <ClInclude Include="utils\class_type_check.h" />
     <ClInclude Include="core\game.h" />
-    <ClInclude Include="core\game_base.h" />
+    <ClInclude Include="core\gameplay_base.h" />
+    <ClInclude Include="core\game_state.h" />
+    <ClInclude Include="state_machine_base\state_machine.h" />
     <ClInclude Include="system_component\entity.h" />
     <ClInclude Include="system_component\collider.h" />
     <ClInclude Include="entities\pipe.h" />
