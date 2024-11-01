@@ -15,6 +15,11 @@ public:
     virtual State* run() { return nullptr; };
     virtual void exit() {};
     virtual ~State() = default;
+
+    template<typename T>
+    bool is_type() {
+        return ClassTypeCheck::is_class_type<T>(this);
+    }
 protected:
     StateMachineEventEmitter* emitter;
 };
@@ -54,6 +59,7 @@ public:
     
     void init(State* start_state) {
         current_state = start_state;
+        current_state->enter();
     }
 
     State* run() {
@@ -64,10 +70,7 @@ public:
         return current_state;
     }
 
-    template<typename T>
-    bool current_state_is_type() {
-        return ClassTypeCheck::is_class_type<T>(current_state);
-    }
+    State* get_current_state() { return current_state; };
 
 private:
     void change_state(State* new_state) {

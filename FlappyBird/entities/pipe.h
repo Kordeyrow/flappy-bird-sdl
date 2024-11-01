@@ -10,8 +10,8 @@
 #include <entities/flappy_bird.h>
 #include <entities/flappy_bird.h>
 #include <state_machine_base/state_machine.h>
-#include <core/gameplay_base.h>
 #include <utils/class_type_check.h>
+#include <core/gameplay_base.h>
 
 class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public Collider {
 public:
@@ -20,7 +20,7 @@ public:
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },
         Entity{}, speed_x{ speed_x },
-        Collider{ this, this, Vector2{0.95, 0.95} } 
+        Collider{ this, this, Vector2{0.97, 0.99} } 
     {
         auto current_state = game_sm_emitter->subscribe(this);
         check_new_game_state(current_state);

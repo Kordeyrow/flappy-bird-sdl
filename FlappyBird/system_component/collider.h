@@ -5,8 +5,8 @@
 
 class Collider {
 public:
-	Collider(Entity* owner, Transform* t, Vector2 relative_size)
-		: _owner{ owner }, transform{ t }, relative_size{ relative_size } {}
+	Collider(Entity* owner, Transform* t, Vector2 relative_scale)
+		: _owner{ owner }, transform{ t }, relative_scale{ relative_scale } {}
 
 	virtual void collided(Collider* other) = 0;
 
@@ -18,19 +18,20 @@ public:
         Transform* other_transform = other->transform;
 
         // Calculate the scaled collision transform size
-        Vector2 scaled_size = transform->size * relative_size;
+        Vector2 scaled_size_ = calc_scaled_size();
 
         // Calculate the bounding box for this collider
-        float x1 = transform->position.x;
-        float y1 = transform->position.y;
-        float w1 = scaled_size.x;
-        float h1 = scaled_size.y;
+        float x1 = transform->position.x - scaled_size_.x / 2;
+        float y1 = transform->position.y - scaled_size_.y / 2;
+        float w1 = scaled_size_.x;
+        float h1 = scaled_size_.y;
 
         // Calculate the bounding box for the other collider
-        float x2 = other_transform->position.x;
-        float y2 = other_transform->position.y;
-        float w2 = other_transform->size.x;
-        float h2 = other_transform->size.y;
+        Vector2 other_scaled_size_ = other->calc_scaled_size();
+        float x2 = other_transform->position.x - other_scaled_size_.x / 2;
+        float y2 = other_transform->position.y - other_scaled_size_.y / 2;
+        float w2 = other_scaled_size_.x;
+        float h2 = other_scaled_size_.y;
 
         // AABB (Axis-Aligned Bounding Box) collision check
         if (x1 < x2 + w2 &&
@@ -43,8 +44,12 @@ public:
         return false; // No collision
     }
 
+    Vector2 calc_scaled_size() const {
+        return transform->size * relative_scale;
+    }
+
 	Transform* transform;
-	Vector2 relative_size;
+	Vector2 relative_scale;
 
 private:
 	Entity* _owner;

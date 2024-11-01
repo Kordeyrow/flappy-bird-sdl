@@ -14,7 +14,7 @@ public:
 	}
 
 	SDL_Rect get_rect(){
-		return SDL_Rect{ (int)draw_transform->position.x, (int)draw_transform->position.y, (int)draw_transform->size.x, (int)draw_transform->size.y };
+		return SDL_Rect{ (int)(draw_transform->position.x -draw_transform->size.x/2), (int)(draw_transform->position.y -draw_transform->size.y/2), (int)draw_transform->size.x, (int)draw_transform->size.y };
 	}
 
 	double get_rotation() const {

@@ -14,7 +14,7 @@ public:
         : Transform{ position, size },
         Drawable{ texture, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
-        Collider{ this, this, Vector2{0.8, 0.8} }, 
+        Collider{ this, this, Vector2{0.96, 0.96} },
         ground_y{ ground_y } {}
 
     void update(double elapsed_time) override {
@@ -26,7 +26,10 @@ public:
         speed_y += relative_gravity * elapsed_time;
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
 
-        if (position.y >= ground_y) {
+        // ground check
+        double bottom = position.y + calc_scaled_size().y / 2;
+        if (bottom >= ground_y) {
+            _dead = true;
             _fallen = true;
             position.y = ground_y;
         }

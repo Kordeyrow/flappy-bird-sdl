@@ -4,6 +4,7 @@
 int main(int argc, char** argv) {
 	while (true) {
 		Game game{};
+		game.init();
 		game.run();
 	}
 }
