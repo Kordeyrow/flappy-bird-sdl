@@ -2,9 +2,10 @@
 #include <core/game.h>
 
 int main(int argc, char** argv) {
-	while (true) {
-		Game game{};
-		game.init();
-		game.run();
-	}
+
+	Game game{};
+	game.init<Playing>();
+	game.run_until<Closed>();
+
+	return 0;
 }

@@ -61,6 +61,8 @@ public:
         return _dead;
     }
 
+    const bool& is_dead_ref() const { return _dead; }
+
     bool fallen() const {
         return _fallen;
     }

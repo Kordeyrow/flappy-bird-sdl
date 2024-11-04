@@ -1,13 +1,13 @@
 #pragma once
 #include <state_machine_base/state_machine.h>
 
-class GameContext;
+class Game;
 
 class GameState : public State {
 public:
-    GameState(GameContext* context, StateMachineEventEmitter* emitter)
-        : State{ emitter }, context{ context } {}
+    GameState(Game* game, StateMachineEventEmitter* emitter)
+        : State{ emitter }, game{ game } {}
 protected:
-    GameContext* context;
+    Game* game;
 };
 

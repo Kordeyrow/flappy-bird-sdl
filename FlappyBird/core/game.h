@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <stdlib.h>
+#include <functional>
+#include <chrono>
 #include <map>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -12,9 +14,155 @@
 #include <entities/pipe.h>
 #include <state_machine_base/state_machine.h>
 #include "game_state.h"
+#include <typeindex>
+
+class Closed;
+class Playing;
+
+struct BoolCondition {
+	bool& condition;
+
+	BoolCondition(bool& cond) : condition(cond) {}
+
+	bool evaluate() const {
+		return condition;
+	}
+};
+
+enum class ComparisonType {
+	Greater,
+	Less,
+	Equal,
+	NotEqual,
+	GreaterOrEqual,
+	LessOrEqual
+};
+
+template <typename T>
+struct ValueCondition {
+	T& lhs;
+	ComparisonType comparison;
+	const T* rhsValue = nullptr;
+	T* rhsVariable = nullptr;
+
+	ValueCondition(T& lhs, ComparisonType comp, const T& value)
+		: lhs(lhs), comparison(comp), rhsValue(&value) {}
+
+	ValueCondition(T& lhs, ComparisonType comp, T& rhsVar)
+		: lhs(lhs), comparison(comp), rhsVariable(&rhsVar) {}
+
+	bool evaluate() const {
+		T rhs = rhsVariable ? *rhsVariable : *rhsValue;
+		switch (comparison) {
+		case ComparisonType::Greater: return lhs > rhs;
+		case ComparisonType::Less: return lhs < rhs;
+		case ComparisonType::Equal: return lhs == rhs;
+		case ComparisonType::NotEqual: return lhs != rhs;
+		case ComparisonType::GreaterOrEqual: return lhs >= rhs;
+		case ComparisonType::LessOrEqual: return lhs <= rhs;
+		}
+		return false;
+	}
+};
+
+struct TimerCondition {
+	std::chrono::time_point<std::chrono::steady_clock> startTime;
+	float duration;
+
+	TimerCondition(float durationInSeconds)
+		: duration(durationInSeconds), startTime(std::chrono::steady_clock::now()) {}
+
+	bool evaluate() const {
+		auto now = std::chrono::steady_clock::now();
+		std::chrono::duration<float> elapsed = now - startTime;
+		return elapsed.count() >= duration;
+	}
+
+	void reset() {
+		startTime = std::chrono::steady_clock::now();
+	}
+};
+
+struct EventCondition {
+	bool& eventTriggered;
+
+	EventCondition(bool& triggered) : eventTriggered(triggered) {}
+
+	bool evaluate() const {
+		return eventTriggered;
+	}
+
+	void reset() {
+		eventTriggered = false;
+	}
+};
 
 
-class GameContext {
+
+
+
+class StateTransitionBase {
+public:
+	StateTransitionBase() {}
+
+	void addBoolCondition(bool& condition) {
+		conditions.push_back([&condition]() { return BoolCondition(condition).evaluate(); });
+	}
+
+	template <typename T>
+	void addValueCondition(T& lhs, ComparisonType comp, const T& rhsValue) {
+		conditions.push_back([&lhs, comp, &rhsValue]() {
+			return ValueCondition<T>(lhs, comp, rhsValue).evaluate();
+			});
+	}
+
+	void addTimerCondition(float duration) {
+		TimerCondition timer(duration);
+		conditions.push_back([timer]() mutable { return timer.evaluate(); });
+	}
+
+	void addEventCondition(bool& eventTriggered) {
+		conditions.push_back([&eventTriggered]() { return EventCondition(eventTriggered).evaluate(); });
+	}
+
+	bool isTriggered() const {
+		for (const auto& condition : conditions) {
+			if (!condition()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+private:
+	std::vector<std::function<bool()>> conditions;
+};
+
+template<typename OriginState, typename TargetState>
+class StateTransition : public StateTransitionBase {
+};
+
+
+
+class Game;
+class GameOver;
+
+
+//class GameTransitionsManager {
+//private:
+//	bool player_dead = false;
+//	Game* game;
+//	std::map<std::type_index, StateTransitionBase*> transitions;
+//public:
+//	GameTransitionsManager(Game* game) : game{game} {
+//		auto& t = new StateTransition<Playing, GameOver>();
+//		t->addBoolCondition(player_dead);
+//		transitions[typeid(Playing)] = t;
+//	}
+//};
+
+
+class Game {
 public:
 	// SDL
 	SDL_Window* window() { return _window; }
@@ -32,6 +180,8 @@ public:
 
 	StateMachine* state_machine() { return _state_machine; }
 
+	GameState* start_state;
+
 private:
 	// SDL
 	SDL_Window* _window;
@@ -47,24 +197,23 @@ private:
 
 	FlappyBird* _player;
 	StateMachine* _state_machine{};
-	bool initialized = false;
 
 public:
-	bool init() {
-		if (initialized)
-			return true;
+	Game() {}
 
+	template<typename StartStateType>
+	void init() {
 		// SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 			std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
 			system("pause");
-			return false;
+			return;
 		}
 
 		// IMG
 		if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) < 0) {
 			std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
-			return false;
+			return;
 		}
 
 		// window
@@ -72,14 +221,14 @@ public:
 		if (!_window) {
 			std::cout << "Error creating window: " << SDL_GetError() << std::endl;
 			system("pause");
-			return false;
+			return;
 		}
 
 		// renderer
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 		if (!_renderer) {
 			std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
-			return false;
+			return;
 		}
 
 		// window info
@@ -90,13 +239,17 @@ public:
 		_texture_manager = new TextureManager(_renderer);
 		_texture_manager->load_init_textures();
 
-		//spawn_player();
-
 		// state machine
 		_state_machine = new StateMachine();
+		_state_machine->init(CreateState<StartStateType>());
+	}
 
-		initialized = true;
-		return true;
+public:
+	template<typename LastStateType>
+	void run_until() {
+		while (_state_machine->get_current_state()->is_type<LastStateType>()) {
+			_state_machine->run();
+		}
 	}
 
 	void spawn_player() {
@@ -195,15 +348,15 @@ public:
 		SDL_Quit();
 	}
 
-	template<typename T>
-	static GameState* CreateState(GameContext* context, StateMachineEventEmitter* emitter) {
-		return (GameState*) new T(context, emitter);
+	template<typename GameStateType>
+	GameState* CreateState() {
+		return (GameState*) new GameStateType(this, _state_machine);
 	}
 };
 
 class Menu : public GameState {
 public:
-	Menu(GameContext* context, StateMachineEventEmitter* emitter) : GameState{ context, emitter } {}
+	Menu(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
 
@@ -220,7 +373,7 @@ public:
 
 class Closed : public GameState {
 public:
-	Closed(GameContext* context, StateMachineEventEmitter* emitter) : GameState{ context, emitter } {}
+	Closed(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
 
@@ -237,14 +390,14 @@ public:
 
 class Closing : public GameState {
 public:
-	Closing(GameContext* context, StateMachineEventEmitter* emitter) : GameState{ context, emitter } {}
+	Closing(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
-		context->close();
+		game->close();
 	};
 
 	State* run() override {
-		return new Closed(context, emitter);
+		return game->CreateState<Closed>();
 	};
 
 	void exit() override {
@@ -268,30 +421,29 @@ private:
 	double total_elapsed_time = 0;
 	uint32_t previous_time = 0;
 public:
-	Playing(GameContext* context, StateMachineEventEmitter* emitter) : GameState{ context, emitter } {}
+	Playing(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
 		// clear
-		context->sprites()->clear();
-		context->updatables()->clear();
+		game->sprites()->clear();
+		game->updatables()->clear();
 
 		// spawn pipe
 		current_spawn_timer_seconds = 0;
-		context->spawn_pipe(context->window_w(), context->window_h(), speed_x);
+		game->spawn_pipe(game->window_w(), game->window_h(), speed_x);
 
 		// player
-		context->spawn_player();
-		context->player()->jump();
+		game->spawn_player();
+		game->player()->jump();
 
 		// game loop
-		quit = false;
 		total_elapsed_time = 0;
-		previous_time = context->get_current_time();
+		previous_time = game->get_current_time();
 	};
 
 	State* run() override {
 		// time
-		auto current_time = context->get_current_time();
+		auto current_time = game->get_current_time();
 		auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
 		previous_time = current_time;
 		// input
@@ -300,14 +452,13 @@ public:
 			SDL_Keycode keycode = e.key.keysym.sym;
 			switch (e.type) {
 			case SDL_QUIT:
-				quit = true;
-				break;
+				return game->CreateState<Closing>();
 			case SDL_KEYDOWN:
 				if (keycode == SDLK_SPACE) {
-					if (context->player()->dead() == false) {
-						context->player()->jump();
+					if (game->player()->dead() == false) {
+						game->player()->jump();
 					}
-					if (context->player()->fallen()) {
+					if (game->player()->fallen()) {
 						// reset
 					}
 				}
@@ -316,12 +467,9 @@ public:
 				break;
 			}
 		}
-		if (quit) {
-			return new Closing(context, emitter);
-		}
 
 		// update
-		for (auto u : *context->updatables()) {
+		for (auto u : *game->updatables()) {
 			u->update(elapsed_time_seconds);
 		}
 
@@ -329,7 +477,7 @@ public:
 		current_spawn_timer_seconds += elapsed_time_seconds;
 		if (current_spawn_timer_seconds >= real_spawn_gap_seconds) {
 			current_spawn_timer_seconds = 0;
-			context->spawn_pipe(context->window_w(), context->window_h(), speed_x);
+			game->spawn_pipe(game->window_w(), game->window_h(), speed_x);
 		}
 
 		// physics
@@ -339,7 +487,7 @@ public:
 
 			// get colliders
 			std::vector<Collider*> cols;
-			for (auto u : *context->updatables()) {
+			for (auto u : *game->updatables()) {
 				Collider* col = dynamic_cast<Collider*>(u);
 				if (col) {
 					cols.push_back(col);
@@ -360,10 +508,10 @@ public:
 		}
 
 		//reder
-		context->render();
+		game->render();
 
-		if (context->player()->dead()) {
-			return context->CreateState<GameOver>(context, emitter);
+		if (game->player()->dead()) {
+			return game->CreateState<GameOver>();
 		}
 		return this;
 	};
@@ -375,7 +523,7 @@ public:
 
 class GameOver : public GameState {
 public:
-	GameOver(GameContext* context, StateMachineEventEmitter* emitter) : GameState{ context, emitter } {}
+	GameOver(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
 
@@ -386,9 +534,11 @@ public:
 		while (SDL_PollEvent(&e) != 0) {
 			SDL_Keycode keycode = e.key.keysym.sym;
 			switch (e.type) {
+				case SDL_QUIT:
+					return game->CreateState<Closing>();
 				case SDL_KEYDOWN:
 					if (keycode == SDLK_SPACE) {
-						return new Playing(context, emitter);
+						return game->CreateState<Playing>();
 					}
 					break;
 			}
@@ -401,18 +551,10 @@ public:
 	};
 };
 
-
-class Game {
-public:
-	GameContext* context;
-	Game() : context{ new GameContext() } {}
-	void init() {
-		context->init();
-		context->state_machine()->init(new Playing{ context, context->state_machine() });
-	}
-	void run() {
-		while (context->state_machine()->get_current_state()->is_type<Closed>()) {
-			context->state_machine()->run();
-		}
-	}
-};
+//class GameStateFactory {
+//public:
+//	template<typename T>
+//	static GameState* CreateState() {
+//		return (GameState*) new T(this, _state_machine);
+//	}
+//};
