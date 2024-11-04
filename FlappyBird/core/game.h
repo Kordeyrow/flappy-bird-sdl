@@ -6,15 +6,20 @@
 #include <functional>
 #include <chrono>
 #include <map>
+#include <typeindex>
+
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer2.h"
 #include <SDL.h>
 #include <SDL_image.h>
+
 #include <entities/flappy_bird.h>
 #include <res_manager/texture_manager.h>
 #include <system_component/updatable.h>
 #include <entities/pipe.h>
 #include <state_machine_base/state_machine.h>
 #include "game_state.h"
-#include <typeindex>
 
 class Closed;
 class Playing;
@@ -230,6 +235,11 @@ public:
 			std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
 			return;
 		}
+		//IMGUI_CHECKVERSION();
+		//ImGui::CreateContext();
+		ImGui::Begin("Game HUD");
+		ImGui::Text("Score: %d", 1);
+		ImGui::End();
 
 		// window info
 		_window_w = (double)SDL_GetWindowSurface(_window)->w;

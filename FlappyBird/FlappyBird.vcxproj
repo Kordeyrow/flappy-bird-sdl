@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\imgui\backends\;$(ProjectDir)..\imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\imgui\backends\;$(ProjectDir)..\imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\imgui\backends\;$(ProjectDir)..\imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\imgui\backends\;$(ProjectDir)..\imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
