@@ -7,10 +7,12 @@
 #include <chrono>
 #include <map>
 #include <typeindex>
+#include <string>
 
-#include "imgui.h"
-#include "imgui_impl_sdl2.h"
-#include "imgui_impl_sdlrenderer2.h"
+#include <sdl2imgui/imgui.h>
+#include <sdl2imgui/imgui_impl_sdl2.h>
+#include <sdl2imgui/imgui_impl_sdlrenderer2.h>
+
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -202,6 +204,8 @@ private:
 
 	FlappyBird* _player;
 	StateMachine* _state_machine{};
+	ImFont* score_font = nullptr;
+	//ImFont* score_font_front = nullptr;
 
 public:
 	Game() {}
@@ -235,11 +239,8 @@ public:
 			std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
 			return;
 		}
-		//IMGUI_CHECKVERSION();
-		//ImGui::CreateContext();
-		ImGui::Begin("Game HUD");
-		ImGui::Text("Score: %d", 1);
-		ImGui::End();
+
+		init_imgui();
 
 		// window info
 		_window_w = (double)SDL_GetWindowSurface(_window)->w;
@@ -254,7 +255,58 @@ public:
 		_state_machine->init(CreateState<StartStateType>());
 	}
 
+	void init_imgui() {
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+
+		ImGuiIO& io = ImGui::GetIO();
+		//(void)io;
+
+		// Load custom font (make sure the .ttf file path is correct)
+		score_font = io.Fonts->AddFontFromFileTTF("../res/fonts/flappy-bird-score-font.ttf", 40.0f);
+		//score_font_front = io.Fonts->AddFontFromFileTTF("../res/fonts/flappy-bird-score-font.ttf", 40.0f);
+		//ImGui::StyleColorsDark();
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplSDL2_InitForSDLRenderer(_window, _renderer);
+		ImGui_ImplSDLRenderer2_Init(_renderer);
+
+		// Start the Dear ImGui frame
+		ImGui_ImplSDLRenderer2_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+	}
+
 public:
+	void render_score(const char* score, ImFont* font) {
+		// Load custom font (make sure the .ttf file path is correct)
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		// Set all borders and window decorations to zero or transparent
+		style.WindowBorderSize = 0.0f; // No border on windows
+		style.FrameBorderSize = 0.0f;  // No border on frames
+		style.WindowRounding = 0.0f;   // No corner rounding for window
+		style.FrameRounding = 0.0f;    // No corner rounding for frames
+
+		// Make window and frame backgrounds fully transparent
+		style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+		style.Colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+		style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+		style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::PushFont(font);
+		auto prev_cursor_pos_x = ImGui::GetCursorPosX();
+		auto textWidth = ImGui::CalcTextSize(score).x;
+		ImGui::SetCursorPosX(_window_w/2 -44 -textWidth/2);
+		ImGui::Text(score);
+		ImGui::PopFont();
+		ImGui::PopStyleColor();
+		ImGui::SetCursorPosX(prev_cursor_pos_x);
+	}
+
+	void render_score(const char* score) {
+		render_score(score, score_font);
+	}
+
 	template<typename LastStateType>
 	void run_until() {
 		while (_state_machine->get_current_state()->is_type<LastStateType>()) {
@@ -276,13 +328,18 @@ public:
 	}
 
 	void spawn_pipe(double window_w, double window_h, float speed_x) {
-		int height_bias = 0; // 50
-		double random_height = 0; //200;
-		int random_height_percent = 1;// rand() % 101 / 100;
-		double height = 320;
-		double gap_size = 140;
-		Vector2 pipe_size = Vector2{ 64, height };
-		Vector2 pipe_start_pos = Vector2{ window_w + pipe_size.x / 2, window_h / 2 + height_bias + pipe_size.y/2 + gap_size/2 + random_height * random_height_percent };
+		double size_y = 400;
+		double gap_size = 260;
+
+		// random y
+		double max_y_offset = 240;
+		double random_y_percent = (rand() % 101) / 100.0f;
+		double random_y_offset = (max_y_offset/2) * random_y_percent - max_y_offset/2;
+
+		Vector2 pipe_size = Vector2{ 64, size_y };
+		double x_offset = pipe_size.x /2;
+		double y_offset = pipe_size.y /2 + gap_size /2 + random_y_offset;
+		Vector2 pipe_start_pos = Vector2{ window_w + x_offset, window_h /2 + y_offset };
 
 		Pipe* pipe_down = new Pipe{
 			_state_machine,
@@ -297,7 +354,7 @@ public:
 		Pipe* pipe_up = new Pipe{
 			_state_machine,
 			_texture_manager->get_texture(TextureManager::PIPE),
-			pipe_start_pos + Vector2{0, -height - gap_size},
+			pipe_start_pos + Vector2{0, -size_y -gap_size /2},
 			pipe_size,
 			speed_x,
 			SDL_FLIP_VERTICAL
@@ -338,13 +395,43 @@ public:
 		SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 	}
 
-	void render() {
-		draw_backgroung();
-		draw_sprites();
+	void render_ui() {
+		ImGui::NewFrame();
+
+		// Custom window with no title bar or resizing options
+		ImGui::SetNextWindowSize(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+
+		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+		//ImGui::Text("Points");
+
+		// Use a custom color temporarily
+		//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.7f, 0.2f, 1.0f)); // Custom color for text
+		//ImGui::Text("0");
+		//ImGui::PopStyleColor(); // Restore original color
+		render_score("0");
+
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
+
 		SDL_RenderPresent(_renderer);
 	}
 
+	void render() {
+		draw_backgroung();
+		draw_sprites();
+		render_ui();
+		SDL_RenderPresent(_renderer);
+		SDL_RenderClear(_renderer);
+	}
+
 	void close() {
+		ImGui_ImplSDLRenderer2_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
+
 		SDL_DestroyWindow(_window);
 		_window = nullptr;
 
