@@ -22,6 +22,7 @@
 #include <entities/pipe.h>
 #include <state_machine_base/state_machine.h>
 #include "game_state.h"
+#include <queue>
 
 class Closed;
 class Playing;
@@ -184,8 +185,11 @@ public:
 	double window_h() const { return _window_h; }
 	// Player
 	FlappyBird* player() { return _player; }
+	int score() const { return _score; }
+	void add_score() {_score++; }
 
 	StateMachine* state_machine() { return _state_machine; }
+	std::tuple<Pipe*, Pipe*> next_pipes() { return _next_pipes; }
 
 	GameState* start_state;
 
@@ -201,11 +205,16 @@ private:
 	// Window
 	double _window_w;
 	double _window_h;
-
+	// Player
 	FlappyBird* _player;
+	// StateMachine
 	StateMachine* _state_machine{};
+	// score
 	ImFont* score_font = nullptr;
-	//ImFont* score_font_front = nullptr;
+	int _score = 0;
+	// pipe
+	std::queue<std::tuple<Pipe*, Pipe*>> pipe_queue; // when "_next_pipes" is passed by player, get next
+	std::tuple<Pipe*, Pipe*> _next_pipes;
 
 public:
 	Game() {}
@@ -341,17 +350,17 @@ public:
 		double y_offset = pipe_size.y /2 + gap_size /2 + random_y_offset;
 		Vector2 pipe_start_pos = Vector2{ window_w + x_offset, window_h /2 + y_offset };
 
-		Pipe* pipe_down = new Pipe{
+		Pipe* bottom_pipe = new Pipe{
 			_state_machine,
 			_texture_manager->get_texture(TextureManager::PIPE),
 			pipe_start_pos,
 			pipe_size,
 			speed_x
 		};
-		_sprites.push_back(pipe_down);
-		_updatables.push_back(pipe_down);
+		_sprites.push_back(bottom_pipe);
+		_updatables.push_back(bottom_pipe);
 
-		Pipe* pipe_up = new Pipe{
+		Pipe* top_pipe = new Pipe{
 			_state_machine,
 			_texture_manager->get_texture(TextureManager::PIPE),
 			pipe_start_pos + Vector2{0, -size_y -gap_size /2},
@@ -359,8 +368,18 @@ public:
 			speed_x,
 			SDL_FLIP_VERTICAL
 		};
-		_sprites.push_back(pipe_up);
-		_updatables.push_back(pipe_up);
+		_sprites.push_back(top_pipe);
+		_updatables.push_back(top_pipe);
+
+		pipe_queue.push({ bottom_pipe, top_pipe });
+		if ( ! std::get<0>(_next_pipes)) {
+			update_next_pipes();
+		}
+	}
+
+	void update_next_pipes() {
+		_next_pipes = std::move(pipe_queue.front());
+		pipe_queue.pop();
 	}
 
 	uint32_t get_current_time()
@@ -368,6 +387,7 @@ public:
 		return SDL_GetTicks64();
 	}
 
+	// TODO: apply on vector_changed
 	static void sort_sprites_by_layer(std::vector<Drawable*>& sprites) {
 		std::sort(sprites.begin(), sprites.end(), [](Drawable* a, Drawable* b) {
 			return a->layer_index() > b->layer_index();
@@ -409,7 +429,7 @@ public:
 		//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.7f, 0.2f, 1.0f)); // Custom color for text
 		//ImGui::Text("0");
 		//ImGui::PopStyleColor(); // Restore original color
-		render_score("0");
+		render_score(std::to_string(_score).c_str());
 
 		ImGui::End();
 
@@ -517,6 +537,7 @@ private:
 	bool quit = false;
 	double total_elapsed_time = 0;
 	uint32_t previous_time = 0;
+	int score = 0;
 public:
 	Playing(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
@@ -543,6 +564,7 @@ public:
 		auto current_time = game->get_current_time();
 		auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
 		previous_time = current_time;
+		
 		// input
 		SDL_Event e;
 		while (SDL_PollEvent(&e) != 0) {
@@ -577,30 +599,56 @@ public:
 			game->spawn_pipe(game->window_w(), game->window_h(), speed_x);
 		}
 
+		bool player_dead = false;
+
 		// physics
 		total_elapsed_time += elapsed_time_seconds;
 		if (total_elapsed_time > 0.02) {
 			total_elapsed_time -= 0.02;
 
-			// get colliders
-			std::vector<Collider*> cols;
-			for (auto u : *game->updatables()) {
-				Collider* col = dynamic_cast<Collider*>(u);
-				if (col) {
-					cols.push_back(col);
-				}
-			}
+			//// get colliders
+			//std::vector<Collider*> cols;
+			//for (auto u : *game->updatables()) {
+			//	Collider* col = dynamic_cast<Collider*>(u);
+			//	if (col) {
+			//		cols.push_back(col);
+			//	}
+			//}
 
-			// check collision
-			for (size_t i = 0; i < cols.size(); i++)
-			{
-				for (size_t j = i + 1; j < cols.size(); j++)
-				{
-					if (cols[i]->is_colliding(cols[j])) {
-						cols[i]->collided(cols[j]);
-						cols[j]->collided(cols[i]);
-					}
+			//// check collision
+			//for (size_t i = 0; i < cols.size(); i++)
+			//{
+			//	for (size_t j = i + 1; j < cols.size(); j++)
+			//	{
+			//		if (game->collision_manager().is_colliding(cols[i], cols[j])) {
+			//			cols[i]->collided(cols[j]);
+			//			cols[j]->collided(cols[i]);
+			//		}
+			//	}
+			//}
+
+			Pipe* bottom_pipe = std::get<0>(game->next_pipes());
+			if (bottom_pipe) {
+
+				// update next_pipes (score)
+				double r = bottom_pipe->right();
+				double l = game->player()->left();
+				std::cout << r << std::endl;
+  				if (bottom_pipe->right() < game->player()->left()) {
+					game->update_next_pipes();
+					bottom_pipe = std::get<0>(game->next_pipes());
+					game->add_score();
 				}
+
+				// kill player
+				/*Pipe* top_pipe = std::get<1>(game->next_pipes());
+				bool colliding = CollisionChecker::is_colliding(*game->player()->circle_collider(), *bottom_pipe->rectangle_collider());
+				if ( ! colliding) {
+					colliding = CollisionChecker::is_colliding(*game->player()->circle_collider(), *top_pipe->rectangle_collider());
+				}
+				if (colliding) {
+					game->player()->kill();
+				}*/
 			}
 		}
 

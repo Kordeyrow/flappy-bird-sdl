@@ -13,18 +13,20 @@
 #include <utils/class_type_check.h>
 #include <core/gameplay_base.h>
 
-class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public Collider {
+class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public RectangleCollider {
 public:
     Pipe(StateMachineEventEmitter* game_sm_emitter, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : game_sm_emitter{ game_sm_emitter },
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },
         Entity{}, speed_x{ speed_x },
-        Collider{ this, this, Vector2{0.97, 0.99} } 
+        RectangleCollider{ this, this, Vector2{0.97, 0.99} }
     {
         auto current_state = game_sm_emitter->subscribe(this);
         check_new_game_state(current_state);
     }
+
+    RectangleCollider* rectangle_collider() { return this; }
 
     ~Pipe() {
         game_sm_emitter->unsubscribe(this);

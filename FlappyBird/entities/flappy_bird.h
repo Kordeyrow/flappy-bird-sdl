@@ -8,14 +8,16 @@
 #include <system_component/entity.h>
 #include <system_component/collider.h>
 
-class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public Collider {
+class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public CircleCollider {
 public:
     FlappyBird(SDL_Texture* texture, double ground_y, Vector2 position, Vector2 size, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
         Drawable{ texture, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
-        Collider{ this, this, Vector2{0.96, 0.96} },
+        CircleCollider{ this, this, (float)std::min(size.x, size.y)},
         ground_y{ ground_y } {}
+
+    CircleCollider* circle_collider() { return this; }
 
     void update(double elapsed_time) override {
         if (_fallen) {
@@ -55,6 +57,10 @@ public:
         _dead = true;
 
         //std::cout << "died" << std::endl;
+    }
+
+    void kill() {
+        _dead = true;
     }
 
     bool dead() const {
