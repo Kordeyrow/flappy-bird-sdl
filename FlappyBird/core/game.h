@@ -187,6 +187,12 @@ public:
 	FlappyBird* player() { return _player; }
 	int score() const { return _score; }
 	void add_score() {_score++; }
+	// Pipe
+	double pipe_size_x() const { return _pipe_size_x; }
+	// 
+	bool is_debug_gizmos_on() const { return _is_debug_gizmos_on; }
+	void toggle_debug_gizmos() { _is_debug_gizmos_on = !_is_debug_gizmos_on; }
+	void set_debug_gizmos(bool val) { _is_debug_gizmos_on = val; }
 
 	StateMachine* state_machine() { return _state_machine; }
 	std::tuple<Pipe*, Pipe*> next_pipes() { return _next_pipes; }
@@ -207,14 +213,18 @@ private:
 	double _window_h;
 	// Player
 	FlappyBird* _player;
+	// Pipe
+	double _pipe_size_x = 64;
 	// StateMachine
 	StateMachine* _state_machine{};
 	// score
 	ImFont* score_font = nullptr;
 	int _score = 0;
 	// pipe
-	std::queue<std::tuple<Pipe*, Pipe*>> pipe_queue; // when "_next_pipes" is passed by player, get next
+	std::queue<std::tuple<Pipe*, Pipe*>> pipe_tuple_queue; // when "_next_pipes" is passed by player, get next
 	std::tuple<Pipe*, Pipe*> _next_pipes;
+	// debug
+	bool _is_debug_gizmos_on = false;
 
 public:
 	Game() {}
@@ -286,7 +296,9 @@ public:
 	}
 
 public:
-	void render_score(const char* score, ImFont* font) {
+	void render_score(const char* score, ImFont* font = nullptr) {
+		if (font == nullptr) { font = score_font; }
+
 		// Load custom font (make sure the .ttf file path is correct)
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -312,10 +324,6 @@ public:
 		ImGui::SetCursorPosX(prev_cursor_pos_x);
 	}
 
-	void render_score(const char* score) {
-		render_score(score, score_font);
-	}
-
 	template<typename LastStateType>
 	void run_until() {
 		while (_state_machine->get_current_state()->is_type<LastStateType>()) {
@@ -324,36 +332,36 @@ public:
 	}
 
 	void spawn_player() {
-		Vector2 player_size = Vector2{ 48, 36 };
+		Vector2 player_size = Vector2{ 42, 32 };
 		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
 		_player = new FlappyBird{
 			_texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
 			_window_h,
 			player_start_pos,
-			player_size
+			player_size,
+			17
 		};
 		_sprites.push_back(_player);
 		_updatables.push_back(_player);
 	}
 
 	void spawn_pipe(double window_w, double window_h, float speed_x) {
-		double size_y = 400;
-		double gap_size = 260;
+		double size_y = 440;
+		double pair_gap_size = 126;
 
 		// random y
-		double max_y_offset = 240;
-		double random_y_percent = (rand() % 101) / 100.0f;
-		double random_y_offset = (max_y_offset/2) * random_y_percent - max_y_offset/2;
+		double max_y_offset = 128;
+		double random_y_offset = max_y_offset * generate_biased_random();
 
-		Vector2 pipe_size = Vector2{ 64, size_y };
-		double x_offset = pipe_size.x /2;
-		double y_offset = pipe_size.y /2 + gap_size /2 + random_y_offset;
+		Vector2 pipe_size = Vector2{ pipe_size_x(), size_y };
+		double x_offset = pipe_size.x / 2;
+		double y_offset = random_y_offset;
 		Vector2 pipe_start_pos = Vector2{ window_w + x_offset, window_h /2 + y_offset };
 
 		Pipe* bottom_pipe = new Pipe{
 			_state_machine,
 			_texture_manager->get_texture(TextureManager::PIPE),
-			pipe_start_pos,
+			pipe_start_pos + Vector2{0, +size_y/2 +pair_gap_size / 2},
 			pipe_size,
 			speed_x
 		};
@@ -363,7 +371,7 @@ public:
 		Pipe* top_pipe = new Pipe{
 			_state_machine,
 			_texture_manager->get_texture(TextureManager::PIPE),
-			pipe_start_pos + Vector2{0, -size_y -gap_size /2},
+			pipe_start_pos + Vector2{0, -size_y/2 -pair_gap_size /2},
 			pipe_size,
 			speed_x,
 			SDL_FLIP_VERTICAL
@@ -371,15 +379,36 @@ public:
 		_sprites.push_back(top_pipe);
 		_updatables.push_back(top_pipe);
 
-		pipe_queue.push({ bottom_pipe, top_pipe });
+		pipe_tuple_queue.push({ bottom_pipe, top_pipe });
 		if ( ! std::get<0>(_next_pipes)) {
 			update_next_pipes();
 		}
 	}
+	
+	double generate_biased_random(double bias_strength = 3.8, double sign_flip_chance = 0.52) {
+		static int last_sign = 1; // 1 for positive, -1 for negative
+
+		// Generate a random float in the range [0, 1]
+		double raw_value = (rand() % 101) / 100.0f;
+
+		// Apply the bias towards the extremes using a power function
+		float biased_value = pow(raw_value, 1.0f / (bias_strength / 10));
+
+		// Map the biased value to the range (-0.5, 0.5)
+		biased_value = (biased_value) * last_sign;
+
+		// Decide whether to flip the sign based on sign_flip_chance
+		if ((rand() % 100) < (sign_flip_chance * 100)) {
+			last_sign = -last_sign;  // Flip the sign
+		}
+
+		return biased_value;
+	}
+
 
 	void update_next_pipes() {
-		_next_pipes = std::move(pipe_queue.front());
-		pipe_queue.pop();
+		_next_pipes = std::move(pipe_tuple_queue.front());
+		pipe_tuple_queue.pop();
 	}
 
 	uint32_t get_current_time()
@@ -435,16 +464,166 @@ public:
 
 		ImGui::Render();
 		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
+	}
 
-		SDL_RenderPresent(_renderer);
+	void draw_circle(SDL_Renderer* renderer, const CircleCollider& circle, SDL_Color color = { 255, 0, 0, 255 }, bool outline_only = true, int outline_thickness = 4) {
+		// Ensure renderer is valid
+		if (!renderer) return;
+
+		SDL_Color red = { 255, 0, 0, 255 };
+		SDL_Color black = { 0, 0, 0, 60 };
+
+		int centerX = circle.transform->position.x;
+		int centerY = circle.transform->position.y;
+		int radius = circle.radius();
+
+		if (outline_only) {
+			// Outline circle with adjustable thickness
+			for (int t = 0; t < outline_thickness; ++t) {
+
+				if (t == 0 || t == outline_thickness-1) {
+					SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
+				}
+				else {
+					SDL_SetRenderDrawColor(renderer, red.r, red.g, red.b, red.a);
+				}
+
+				int adjusted_radius = radius - t;
+				int x = adjusted_radius;
+				int y = 0;
+				int decisionOver2 = 1 - x;   // Decision criterion divided by 2 (for better precision)
+
+				while (y <= x) {
+					// Draw the eight octants of the circle
+					SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+					SDL_RenderDrawPoint(renderer, centerX + y, centerY + x);
+					SDL_RenderDrawPoint(renderer, centerX - x, centerY + y);
+					SDL_RenderDrawPoint(renderer, centerX - y, centerY + x);
+					SDL_RenderDrawPoint(renderer, centerX - x, centerY - y);
+					SDL_RenderDrawPoint(renderer, centerX - y, centerY - x);
+					SDL_RenderDrawPoint(renderer, centerX + x, centerY - y);
+					SDL_RenderDrawPoint(renderer, centerX + y, centerY - x);
+
+					y++;
+					if (decisionOver2 <= 0) {
+						decisionOver2 += 2 * y + 1; // Change decision criterion for next y increment
+					}
+					else {
+						x--;
+						decisionOver2 += 2 * (y - x) + 1; // Change decision criterion for next y and x decrement
+					}
+				}
+			}
+		}
+		else {
+			// Filled circle using the original Midpoint Circle Algorithm
+			for (int w = 0; w < radius * 2; w++) {
+				for (int h = 0; h < radius * 2; h++) {
+					int dx = radius - w; // horizontal offset
+					int dy = radius - h; // vertical offset
+					if ((dx * dx + dy * dy) <= (radius * radius)) {
+						SDL_RenderDrawPoint(renderer, centerX + dx, centerY + dy);
+					}
+				}
+			}
+		}
+	}
+
+	void draw_rectangle(SDL_Renderer* renderer, const RectangleCollider& rect, SDL_Color color = { 255, 0, 0, 255 }, bool outline_only = true, int outline_thickness = 4) {
+		// Ensure renderer is valid
+		if (!renderer) return;
+
+		SDL_Color red = { 255, 0, 0, 255 };
+		SDL_Color black = { 0, 0, 0, 60 };
+
+		// Calculate the rectangle's corners
+		double left = rect.left();
+		double right = rect.right();
+		double top = rect.top();
+		double bottom = rect.bottom();
+
+		if (outline_only) {
+			// Draw outline with adjustable thickness
+			for (int t = 0; t < outline_thickness; ++t) {
+				if (t == 0 || t == outline_thickness - 1) {
+					SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
+				}
+				else {
+					SDL_SetRenderDrawColor(renderer, red.r, red.g, red.b, red.a);
+				}
+				// Adjust the position of each outline layer
+				SDL_Rect outlineRect = {
+					left + t,        // Left
+					top + t,         // Top
+					right - left - 2 * t,  // Width (decreasing as t increases)
+					bottom - top - 2 * t   // Height (decreasing as t increases)
+				};
+				SDL_RenderDrawRect(renderer, &outlineRect);
+			}
+		}
+		else {
+			// Draw filled rectangle
+			SDL_Rect fillRect = { left, top, right - left, bottom - top };
+			SDL_RenderFillRect(renderer, &fillRect);
+		}
+	}
+
+	void draw_debug_info() {
+		draw_circle(_renderer, *_player->circle_collider());
+		for (Drawable* s : _sprites) {
+			RectangleCollider* col = dynamic_cast<RectangleCollider*>(s);
+			if (col) {
+				draw_rectangle(_renderer, *col);
+			}
+		}
 	}
 
 	void render() {
 		draw_backgroung();
 		draw_sprites();
 		render_ui();
+		if (_is_debug_gizmos_on) {
+			draw_debug_info();
+		}
 		SDL_RenderPresent(_renderer);
 		SDL_RenderClear(_renderer);
+	}
+
+	void reset() {
+		// clear_heap
+		while ( ! pipe_tuple_queue.empty())
+		{ 
+			auto& t = pipe_tuple_queue.front();
+			Pipe* p1 = std::get<0>(t);
+			Pipe* p2 = std::get<1>(t);
+			if (p1) { delete p1; }
+			if (p2) { delete p2; }
+			pipe_tuple_queue.pop();
+		}
+
+		Pipe* p1 = std::get<0>(_next_pipes);
+		Pipe* p2 = std::get<1>(_next_pipes);
+		if (p1) { delete p1; }
+		if (p2) { delete p2; }
+		_next_pipes = { nullptr, nullptr };
+
+		if (_player) { delete _player; }
+
+		/*for (auto p : _sprites)
+		{
+			delete p;
+		}*/
+		_sprites.clear();
+
+		/*for (size_t i = 0; i < _updatables.size(); i++) 
+		{ 
+			if (_updatables[i]) 
+				delete _updatables[i]; 
+		}*/
+		_updatables.clear();
+
+		// reset vals
+   		_score = 0;
 	}
 
 	void close() {
@@ -527,9 +706,9 @@ class GameOver;
 class Playing : public GameState, public GameplayBase {
 private:
 	//// CONFIG
-	const float speed_x = -100;
-	const double spawn_gap = 0.0145;
-	double real_spawn_gap_seconds = spawn_gap * abs(speed_x);
+	const float speed_x = -130;
+	const double spawn_gap = 115;
+	double real_spawn_gap_seconds = spawn_gap / abs(speed_x) + game->pipe_size_x() / abs(speed_x);
 	//// STATE
 	// spawn pipe
 	double current_spawn_timer_seconds = 0;
@@ -542,9 +721,7 @@ public:
 	Playing(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
-		// clear
-		game->sprites()->clear();
-		game->updatables()->clear();
+		game->reset();
 
 		// spawn pipe
 		current_spawn_timer_seconds = 0;
@@ -580,6 +757,9 @@ public:
 					if (game->player()->fallen()) {
 						// reset
 					}
+				}
+				else if (keycode == SDLK_b) {
+					game->toggle_debug_gizmos();
 				}
 				break;
 			case SDL_KEYUP:
@@ -633,7 +813,6 @@ public:
 				// update next_pipes (score)
 				double r = bottom_pipe->right();
 				double l = game->player()->left();
-				std::cout << r << std::endl;
   				if (bottom_pipe->right() < game->player()->left()) {
 					game->update_next_pipes();
 					bottom_pipe = std::get<0>(game->next_pipes());
@@ -641,14 +820,14 @@ public:
 				}
 
 				// kill player
-				/*Pipe* top_pipe = std::get<1>(game->next_pipes());
+				Pipe* top_pipe = std::get<1>(game->next_pipes());
 				bool colliding = CollisionChecker::is_colliding(*game->player()->circle_collider(), *bottom_pipe->rectangle_collider());
 				if ( ! colliding) {
 					colliding = CollisionChecker::is_colliding(*game->player()->circle_collider(), *top_pipe->rectangle_collider());
 				}
 				if (colliding) {
 					game->player()->kill();
-				}*/
+				}
 			}
 		}
 
@@ -662,7 +841,6 @@ public:
 	};
 
 	void exit() override {
-
 	};
 };
 

@@ -10,11 +10,11 @@
 
 class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public CircleCollider {
 public:
-    FlappyBird(SDL_Texture* texture, double ground_y, Vector2 position, Vector2 size, SDL_RendererFlip flip = SDL_FLIP_NONE)
+    FlappyBird(SDL_Texture* texture, double ground_y, Vector2 position, Vector2 size, double circle_collider_radius, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
         Drawable{ texture, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
-        CircleCollider{ this, this, (float)std::min(size.x, size.y)},
+        CircleCollider{ this, this, circle_collider_radius },
         ground_y{ ground_y } {}
 
     CircleCollider* circle_collider() { return this; }
@@ -79,9 +79,10 @@ private:
     bool _dead = false;
     float speed_y = 0;
     const int inverted_y_axis = -1;
-    const float jump_force = 4;
+    const float jump_force = 3.2;
     const float gravity = -9.8;
-    const float world_space_proportion = 90;
-    const float relative_gravity = gravity * world_space_proportion;
+    const float world_space_proportion = 130;
+    const float extra_gravity = -1;
+    const float relative_gravity = gravity * world_space_proportion + extra_gravity * world_space_proportion;
 };
 

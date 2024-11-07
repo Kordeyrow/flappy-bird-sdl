@@ -11,6 +11,8 @@
 #include <utility>
 #include <typeinfo>
 
+#include <SDL.h>
+
 class Collider {
 public:
 	Collider(Entity* owner, Transform* t, Vector2 relative_scale)
@@ -22,10 +24,10 @@ public:
 		return _owner;
 	}
 
-    virtual double left() { return transform->position.x - calc_scaled_size().x / 2; };
-    virtual double right() { return transform->position.x + calc_scaled_size().x / 2; };
-    virtual double top() { return transform->position.y - calc_scaled_size().y / 2; };
-    virtual double bottom() { return transform->position.y + calc_scaled_size().y / 2; };
+    virtual double left() const { return transform->position.x - calc_scaled_size().x / 2; };
+    virtual double right() const { return transform->position.x + calc_scaled_size().x / 2; };
+    virtual double top() const { return transform->position.y - calc_scaled_size().y / 2; };
+    virtual double bottom() const { return transform->position.y + calc_scaled_size().y / 2; };
 
     Vector2 calc_scaled_size() const {
         return transform->size * relative_scale;
@@ -50,7 +52,7 @@ class CircleCollider : public Collider {
 private:
     double _radius;
 public:
-    CircleCollider(Entity* owner, Transform* t, float radius)
+    CircleCollider(Entity* owner, Transform* t, double radius)
         : Collider(owner, t, Vector2{ 1, 1 }), _radius{ radius } {};
 
     double radius() const { return _radius; }
@@ -81,15 +83,27 @@ public:
     }
 
     static bool is_colliding(const CircleCollider& circle, const RectangleCollider& rect) {
+        // Ensure that both circle and rect have valid transform pointers
+        if (!circle.transform || !rect.transform) {
+            return false; // Can't check collision if either transform is null
+        }
+
+        // Calculate the scaled size of the rectangle
         Vector2 rect_scaled_size = rect.calc_scaled_size();
 
+        // Find the closest point on the rectangle to the circle's center
         float closest_x = std::max(rect.transform->position.x - rect_scaled_size.x / 2,
-            std::min(circle.transform->position.x, rect.transform->position.x + rect_scaled_size.x / 2));
+            std::min(circle.transform->position.x,
+                rect.transform->position.x + rect_scaled_size.x / 2));
         float closest_y = std::max(rect.transform->position.y - rect_scaled_size.y / 2,
-            std::min(circle.transform->position.y, rect.transform->position.y + rect_scaled_size.y / 2));
+            std::min(circle.transform->position.y,
+                rect.transform->position.y + rect_scaled_size.y / 2));
 
+        // Calculate the distance between the circle's center and the closest point
         float distance_x = circle.transform->position.x - closest_x;
         float distance_y = circle.transform->position.y - closest_y;
+
+        // Check if the squared distance is less than or equal to the squared radius
         return (distance_x * distance_x + distance_y * distance_y) <= (circle.radius() * circle.radius());
     }
 };

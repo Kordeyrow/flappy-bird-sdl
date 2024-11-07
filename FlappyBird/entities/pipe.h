@@ -20,7 +20,7 @@ public:
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },
         Entity{}, speed_x{ speed_x },
-        RectangleCollider{ this, this, Vector2{0.97, 0.99} }
+        RectangleCollider{ this, this, Vector2{0.92, 0.99} }
     {
         auto current_state = game_sm_emitter->subscribe(this);
         check_new_game_state(current_state);
