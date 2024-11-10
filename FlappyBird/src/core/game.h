@@ -181,8 +181,8 @@ public:
 	std::vector<Drawable*>* sprites() { return &_sprites; }
 	std::vector<Updatable*>* updatables() { return &_updatables; }
 	// Window
-	double window_w() const { return _window_w; }
 	double window_h() const { return _window_h; }
+	double window_w() const { return _window_w; }
 	// Player
 	FlappyBird* player() { return _player; }
 	int score() const { return _score; }
@@ -200,6 +200,15 @@ public:
 	GameState* start_state;
 
 private:
+	//-- Config
+	// Window
+	const double _window_h_percent_from_client = 0.7;
+	const double _window_w_percent_from_h = 0.75;
+
+	//-- Runtime
+	// Window
+	double _window_h;
+	double _window_w;
 	// SDL
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
@@ -208,9 +217,6 @@ private:
 	// Gameobjects
 	std::vector<Drawable*> _sprites;
 	std::vector<Updatable*> _updatables;
-	// Window
-	double _window_w;
-	double _window_h;
 	// Player
 	FlappyBird* _player;
 	// Pipe
@@ -231,8 +237,6 @@ public:
 		
 	template<typename StartStateType>
 	void init() {
-		int width = 640;
-		int height = 480;
 
 		// SDL
 		/*if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -247,9 +251,21 @@ public:
 			return;
 		}
 
-		SDL_CreateWindowAndRenderer(width, height, 0, &_window, &_renderer);
+		SDL_CreateWindowAndRenderer(_window_w, _window_h, 0, &_window, &_renderer);
+
+		SDL_Rect r;
+		SDL_GetDisplayBounds(0, &r);
+		_window_h = r.h * _window_h_percent_from_client;
+		_window_w = _window_h * _window_w_percent_from_h;
+
+		SDL_SetWindowSize(_window, _window_w, _window_h);
+		double offset_x = -r.w * 0.04;
+		double offset_y = -offset_x * 0.7;
+		SDL_SetWindowPosition(_window, r.w/2 - _window_w/2 + offset_x, r.h/2 - _window_h/2 + offset_y);
 
 		SDL_SetWindowTitle(_window, "Flappy Bird");
+			
+
 
 		// window
 		/*_window = SDL_CreateWindow("Flappy Bird", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
@@ -267,10 +283,6 @@ public:
 		}*/
 
 		init_imgui();
-
-		// window info
-		_window_w = (double)SDL_GetWindowSurface(_window)->w;
-		_window_h = (double)SDL_GetWindowSurface(_window)->h;
 
 		// texture
 		_texture_manager = new TextureManager(_renderer);
@@ -333,7 +345,7 @@ public:
 		(void)io;
 
 		// Load custom font (make sure the .ttf file path is correct)
-		score_font = io.Fonts->AddFontFromFileTTF("assets/fonts/flappy-bird-score-font.ttf", 40.0f);
+		score_font = io.Fonts->AddFontFromFileTTF("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
 		ImGui::StyleColorsDark();
 
 		// Setup Platform/Renderer backends
@@ -358,20 +370,22 @@ public:
 		style.WindowRounding = 0.0f;   // No corner rounding for window
 		style.FrameRounding = 0.0f;    // No corner rounding for frames
 
-		// Make window and frame backgrounds fully transparent
+		//// Make window and frame backgrounds fully transparent
 		style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		style.Colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 		ImGui::PushFont(font);
-		auto prev_cursor_pos_x = ImGui::GetCursorPosX();
+		//auto prev_cursor_pos_x = ImGui::GetCursorPosX();
 		auto textWidth = ImGui::CalcTextSize(score).x;
-		ImGui::SetCursorPosX(_window_w/2 -44 -textWidth/2);
+		const char* score_0 = &score[0];
+		auto textWidth_fix_offset = ImGui::CalcTextSize(score_0).x;
+		ImGui::SetCursorPosX(_window_w / 2 - textWidth / 2 + textWidth_fix_offset/2);
 		ImGui::Text(score);
 		ImGui::PopFont();
 		ImGui::PopStyleColor();
-		ImGui::SetCursorPosX(prev_cursor_pos_x);
+		//ImGui::SetCursorPosX(prev_cursor_pos_x);
 	}
 
 	template<typename EndStateType>
@@ -501,8 +515,14 @@ public:
 		ImGui::NewFrame();
 
 		// Custom window with no title bar or resizing options
-		ImGui::SetNextWindowSize(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+		ImGuiCond c = ImGuiCond_FirstUseEver;
+
+		// update imgui.ini file on start
+		static bool win_init = false;
+		if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
+
+		ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
+		ImGui::SetNextWindowPos(ImVec2(0, _window_h / 15), c);
 		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
 		
 		render_score(std::to_string(_score).c_str());
@@ -628,9 +648,7 @@ public:
 		draw_backgroung();
 		draw_sprites();
 		render_ui();
-		if (_is_debug_gizmos_on) {
-			draw_debug_info();
-		}
+		if (_is_debug_gizmos_on) draw_debug_info();
 		SDL_RenderPresent(_renderer);
 		SDL_RenderClear(_renderer);
 	}
