@@ -33,7 +33,12 @@ public:
         if (bottom >= ground_y) {
             _dead = true;
             _fallen = true;
-            position.y = ground_y;
+            position.y = bottom;
+        }
+
+        if (position.y < 0) {
+            speed_y = 0;
+            position.y = 0;
         }
     }
 

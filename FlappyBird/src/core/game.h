@@ -236,61 +236,54 @@ public:
 	Game() {}
 		
 	template<typename StartStateType>
-	void init() {
+	bool init() {
 
 		// SDL
-		/*if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 			std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
 			system("pause");
-			return;
-		}*/
+			return false;
+		}
 
 		// IMG
 		if (IMG_Init(IMG_INIT_PNG) < 0) {
 			std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
-			return;
+			return false;
 		}
 
-		SDL_CreateWindowAndRenderer(_window_w, _window_h, 0, &_window, &_renderer);
+		try
+		{
+			SDL_CreateWindowAndRenderer(_window_w, _window_h, 0, &_window, &_renderer);
 
-		SDL_Rect r;
-		SDL_GetDisplayBounds(0, &r);
-		_window_h = r.h * _window_h_percent_from_client;
-		_window_w = _window_h * _window_w_percent_from_h;
+			SDL_Rect r;
+			SDL_GetDisplayBounds(0, &r);
+			_window_h = r.h * _window_h_percent_from_client;
+			_window_w = _window_h * _window_w_percent_from_h;
 
-		SDL_SetWindowSize(_window, _window_w, _window_h);
-		double offset_x = -r.w * 0.04;
-		double offset_y = -offset_x * 0.7;
-		SDL_SetWindowPosition(_window, r.w/2 - _window_w/2 + offset_x, r.h/2 - _window_h/2 + offset_y);
+			SDL_SetWindowSize(_window, _window_w, _window_h);
+			double offset_x = -r.w * 0.04;
+			double offset_y = -offset_x * 0.6;
+			SDL_SetWindowPosition(_window, r.w / 2 - _window_w / 2 + offset_x, r.h / 2 - _window_h / 2 + offset_y);
 
-		SDL_SetWindowTitle(_window, "Flappy Bird");
-			
+			SDL_SetWindowTitle(_window, "Flappy Bird");
 
+			init_imgui();
 
-		// window
-		/*_window = SDL_CreateWindow("Flappy Bird", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
-		if (!_window) {
-			std::cout << "Error creating window: " << SDL_GetError() << std::endl;
-			system("pause");
-			return;
-		}*/
+			// texture
+			_texture_manager = new TextureManager(_renderer);
+			_texture_manager->load_init_textures();
 
-		// renderer
-		/*_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-		if (!_renderer) {
-			std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
-			return;
-		}*/
+			// state machine
+			_state_machine = new StateMachine();
+			_state_machine->init(CreateState<StartStateType>());
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "Error initializing: " << e.what() << std::endl;
+			return false;
+		}
 
-		init_imgui();
-
-		// texture
-		_texture_manager = new TextureManager(_renderer);
-		_texture_manager->load_init_textures();
-
-		// state machine
-		_state_machine = new StateMachine();
-		_state_machine->init(CreateState<StartStateType>());
+		return true;
 	}
 
 	//void init() {
@@ -704,7 +697,7 @@ public:
 		_texture_manager->kill();
 		_texture_manager = nullptr;
 
-		IMG_Quit();
+		IMG_Quit(); 
 		SDL_Quit();
 	}
 
