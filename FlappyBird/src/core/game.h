@@ -395,9 +395,10 @@ public:
 	void spawn_player() {
 		Vector2 player_size = Vector2{ 42, 32 };
 		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
+		double ground_y = _window_h + 3;
 		_player = new FlappyBird{
 			_texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
-			_window_h,
+			ground_y,
 			player_start_pos,
 			player_size,
 			17

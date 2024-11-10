@@ -29,11 +29,11 @@ public:
         position = Vector2{ position.x, position.y + speed_y * elapsed_time * inverted_y_axis };
 
         // ground check
-        double bottom = position.y + calc_scaled_size().y / 2;
-        if (bottom >= ground_y) {
+        double max_y = ground_y - calc_scaled_size().y / 2;
+        if (position.y >= max_y) {
             _dead = true;
             _fallen = true;
-            position.y = bottom;
+            position.y = max_y;
         }
 
         if (position.y < 0) {
