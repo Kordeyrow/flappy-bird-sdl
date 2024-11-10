@@ -2,13 +2,14 @@
 #include <map>
 #include <array>
 #include <vector>
+#include <string>
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 
 class TextureManager {
 public:
-	enum TEXTURE_PATH_KEY {
+	enum TEXTURE_KEY {
 		TEXTURE_FLAPPY_BIRD_UP_WING,
 		PIPE
 	};
@@ -18,7 +19,7 @@ public:
 	}
 	bool load_init_textures()
 	{
-		for (TEXTURE_PATH_KEY key : textures_to_load_on_init)
+		for (TEXTURE_KEY key : textures_to_load_on_init)
 		{
 			if (load_texture(key) == nullptr) {
 				return false;
@@ -26,7 +27,7 @@ public:
 		}
 		return true;
 	}
-	SDL_Texture* get_texture(TEXTURE_PATH_KEY key)
+	SDL_Texture* get_texture(TEXTURE_KEY key)
 	{
 		auto iterator = loaded_textures.find(key);
 		if (iterator != loaded_textures.end())
@@ -43,23 +44,30 @@ public:
 
 private:
 	// config
-	std::map<TEXTURE_PATH_KEY, const char*> textures_paths{
-		{ static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "../res/sprites/yellowbird-upflap.png" },
-		{ static_cast<TEXTURE_PATH_KEY>(PIPE), "../res/sprites/pipe-green.png" }
+	std::string SPRITES_PATH = "assets/sprites/";
+	std::map<TEXTURE_KEY, std::string> textures_paths {
+		{ static_cast<TEXTURE_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING), "yellowbird-upflap.png" },
+		{ static_cast<TEXTURE_KEY>(PIPE), "pipe-green.png" }
 	};
-	std::array<TEXTURE_PATH_KEY, 2> textures_to_load_on_init{
-		static_cast<TEXTURE_PATH_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING),
-		static_cast<TEXTURE_PATH_KEY>(PIPE)
+	std::array<TEXTURE_KEY, 2> textures_to_load_on_init{
+		static_cast<TEXTURE_KEY>(TEXTURE_FLAPPY_BIRD_UP_WING),
+		static_cast<TEXTURE_KEY>(PIPE)
 	};
 	// shared
 	SDL_Renderer* renderer;
 	// runtime
-	std::map<TEXTURE_PATH_KEY, SDL_Texture*> loaded_textures;
+	std::map<TEXTURE_KEY, SDL_Texture*> loaded_textures;
 
-	SDL_Texture* load_texture(TEXTURE_PATH_KEY key)
+	SDL_Texture* load_texture(TEXTURE_KEY key)
 	{
+		//std::string path = textures_paths[key];
+		//std::cout << "Loading texture from path: " << path << std::endl; // Debugging path output
+
 		// Load bitmap into surface
-		SDL_Surface* buffer = IMG_Load(textures_paths[key]);
+		//SDL_Surface* buffer = IMG_Load("C:\\dev\\FlappyBird\\FlappyBird\\FlappyBird\\src\\resources\\sprites\\yellowbird-upflap.png");
+		//SDL_Surface* buffer = IMG_Load(s2.c_str());
+		SDL_Surface* buffer = IMG_Load((SPRITES_PATH + textures_paths[key]).c_str());
+		//SDL_Surface* buffer = IMG_Load("../resources/sprites/yellowbird-upflap.png");
 		if (!buffer) {
 			std::cout << "Error loading sprite: " << SDL_GetError() << std::endl;
 			return nullptr;
@@ -92,4 +100,3 @@ private:
 		return texture;
 	}
 };
-

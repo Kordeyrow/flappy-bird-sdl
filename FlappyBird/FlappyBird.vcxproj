@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\sdl2imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\sdl2imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\sdl2imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)..\sdl2imgui\;$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -147,56 +147,56 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="sdl2imgui\imgui.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_demo.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_draw.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_impl_sdlrenderer2.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_tables.cpp" />
-    <ClCompile Include="sdl2imgui\imgui_widgets.cpp" />
-    <ClCompile Include="state_machine_base\listener_id.cpp" />
-    <ClCompile Include="state_machine_base\state_machine_listener_base.cpp" />
-    <ClCompile Include="utils\class_type_check.cpp" />
-    <ClCompile Include="core\game.cpp" />
-    <ClCompile Include="core\gameplay_base.cpp" />
-    <ClCompile Include="core\game_state.cpp" />
-    <ClCompile Include="state_machine_base\state_machine.cpp" />
-    <ClCompile Include="system_component\entity.cpp" />
-    <ClCompile Include="system_component\collider.cpp" />
-    <ClCompile Include="entities\pipe.cpp" />
-    <ClCompile Include="system_component\drawable.cpp" />
-    <ClCompile Include="entities\flappy_bird.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\vector2.cpp" />
-    <ClCompile Include="res_manager\texture_manager.cpp" />
-    <ClCompile Include="system_component\updatable.cpp" />
-    <ClCompile Include="system_component\transform.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\state_machine_base\listener_id.cpp" />
+    <ClCompile Include="src\state_machine_base\state_machine_listener_base.cpp" />
+    <ClCompile Include="src\utils\class_type_check.cpp" />
+    <ClCompile Include="src\core\game.cpp" />
+    <ClCompile Include="src\core\gameplay_base.cpp" />
+    <ClCompile Include="src\core\game_state.cpp" />
+    <ClCompile Include="src\state_machine_base\state_machine.cpp" />
+    <ClCompile Include="src\system_component\entity.cpp" />
+    <ClCompile Include="src\system_component\collider.cpp" />
+    <ClCompile Include="src\entities\pipe.cpp" />
+    <ClCompile Include="src\system_component\drawable.cpp" />
+    <ClCompile Include="src\entities\flappy_bird.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\vector2.cpp" />
+    <ClCompile Include="src\res_manager\texture_manager.cpp" />
+    <ClCompile Include="src\system_component\updatable.cpp" />
+    <ClCompile Include="src\system_component\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sdl2imgui\imconfig.h" />
-    <ClInclude Include="sdl2imgui\imgui.h" />
-    <ClInclude Include="sdl2imgui\imgui_impl_sdl2.h" />
-    <ClInclude Include="sdl2imgui\imgui_impl_sdlrenderer2.h" />
-    <ClInclude Include="sdl2imgui\imgui_internal.h" />
-    <ClInclude Include="sdl2imgui\imstb_rectpack.h" />
-    <ClInclude Include="sdl2imgui\imstb_textedit.h" />
-    <ClInclude Include="sdl2imgui\imstb_truetype.h" />
-    <ClInclude Include="state_machine_base\listener_id.h" />
-    <ClInclude Include="state_machine_base\state_machine_listener_base.h" />
-    <ClInclude Include="utils\class_type_check.h" />
-    <ClInclude Include="core\game.h" />
-    <ClInclude Include="core\gameplay_base.h" />
-    <ClInclude Include="core\game_state.h" />
-    <ClInclude Include="state_machine_base\state_machine.h" />
-    <ClInclude Include="system_component\entity.h" />
-    <ClInclude Include="system_component\collider.h" />
-    <ClInclude Include="entities\pipe.h" />
-    <ClInclude Include="system_component\drawable.h" />
-    <ClInclude Include="entities\flappy_bird.h" />
-    <ClInclude Include="math\vector2.h" />
-    <ClInclude Include="res_manager\texture_manager.h" />
-    <ClInclude Include="system_component\updatable.h" />
-    <ClInclude Include="system_component\transform.h" />
+    <ClInclude Include="src\sdl2imgui\imconfig.h" />
+    <ClInclude Include="src\sdl2imgui\imgui.h" />
+    <ClInclude Include="src\sdl2imgui\imgui_impl_sdl2.h" />
+    <ClInclude Include="src\sdl2imgui\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="src\sdl2imgui\imgui_internal.h" />
+    <ClInclude Include="src\sdl2imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\sdl2imgui\imstb_textedit.h" />
+    <ClInclude Include="src\sdl2imgui\imstb_truetype.h" />
+    <ClInclude Include="src\state_machine_base\listener_id.h" />
+    <ClInclude Include="src\state_machine_base\state_machine_listener_base.h" />
+    <ClInclude Include="src\utils\class_type_check.h" />
+    <ClInclude Include="src\core\game.h" />
+    <ClInclude Include="src\core\gameplay_base.h" />
+    <ClInclude Include="src\core\game_state.h" />
+    <ClInclude Include="src\state_machine_base\state_machine.h" />
+    <ClInclude Include="src\system_component\entity.h" />
+    <ClInclude Include="src\system_component\collider.h" />
+    <ClInclude Include="src\entities\pipe.h" />
+    <ClInclude Include="src\system_component\drawable.h" />
+    <ClInclude Include="src\entities\flappy_bird.h" />
+    <ClInclude Include="src\math\vector2.h" />
+    <ClInclude Include="src\res_manager\texture_manager.h" />
+    <ClInclude Include="src\system_component\updatable.h" />
+    <ClInclude Include="src\system_component\transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,150 +15,150 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="entities\flappy_bird.cpp">
+    <ClCompile Include="src\entities\flappy_bird.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="math\vector2.cpp">
+    <ClCompile Include="src\math\vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="res_manager\texture_manager.cpp">
+    <ClCompile Include="src\res_manager\texture_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="system_component\drawable.cpp">
+    <ClCompile Include="src\system_component\drawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="entities\pipe.cpp">
+    <ClCompile Include="src\entities\pipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="system_component\updatable.cpp">
+    <ClCompile Include="src\system_component\updatable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="system_component\collider.cpp">
+    <ClCompile Include="src\system_component\collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="system_component\entity.cpp">
+    <ClCompile Include="src\system_component\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="system_component\transform.cpp">
+    <ClCompile Include="src\system_component\transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\game.cpp">
+    <ClCompile Include="src\core\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="state_machine_base\state_machine.cpp">
+    <ClCompile Include="src\state_machine_base\state_machine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\gameplay_base.cpp">
+    <ClCompile Include="src\core\gameplay_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\game_state.cpp">
+    <ClCompile Include="src\core\game_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils\class_type_check.cpp">
+    <ClCompile Include="src\utils\class_type_check.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="state_machine_base\state_machine_listener_base.cpp">
+    <ClCompile Include="src\state_machine_base\state_machine_listener_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="state_machine_base\listener_id.cpp">
+    <ClCompile Include="src\state_machine_base\listener_id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_demo.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_draw.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_impl_sdl2.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdl2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_impl_sdlrenderer2.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdlrenderer2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_tables.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl2imgui\imgui_widgets.cpp">
+    <ClCompile Include="src\sdl2imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="entities\flappy_bird.h">
+    <ClInclude Include="src\entities\flappy_bird.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="math\vector2.h">
+    <ClInclude Include="src\math\vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res_manager\texture_manager.h">
+    <ClInclude Include="src\res_manager\texture_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="system_component\drawable.h">
+    <ClInclude Include="src\system_component\drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="entities\pipe.h">
+    <ClInclude Include="src\entities\pipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="system_component\updatable.h">
+    <ClInclude Include="src\system_component\updatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="system_component\collider.h">
+    <ClInclude Include="src\system_component\collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="system_component\entity.h">
+    <ClInclude Include="src\system_component\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="system_component\transform.h">
+    <ClInclude Include="src\system_component\transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\game.h">
+    <ClInclude Include="src\core\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="state_machine_base\state_machine.h">
+    <ClInclude Include="src\state_machine_base\state_machine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\gameplay_base.h">
+    <ClInclude Include="src\core\gameplay_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\game_state.h">
+    <ClInclude Include="src\core\game_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\class_type_check.h">
+    <ClInclude Include="src\utils\class_type_check.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="state_machine_base\state_machine_listener_base.h">
+    <ClInclude Include="src\state_machine_base\state_machine_listener_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="state_machine_base\listener_id.h">
+    <ClInclude Include="src\state_machine_base\listener_id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imconfig.h">
+    <ClInclude Include="src\sdl2imgui\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imgui.h">
+    <ClInclude Include="src\sdl2imgui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imgui_impl_sdl2.h">
+    <ClInclude Include="src\sdl2imgui\imgui_impl_sdl2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imgui_impl_sdlrenderer2.h">
+    <ClInclude Include="src\sdl2imgui\imgui_impl_sdlrenderer2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imgui_internal.h">
+    <ClInclude Include="src\sdl2imgui\imgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imstb_rectpack.h">
+    <ClInclude Include="src\sdl2imgui\imstb_rectpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imstb_textedit.h">
+    <ClInclude Include="src\sdl2imgui\imstb_textedit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl2imgui\imstb_truetype.h">
+    <ClInclude Include="src\sdl2imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

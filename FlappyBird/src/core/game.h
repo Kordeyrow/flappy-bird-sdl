@@ -228,36 +228,43 @@ private:
 
 public:
 	Game() {}
-
+		
 	template<typename StartStateType>
 	void init() {
+		int width = 640;
+		int height = 480;
+
 		// SDL
-		if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		/*if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 			std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
 			system("pause");
 			return;
-		}
+		}*/
 
 		// IMG
-		if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) < 0) {
+		if (IMG_Init(IMG_INIT_PNG) < 0) {
 			std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
 			return;
 		}
 
+		SDL_CreateWindowAndRenderer(width, height, 0, &_window, &_renderer);
+
+		SDL_SetWindowTitle(_window, "Flappy Bird");
+
 		// window
-		_window = SDL_CreateWindow("Flappy Bird", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+		/*_window = SDL_CreateWindow("Flappy Bird", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 		if (!_window) {
 			std::cout << "Error creating window: " << SDL_GetError() << std::endl;
 			system("pause");
 			return;
-		}
+		}*/
 
 		// renderer
-		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+		/*_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 		if (!_renderer) {
 			std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
 			return;
-		}
+		}*/
 
 		init_imgui();
 
@@ -274,17 +281,60 @@ public:
 		_state_machine->init(CreateState<StartStateType>());
 	}
 
+	//void init() {
+	//	// SDL
+	//	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+	//		std::cout << "Error initializing SDL: " << SDL_GetError() << std::endl;
+	//		system("pause");
+	//		return;
+	//	}
+
+	//	// IMG
+	//	if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) < 0) {
+	//		std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
+	//		return;
+	//	}
+
+	//	// window
+	//	_window = SDL_CreateWindow("Flappy Bird", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+	//	if (!_window) {
+	//		std::cout << "Error creating window: " << SDL_GetError() << std::endl;
+	//		system("pause");
+	//		return;
+	//	}
+
+	//	// renderer
+	//	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+	//	if (!_renderer) {
+	//		std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
+	//		return;
+	//	}
+
+	//	init_imgui();
+
+	//	// window info
+	//	_window_w = (double)SDL_GetWindowSurface(_window)->w;
+	//	_window_h = (double)SDL_GetWindowSurface(_window)->h;
+
+	//	// texture
+	//	_texture_manager = new TextureManager(_renderer);
+	//	_texture_manager->load_init_textures();
+
+	//	// state machine
+	//	_state_machine = new StateMachine();
+	//	_state_machine->init(CreateState<StartStateType>());
+	//}
+
 	void init_imgui() {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();
-		//(void)io;
+		(void)io;
 
 		// Load custom font (make sure the .ttf file path is correct)
-		score_font = io.Fonts->AddFontFromFileTTF("../res/fonts/flappy-bird-score-font.ttf", 40.0f);
-		//score_font_front = io.Fonts->AddFontFromFileTTF("../res/fonts/flappy-bird-score-font.ttf", 40.0f);
-		//ImGui::StyleColorsDark();
+		score_font = io.Fonts->AddFontFromFileTTF("assets/fonts/flappy-bird-score-font.ttf", 40.0f);
+		ImGui::StyleColorsDark();
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplSDL2_InitForSDLRenderer(_window, _renderer);
@@ -324,11 +374,15 @@ public:
 		ImGui::SetCursorPosX(prev_cursor_pos_x);
 	}
 
-	template<typename LastStateType>
-	void run_until() {
-		while (_state_machine->get_current_state()->is_type<LastStateType>()) {
-			_state_machine->run();
+	template<typename EndStateType>
+	bool run_until() {
+		State* curr = _state_machine->get_current_state();
+		EndStateType* s = dynamic_cast<EndStateType*>(curr);
+		if (s) {
+			return true;
 		}
+		_state_machine->run();
+		return false;
 	}
 
 	void spawn_player() {
@@ -405,7 +459,6 @@ public:
 		return biased_value;
 	}
 
-
 	void update_next_pipes() {
 		_next_pipes = std::move(pipe_tuple_queue.front());
 		pipe_tuple_queue.pop();
@@ -450,18 +503,11 @@ public:
 		// Custom window with no title bar or resizing options
 		ImGui::SetNextWindowSize(ImVec2(10, 10), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-
 		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
-		//ImGui::Text("Points");
-
-		// Use a custom color temporarily
-		//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.7f, 0.2f, 1.0f)); // Custom color for text
-		//ImGui::Text("0");
-		//ImGui::PopStyleColor(); // Restore original color
+		
 		render_score(std::to_string(_score).c_str());
 
 		ImGui::End();
-
 		ImGui::Render();
 		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
 	}
@@ -553,17 +599,17 @@ public:
 				}
 				// Adjust the position of each outline layer
 				SDL_Rect outlineRect = {
-					left + t,        // Left
-					top + t,         // Top
-					right - left - 2 * t,  // Width (decreasing as t increases)
-					bottom - top - 2 * t   // Height (decreasing as t increases)
+					(int)(left + t),        // Left
+					(int)(top + t),         // Top
+					(int)(right - left - 2 * t),  // Width (decreasing as t increases)
+					(int)(bottom - top - 2 * t)  // Height (decreasing as t increases)
 				};
 				SDL_RenderDrawRect(renderer, &outlineRect);
 			}
 		}
 		else {
 			// Draw filled rectangle
-			SDL_Rect fillRect = { left, top, right - left, bottom - top };
+			SDL_Rect fillRect = { (int)left, (int)top, (int)(right - left), (int)(bottom - top) };
 			SDL_RenderFillRect(renderer, &fillRect);
 		}
 	}
