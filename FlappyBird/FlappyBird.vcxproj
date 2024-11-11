@@ -198,6 +198,76 @@
     <ClInclude Include="src\system_component\updatable.h" />
     <ClInclude Include="src\system_component\transform.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\flappy-bird-score-font.ttf" />
+    <Font Include="assets\fonts\flappy-bird-score-font___.TTF" />
+    <Font Include="assets\fonts\flappy-bird.ttf" />
+    <Font Include="assets\fonts\flappy-font.ttf" />
+    <Font Include="build_web\assets\fonts\flappy-bird-score-font.ttf" />
+    <Font Include="build_web\assets\fonts\flappy-bird-score-font___.TTF" />
+    <Font Include="build_web\assets\fonts\flappy-bird.ttf" />
+    <Font Include="build_web\assets\fonts\flappy-font.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\sprites\0.png" />
+    <Image Include="assets\sprites\1.png" />
+    <Image Include="assets\sprites\2.png" />
+    <Image Include="assets\sprites\3.png" />
+    <Image Include="assets\sprites\4.png" />
+    <Image Include="assets\sprites\5.png" />
+    <Image Include="assets\sprites\6.png" />
+    <Image Include="assets\sprites\7.png" />
+    <Image Include="assets\sprites\8.png" />
+    <Image Include="assets\sprites\9.png" />
+    <Image Include="assets\sprites\background-day.png" />
+    <Image Include="assets\sprites\background-night.png" />
+    <Image Include="assets\sprites\base.png" />
+    <Image Include="assets\sprites\bluebird-downflap.png" />
+    <Image Include="assets\sprites\bluebird-midflap.png" />
+    <Image Include="assets\sprites\bluebird-upflap.png" />
+    <Image Include="assets\sprites\gameover.png" />
+    <Image Include="assets\sprites\message.png" />
+    <Image Include="assets\sprites\pipe-green.png" />
+    <Image Include="assets\sprites\pipe-red.png" />
+    <Image Include="assets\sprites\redbird-downflap.png" />
+    <Image Include="assets\sprites\redbird-midflap.png" />
+    <Image Include="assets\sprites\redbird-upflap.png" />
+    <Image Include="assets\sprites\yellowbird-downflap.png" />
+    <Image Include="assets\sprites\yellowbird-midflap.png" />
+    <Image Include="assets\sprites\yellowbird-upflap.png" />
+    <Image Include="build_web\assets\sprites\0.png" />
+    <Image Include="build_web\assets\sprites\1.png" />
+    <Image Include="build_web\assets\sprites\2.png" />
+    <Image Include="build_web\assets\sprites\3.png" />
+    <Image Include="build_web\assets\sprites\4.png" />
+    <Image Include="build_web\assets\sprites\5.png" />
+    <Image Include="build_web\assets\sprites\6.png" />
+    <Image Include="build_web\assets\sprites\7.png" />
+    <Image Include="build_web\assets\sprites\8.png" />
+    <Image Include="build_web\assets\sprites\9.png" />
+    <Image Include="build_web\assets\sprites\background-day.png" />
+    <Image Include="build_web\assets\sprites\background-night.png" />
+    <Image Include="build_web\assets\sprites\base.png" />
+    <Image Include="build_web\assets\sprites\bluebird-downflap.png" />
+    <Image Include="build_web\assets\sprites\bluebird-midflap.png" />
+    <Image Include="build_web\assets\sprites\bluebird-upflap.png" />
+    <Image Include="build_web\assets\sprites\gameover.png" />
+    <Image Include="build_web\assets\sprites\message.png" />
+    <Image Include="build_web\assets\sprites\pipe-green.png" />
+    <Image Include="build_web\assets\sprites\pipe-red.png" />
+    <Image Include="build_web\assets\sprites\redbird-downflap.png" />
+    <Image Include="build_web\assets\sprites\redbird-midflap.png" />
+    <Image Include="build_web\assets\sprites\redbird-upflap.png" />
+    <Image Include="build_web\assets\sprites\yellowbird-downflap.png" />
+    <Image Include="build_web\assets\sprites\yellowbird-midflap.png" />
+    <Image Include="build_web\assets\sprites\yellowbird-upflap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="build_web\index.data" />
+    <None Include="build_web\index.html" />
+    <None Include="build_web\index.js" />
+    <None Include="build_web\index.wasm" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
