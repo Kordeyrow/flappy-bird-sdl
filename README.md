@@ -11,20 +11,19 @@
 </div>
 
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
   <a href="https://kordeyrow.github.io/flappy-bird-sdl/">
     <img src="docs/logo.png" alt="Logo" width="180" height="160">
   </a>
-  </br>
-  <a href="https://kordeyrow.github.io/flappy-bird-sdl/">
-    <img src="docs/play-btn.png" alt="Play Button" width="180" height="50">
+</div>
+</br>
+
+<!-- PLAY GAME BUTTON -->
+<div align="center">
+  <a href="https://kordeyrow.github.io/flappy-bird-sdl/" style="text-decoration: none">
+      <img src="docs/play-btn-offset.png" alt="Play Button" width="210" height="50">
   </a>
 </div>
-
-<a href="https://www.libsdl.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Simple_DirectMedia_Layer%2C_Logo.svg" alt="SDL" style="width:130px; height:auto;"></a>ㅤ<a href="https://isocpp.org/"><img src="https://raw.githubusercontent.com/isocpp/logos/master/cpp_logo.png" alt="C++" style="width:60px; height:auto;"></a>
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## Hey there! 😃
@@ -33,9 +32,8 @@
 #### In the making of this game, I was able to learn the basics of SDL (window management, event polling, rendering), improve my C++ knowledge and learn more about project tools like Premake and Emscripten.
 
 ## Built With:
-* C++
-* SDL2
-* Visual Studio
+<!-- TOOLS LOGOS -->
+<a href="https://www.libsdl.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Simple_DirectMedia_Layer%2C_Logo.svg" alt="SDL" style="width:130px; height:auto;"></a>ㅤㅤ<a href="https://isocpp.org/"><img src="https://raw.githubusercontent.com/isocpp/logos/master/cpp_logo.png" alt="C++" style="width:60px; height:auto;"></a>ㅤㅤ<a href="https://visualstudio.microsoft.com/vs/community/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Visual_Studio_Icon_2022.svg/290px-Visual_Studio_Icon_2022.svg.png" alt="Visual Studio" style="width:80px; height:auto;"></a>
 #### Libraries:
 * SDL_Image (load images)
 * SDL_TTF (load fonts)

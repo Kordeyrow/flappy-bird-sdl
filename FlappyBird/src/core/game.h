@@ -257,8 +257,15 @@ public:
 
 			SDL_Rect r;
 			SDL_GetDisplayBounds(0, &r);
-			_window_h = r.h * _window_h_percent_from_client;
-			_window_w = _window_h * _window_w_percent_from_h;
+
+			/*_window_h = r.h * _window_h_percent_from_client;
+			_window_w = _window_h * _window_w_percent_from_h;*/
+			#ifdef __EMSCRIPTEN__
+			_window_h = r.h;
+			_window_w = r.w;
+			#endif
+			_window_w = 460;
+			_window_h = 640;
 
 			SDL_SetWindowSize(_window, _window_w, _window_h);
 			double offset_x = -r.w * 0.04;
@@ -393,7 +400,7 @@ public:
 	}
 
 	void spawn_player() {
-		Vector2 player_size = Vector2{ 42, 32 };
+		Vector2 player_size = Vector2{ 48, 36 };
 		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
 		double ground_y = _window_h + 3;
 		_player = new FlappyBird{
@@ -409,7 +416,7 @@ public:
 
 	void spawn_pipe(double window_w, double window_h, float speed_x) {
 		double size_y = 440;
-		double pair_gap_size = 126;
+		double pair_gap_size = 152;
 
 		// random y
 		double max_y_offset = 128;
@@ -516,7 +523,7 @@ public:
 		if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
 
 		ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
-		ImGui::SetNextWindowPos(ImVec2(0, _window_h / 15), c);
+		ImGui::SetNextWindowPos(ImVec2(0, _window_h / 30), c);
 		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
 		
 		render_score(std::to_string(_score).c_str());

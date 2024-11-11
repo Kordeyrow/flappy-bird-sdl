@@ -3,54 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your SDL Project</title>
+    <title>Flappy Bird!</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="margin: 0; display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
-    <button type="button" id="game-start-button">
-        <span>Start Game!</span>
-    </button>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <img src="assets/logo.png" alt="Game Logo" class="logo">
+        <h1>Flappy Bird!</h1>
+        <br>
+        <p class="developer">by Kordeyrow</p>
+        <br>
+    </header>
 
-    <div id="game-container">
-        <div id="status">Loading...</div>
-        <canvas id="game-board" width="500" height="600" style="display:none"></canvas>
-    </div>
+    <!-- Main content -->
+    <main class="main-content">
+        <div id="game-container" class="game-container">
+            <button type="button" id="game-start-button" class="start-button" width="160px" height="50px">
+              <img src="assets/play-btn.png" width="160px" height="50px">
+            </button>
+            <div id="status" class="loading">Loading...</div>
+            <canvas id="game-board" width="460px" height="640px" style="display:none"></canvas>
+        </div>
+
+        <div class="game-description">
+            <p>Built with SDL</p>
+        </div>
+
+        <!-- GitHub link -->
+        <a class="sub-logo" href="https://github.com/Kordeyrow/flappy-bird-sdl">
+          <img src="assets/github-icon.svg">
+        </a>
+        <h6 class="sub" >
+          View on GitHub
+        </h6>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Kordeyrow</p>
+    </footer>
 
     <script>
-        // Flag to check if the start button was clicked
         let startGameRequested = false;
 
-        // Emscripten Module setup
         var Module = {
-            // This function runs after the WebAssembly runtime is fully initialized
             onRuntimeInitialized() {
                 const status = document.getElementById('status');
-                status.remove();
+                status.style.display = 'none'; // Hide loading after initialization
 
-                // Only call start_game if the start button was clicked
                 if (startGameRequested) {
                     Module.ccall('start_game', null, [], []);
                 }
             },
-            canvas: (function () {
-                const canvas = document.getElementById('game-board');
-                return canvas;
-            })(),
-            // Prevents main() from automatically starting
+            canvas: document.getElementById('game-board'),
             noInitialRun: true
         };
 
-        // DOM Elements
         const startGameButton = document.getElementById('game-start-button');
         const canvas = document.getElementById('game-board');
+        const status = document.getElementById('status');
 
-        // Button event listener to start the game
         startGameButton.addEventListener('click', () => {
             canvas.style.display = 'block';
-            startGameButton.remove();
-            startGameRequested = true; // Set the flag to indicate start was requested
+            startGameButton.style.display = 'none'; // Hide button
+            status.style.display = 'flex'; // Show loading message
+            startGameRequested = true;
 
-            // Dynamically load the game script only when the button is clicked
-            var script = document.createElement('script');
+            const script = document.createElement('script');
             script.src = "./flappy-bird.js";
             document.body.appendChild(script);
         });
