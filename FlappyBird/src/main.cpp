@@ -8,32 +8,43 @@
 Game game;
 bool quit = false;
 
+// Function to initialize the game
 bool init() {
     return game.init<Playing>();
 }
 
+// Function to run the game loop
 void run_game() {
     quit = game.run_until<Closed>();
+#ifdef __EMSCRIPTEN__
     if (quit) {
-        exit(0);
+        emscripten_cancel_main_loop(); // Stop the loop when game is done
     }
+#endif
 }
 
 #ifdef __EMSCRIPTEN__
-int main() {
-    if ( ! init()) {
-        return 1;
+// Function to start the game loop (called from JavaScript)
+extern "C" void start_game() {
+    if (init()) {
+        emscripten_set_main_loop(run_game, 0, 1); // Start the main loop
     }
-    emscripten_set_main_loop(run_game, 0, 1);
-    return 0;
+    else {
+        printf("Failed to initialize game.\n");
+    }
+}
+#endif
+
+#ifdef __EMSCRIPTEN__
+extern "C" int main() {
+    return 0; // Do nothing in main, game loop will start from start_game
 }
 #else
 int main(int argc, char** argv) {
-    if ( ! init()) {
-        return 1;
-    }
-    while (!quit) {
-        run_game();
+    if (init()) {
+        while (!quit) {
+            run_game();
+        }
     }
     return 0;
 }

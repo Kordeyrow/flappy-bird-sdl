@@ -80,12 +80,13 @@ REM -s ALLOW_MEMORY_GROWTH=1
 REM --use-preload-plugins 
 REM -s GL_UNSAFE_OPTS=0
 emcc !SOURCE_FILES! -s USE_SDL=2 -s USE_SDL_IMAGE=2 --preload-file %ASSETS_DIR% --use-preload-plugins ^
+    -s EXPORTED_FUNCTIONS="['_main', '_start_game']" -s "EXPORTED_RUNTIME_METHODS=['ccall']" ^
     -I src ^
     -I src\sdl2imgui ^
     -I ..\SDL2\include ^
     -I ..\SDL2_image\include ^
     -I . ^
-    -o "%OUTPUT_DIR%\index.html"
+    -o "%OUTPUT_DIR%\flappy-bird.js"
 pause
 
 echo.
