@@ -10,33 +10,37 @@ project "FlappyBird"
    language "C++"
    cppdialect "C++14"
    staticruntime "off"
+   targetdir (BinariesDir .. OutputDir .. "%{prj.name}")
+   objdir (BinariesDir .. "Intermediates/" .. OutputDir .. "%{prj.name}")
    files { SourceDir .. "**.h",  SourceDir .. "**.cpp" }
-   targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
-   objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
---    files {
---         "imgui/imgui.cpp",
---         "imgui/imgui_draw.cpp",
---         "imgui/imgui_widgets.cpp",
---         "imgui/imgui_tables.cpp",
---         "imgui/backends/imgui_impl_sdl2.cpp",
---         "imgui/backends/imgui_impl_opengl3.cpp"
---    }
-
+   
    includedirs
    {
         SourceDir,
-	  -- Include Engine
-	    "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
         "../SDL2/include",
         "../SDL2_image/include",
-        "../imgui",
-        "../imgui/backends"
+	    -- "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
    }
 
    links
    {
-        "BirdEngine"
+        "SDL2",
+        "SDL2main",
+        "SDL2_image",
+        -- "BirdEngine",
    }
+
+   libdirs
+   {
+        "../SDL2/lib/x64",
+        "../SDL2_image/lib/x64",
+   }
+
+   dependson
+   {
+        EngineProjName
+   }
+   
 
    filter "system:windows"
        systemversion "latest"

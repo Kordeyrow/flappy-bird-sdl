@@ -1,14 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -17,51 +9,39 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Dist|x64">
+      <Configuration>Dist</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{92D272B5-7E8A-B402-E791-8D5ED3684FF3}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{494620bf-95dd-4ab6-89e7-9d4d21e38b2f}</ProjectGuid>
     <RootNamespace>FlappyBird</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -69,110 +49,108 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\windows-x86_64\Debug\FlappyBird\</OutDir>
+    <IntDir>..\bin\Intermediates\windows-x86_64\Debug\FlappyBird\</IntDir>
+    <TargetName>FlappyBird</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)..\SDL2\include;$(ProjectDir)..\SDL2_image\include;$(ProjectDir)\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\SDL2\lib\x64;$(ProjectDir)..\SDL2_image\lib\x64;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\windows-x86_64\Release\FlappyBird\</OutDir>
+    <IntDir>..\bin\Intermediates\windows-x86_64\Release\FlappyBird\</IntDir>
+    <TargetName>FlappyBird</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\windows-x86_64\Dist\FlappyBird\</OutDir>
+    <IntDir>..\bin\Intermediates\windows-x86_64\Dist\FlappyBird\</IntDir>
+    <TargetName>FlappyBird</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WINDOWS;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WINDOWS;DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\sdl2imgui\imgui.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_impl_sdlrenderer2.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_tables.cpp" />
-    <ClCompile Include="src\sdl2imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\state_machine_base\listener_id.cpp" />
-    <ClCompile Include="src\state_machine_base\state_machine_listener_base.cpp" />
-    <ClCompile Include="src\utils\class_type_check.cpp" />
-    <ClCompile Include="src\core\game.cpp" />
-    <ClCompile Include="src\core\gameplay_base.cpp" />
-    <ClCompile Include="src\core\game_state.cpp" />
-    <ClCompile Include="src\state_machine_base\state_machine.cpp" />
-    <ClCompile Include="src\system_component\entity.cpp" />
-    <ClCompile Include="src\system_component\collider.cpp" />
-    <ClCompile Include="src\entities\pipe.cpp" />
-    <ClCompile Include="src\system_component\drawable.cpp" />
-    <ClCompile Include="src\entities\flappy_bird.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\math\vector2.cpp" />
-    <ClCompile Include="src\res_manager\texture_manager.cpp" />
-    <ClCompile Include="src\system_component\updatable.cpp" />
-    <ClCompile Include="src\system_component\transform.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\core\game.h" />
+    <ClInclude Include="src\core\game_state.h" />
+    <ClInclude Include="src\core\gameplay_base.h" />
+    <ClInclude Include="src\entities\flappy_bird.h" />
+    <ClInclude Include="src\entities\pipe.h" />
+    <ClInclude Include="src\math\vector2.h" />
+    <ClInclude Include="src\res_manager\texture_manager.h" />
     <ClInclude Include="src\sdl2imgui\imconfig.h" />
     <ClInclude Include="src\sdl2imgui\imgui.h" />
     <ClInclude Include="src\sdl2imgui\imgui_impl_sdl2.h" />
@@ -182,91 +160,40 @@
     <ClInclude Include="src\sdl2imgui\imstb_textedit.h" />
     <ClInclude Include="src\sdl2imgui\imstb_truetype.h" />
     <ClInclude Include="src\state_machine_base\listener_id.h" />
-    <ClInclude Include="src\state_machine_base\state_machine_listener_base.h" />
-    <ClInclude Include="src\utils\class_type_check.h" />
-    <ClInclude Include="src\core\game.h" />
-    <ClInclude Include="src\core\gameplay_base.h" />
-    <ClInclude Include="src\core\game_state.h" />
     <ClInclude Include="src\state_machine_base\state_machine.h" />
-    <ClInclude Include="src\system_component\entity.h" />
+    <ClInclude Include="src\state_machine_base\state_machine_listener_base.h" />
     <ClInclude Include="src\system_component\collider.h" />
-    <ClInclude Include="src\entities\pipe.h" />
     <ClInclude Include="src\system_component\drawable.h" />
-    <ClInclude Include="src\entities\flappy_bird.h" />
-    <ClInclude Include="src\math\vector2.h" />
-    <ClInclude Include="src\res_manager\texture_manager.h" />
-    <ClInclude Include="src\system_component\updatable.h" />
+    <ClInclude Include="src\system_component\entity.h" />
     <ClInclude Include="src\system_component\transform.h" />
+    <ClInclude Include="src\system_component\updatable.h" />
+    <ClInclude Include="src\utils\class_type_check.h" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="assets\fonts\flappy-bird-score-font.ttf" />
-    <Font Include="assets\fonts\flappy-bird-score-font___.TTF" />
-    <Font Include="assets\fonts\flappy-bird.ttf" />
-    <Font Include="assets\fonts\flappy-font.ttf" />
-    <Font Include="build_web\assets\fonts\flappy-bird-score-font.ttf" />
-    <Font Include="build_web\assets\fonts\flappy-bird-score-font___.TTF" />
-    <Font Include="build_web\assets\fonts\flappy-bird.ttf" />
-    <Font Include="build_web\assets\fonts\flappy-font.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\sprites\0.png" />
-    <Image Include="assets\sprites\1.png" />
-    <Image Include="assets\sprites\2.png" />
-    <Image Include="assets\sprites\3.png" />
-    <Image Include="assets\sprites\4.png" />
-    <Image Include="assets\sprites\5.png" />
-    <Image Include="assets\sprites\6.png" />
-    <Image Include="assets\sprites\7.png" />
-    <Image Include="assets\sprites\8.png" />
-    <Image Include="assets\sprites\9.png" />
-    <Image Include="assets\sprites\background-day.png" />
-    <Image Include="assets\sprites\background-night.png" />
-    <Image Include="assets\sprites\base.png" />
-    <Image Include="assets\sprites\bluebird-downflap.png" />
-    <Image Include="assets\sprites\bluebird-midflap.png" />
-    <Image Include="assets\sprites\bluebird-upflap.png" />
-    <Image Include="assets\sprites\gameover.png" />
-    <Image Include="assets\sprites\message.png" />
-    <Image Include="assets\sprites\pipe-green.png" />
-    <Image Include="assets\sprites\pipe-red.png" />
-    <Image Include="assets\sprites\redbird-downflap.png" />
-    <Image Include="assets\sprites\redbird-midflap.png" />
-    <Image Include="assets\sprites\redbird-upflap.png" />
-    <Image Include="assets\sprites\yellowbird-downflap.png" />
-    <Image Include="assets\sprites\yellowbird-midflap.png" />
-    <Image Include="assets\sprites\yellowbird-upflap.png" />
-    <Image Include="build_web\assets\sprites\0.png" />
-    <Image Include="build_web\assets\sprites\1.png" />
-    <Image Include="build_web\assets\sprites\2.png" />
-    <Image Include="build_web\assets\sprites\3.png" />
-    <Image Include="build_web\assets\sprites\4.png" />
-    <Image Include="build_web\assets\sprites\5.png" />
-    <Image Include="build_web\assets\sprites\6.png" />
-    <Image Include="build_web\assets\sprites\7.png" />
-    <Image Include="build_web\assets\sprites\8.png" />
-    <Image Include="build_web\assets\sprites\9.png" />
-    <Image Include="build_web\assets\sprites\background-day.png" />
-    <Image Include="build_web\assets\sprites\background-night.png" />
-    <Image Include="build_web\assets\sprites\base.png" />
-    <Image Include="build_web\assets\sprites\bluebird-downflap.png" />
-    <Image Include="build_web\assets\sprites\bluebird-midflap.png" />
-    <Image Include="build_web\assets\sprites\bluebird-upflap.png" />
-    <Image Include="build_web\assets\sprites\gameover.png" />
-    <Image Include="build_web\assets\sprites\message.png" />
-    <Image Include="build_web\assets\sprites\pipe-green.png" />
-    <Image Include="build_web\assets\sprites\pipe-red.png" />
-    <Image Include="build_web\assets\sprites\redbird-downflap.png" />
-    <Image Include="build_web\assets\sprites\redbird-midflap.png" />
-    <Image Include="build_web\assets\sprites\redbird-upflap.png" />
-    <Image Include="build_web\assets\sprites\yellowbird-downflap.png" />
-    <Image Include="build_web\assets\sprites\yellowbird-midflap.png" />
-    <Image Include="build_web\assets\sprites\yellowbird-upflap.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="build_web\index.data" />
-    <None Include="build_web\index.html" />
-    <None Include="build_web\index.js" />
-    <None Include="build_web\index.wasm" />
+    <ClCompile Include="src\core\game.cpp" />
+    <ClCompile Include="src\core\game_state.cpp" />
+    <ClCompile Include="src\core\gameplay_base.cpp" />
+    <ClCompile Include="src\entities\flappy_bird.cpp" />
+    <ClCompile Include="src\entities\pipe.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\vector2.cpp" />
+    <ClCompile Include="src\res_manager\texture_manager.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\sdl2imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\state_machine_base\listener_id.cpp" />
+    <ClCompile Include="src\state_machine_base\state_machine.cpp" />
+    <ClCompile Include="src\state_machine_base\state_machine_listener_base.cpp" />
+    <ClCompile Include="src\system_component\collider.cpp" />
+    <ClCompile Include="src\system_component\drawable.cpp" />
+    <ClCompile Include="src\system_component\entity.cpp" />
+    <ClCompile Include="src\system_component\transform.cpp" />
+    <ClCompile Include="src\system_component\updatable.cpp" />
+    <ClCompile Include="src\utils\class_type_check.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
