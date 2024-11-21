@@ -24,9 +24,6 @@
 #include "game_state.h"
 #include <queue>
 
-class Closed;
-class Playing;
-
 struct BoolCondition {
 	bool& condition;
 
@@ -105,10 +102,6 @@ struct EventCondition {
 	}
 };
 
-
-
-
-
 class StateTransitionBase {
 public:
 	StateTransitionBase() {}
@@ -149,11 +142,6 @@ private:
 template<typename OriginState, typename TargetState>
 class StateTransition : public StateTransitionBase {
 };
-
-
-
-class Game;
-class GameOver;
 
 
 //class GameTransitionsManager {
@@ -416,7 +404,7 @@ public:
 
 	void spawn_pipe(double window_w, double window_h, float speed_x) {
 		double size_y = 440;
-		double pair_gap_size = 152;
+		double pair_gap_size = 156;
 
 		// random y
 		double max_y_offset = 128;
