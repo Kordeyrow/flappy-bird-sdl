@@ -91,6 +91,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>..\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist "../bin/windows-x86_64/Debug/FlappyBird" mkdir "../bin/windows-x86_64/Debug/FlappyBird"
+IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll"\ (xcopy /Q /E /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -115,6 +119,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>..\bin\windows-x86_64\Release\BirdEngine\BirdEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist "../bin/windows-x86_64/Release/FlappyBird" mkdir "../bin/windows-x86_64/Release/FlappyBird"
+IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll"\ (xcopy /Q /E /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
@@ -139,16 +147,20 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>..\bin\windows-x86_64\Dist\BirdEngine\BirdEngine.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist "../bin/windows-x86_64/Dist/FlappyBird" mkdir "../bin/windows-x86_64/Dist/FlappyBird"
+IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll"\ (xcopy /Q /E /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdEngine.dll" "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\FlappyBird" &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\BirdEngine.h" />
     <ClInclude Include="src\dll\framework.h" />
     <ClInclude Include="src\dll\pch.h" />
+    <ClInclude Include="src\engine\bird-engine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BirdEngine.cpp" />
     <ClCompile Include="src\dll\dllmain.cpp" />
     <ClCompile Include="src\dll\pch.cpp" />
+    <ClCompile Include="src\engine\bird-engine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -72,7 +72,7 @@ public:
 
     State* get_current_state() { return current_state; };
 
-private:
+//private:
     void change_state(State* new_state) {
         // var swap
         State* old_state = current_state;

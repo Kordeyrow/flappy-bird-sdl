@@ -3,7 +3,7 @@ ProjectPrefix = "proj-"
 EngineProjName = "BirdEngine"
 GameProj = "FlappyBird"
 
-workspace "FlappyBirdSolution"
+workspace "FlappyBird"
         architecture "x64"
         configurations { "Debug", "Release", "Dist" }
         startproject "FlappyBird"

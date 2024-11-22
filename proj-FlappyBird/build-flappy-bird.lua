@@ -4,14 +4,25 @@ BinariesDir = "../bin/"
 SourceDir = "src/"
 ProjectPrefix = "proj-"
 EngineProjName = "BirdEngine"
+GameProj = "FlappyBird"
+ThisProj = GameProj
 
-project "FlappyBird"
-   kind "ConsoleApp"
+-- Libs
+SDL2DllPath = "../SDL2/lib/x64/"
+SDL2DllPathFile = SDL2DllPath .. "SDL2.dll"
+SDL2_imageDllPath = "../SDL2_image/lib/x64/"
+SDL2_imageDllPathFile = SDL2_imageDllPath .. "SDL2_image.dll"
+-- Assets
+AssetsDir = "assets"
+
+
+project ("" .. ThisProj)
+   kind "WindowedApp"
    language "C++"
    cppdialect "C++14"
    staticruntime "off"
-   targetdir (BinariesDir .. OutputDir .. "%{prj.name}")
-   objdir (BinariesDir .. "Intermediates/" .. OutputDir .. "%{prj.name}")
+   targetdir (BinariesDir .. OutputDir .. ThisProj)
+   objdir (BinariesDir .. "Intermediates/" .. OutputDir .. ThisProj)
    files { SourceDir .. "**.h",  SourceDir .. "**.cpp" }
    
    includedirs
@@ -19,7 +30,7 @@ project "FlappyBird"
         SourceDir,
         "../SDL2/include",
         "../SDL2_image/include",
-	    -- "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
+	    "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
    }
 
    links
@@ -27,24 +38,30 @@ project "FlappyBird"
         "SDL2",
         "SDL2main",
         "SDL2_image",
-        -- "BirdEngine",
+        EngineProjName,
    }
 
    libdirs
    {
-        "../SDL2/lib/x64",
-        "../SDL2_image/lib/x64",
+        SDL2DllPath,
+        SDL2_imageDllPath,
    }
 
    dependson
    {
-        EngineProjName
+       EngineProjName
    }
    
 
    filter "system:windows"
        systemversion "latest"
        defines { "WINDOWS" }
+       postbuildcommands {
+           '{COPY} "'..SDL2DllPathFile..'" "%{cfg.targetdir}"',
+           '{COPY} "'..SDL2_imageDllPathFile..'" "%{cfg.targetdir}"',
+           '{MKDIR} "%{cfg.targetdir}/' .. path.getname(AssetsDir) .. '"',
+           '{COPYDIR} "' .. AssetsDir .. '" "%{cfg.targetdir}/' .. path.getname(AssetsDir) .. '"'
+       }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

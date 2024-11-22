@@ -1,17 +1,24 @@
 #include <SDL.h>
-#include <core/game.h>
+#include <game/game.h>
+#include <engine/bird-engine.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
 Game game;
-bool quit = false;
+bool quit = false; 
 
 // Function to initialize the game
 bool init() {
+
+    // class from dll from engine project
+    BirdEngine engine;
+    engine.run();
+
     return game.init<Playing>();
 }
+
 
 // Function to run the game loop
 void run_game() {

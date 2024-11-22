@@ -241,7 +241,29 @@ public:
 
 		try
 		{
-			SDL_CreateWindowAndRenderer(_window_w, _window_h, 0, &_window, &_renderer);
+			_window = SDL_CreateWindow(
+				"Flappy Bird",                // Window title
+				0,       // X position
+				0,       // Y position
+				0,                          // Width
+				0,                          // Height
+				SDL_WINDOW_SHOWN         // Borderless flag
+			);
+
+			if (!_window) {
+				std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
+				SDL_Quit();
+				return -1;
+			}
+
+			// Create a renderer
+			_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+			if (!_renderer) {
+				std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
+				SDL_DestroyWindow(_window);
+				SDL_Quit();
+				return -1;
+			}
 
 			SDL_Rect r;
 			SDL_GetDisplayBounds(0, &r);

@@ -14,5 +14,5 @@
 class BIRDENGINE_API BirdEngine {
 public:
 	BirdEngine(void);
-	// TODO: add your methods here.
+	void run();
 };

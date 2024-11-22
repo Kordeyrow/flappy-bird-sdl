@@ -4,23 +4,30 @@
     <Filter Include="dll">
       <UniqueIdentifier>{A16A880B-0D74-887C-96EF-9E7C02F8937C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\BirdEngine.h" />
     <ClInclude Include="src\dll\framework.h">
       <Filter>dll</Filter>
     </ClInclude>
     <ClInclude Include="src\dll\pch.h">
       <Filter>dll</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\bird-engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BirdEngine.cpp" />
     <ClCompile Include="src\dll\dllmain.cpp">
       <Filter>dll</Filter>
     </ClCompile>
     <ClCompile Include="src\dll\pch.cpp">
       <Filter>dll</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\bird-engine.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

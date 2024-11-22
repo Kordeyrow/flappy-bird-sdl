@@ -11,7 +11,7 @@
 #include <entities/flappy_bird.h>
 #include <state_machine_base/state_machine.h>
 #include <utils/class_type_check.h>
-#include <core/gameplay_base.h>
+#include <game/gameplay_base.h>
 
 class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public RectangleCollider {
 public:

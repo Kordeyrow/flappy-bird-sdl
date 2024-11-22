@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;..\proj-BirdEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -87,18 +87,24 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "..\SDL2\lib\x64\SDL2.dll"\ (xcopy /Q /E /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Debug\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Debug\FlappyBird" &gt; nul)
+IF EXIST "..\SDL2_image\lib\x64\SDL2_image.dll"\ (xcopy /Q /E /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Debug\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Debug\FlappyBird" &gt; nul)
+IF NOT EXIST "..\bin\windows-x86_64\Debug\FlappyBird\assets" (mkdir "..\bin\windows-x86_64\Debug\FlappyBird\assets")
+xcopy /Q /E /Y /I "assets" "..\bin\windows-x86_64\Debug\FlappyBird\assets"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WINDOWS;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;..\proj-BirdEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -110,20 +116,26 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "..\SDL2\lib\x64\SDL2.dll"\ (xcopy /Q /E /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Release\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Release\FlappyBird" &gt; nul)
+IF EXIST "..\SDL2_image\lib\x64\SDL2_image.dll"\ (xcopy /Q /E /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Release\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Release\FlappyBird" &gt; nul)
+IF NOT EXIST "..\bin\windows-x86_64\Release\FlappyBird\assets" (mkdir "..\bin\windows-x86_64\Release\FlappyBird\assets")
+xcopy /Q /E /Y /I "assets" "..\bin\windows-x86_64\Release\FlappyBird\assets"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WINDOWS;DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\SDL2\include;..\SDL2_image\include;..\proj-BirdEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -135,20 +147,26 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\SDL2\lib\x64;..\SDL2_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST "..\SDL2\lib\x64\SDL2.dll"\ (xcopy /Q /E /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Dist\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2\lib\x64\SDL2.dll" "..\bin\windows-x86_64\Dist\FlappyBird" &gt; nul)
+IF EXIST "..\SDL2_image\lib\x64\SDL2_image.dll"\ (xcopy /Q /E /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Dist\FlappyBird" &gt; nul) ELSE (xcopy /Q /Y /I "..\SDL2_image\lib\x64\SDL2_image.dll" "..\bin\windows-x86_64\Dist\FlappyBird" &gt; nul)
+IF NOT EXIST "..\bin\windows-x86_64\Dist\FlappyBird\assets" (mkdir "..\bin\windows-x86_64\Dist\FlappyBird\assets")
+xcopy /Q /E /Y /I "assets" "..\bin\windows-x86_64\Dist\FlappyBird\assets"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\game.h" />
-    <ClInclude Include="src\core\game_state.h" />
-    <ClInclude Include="src\core\gameplay_base.h" />
     <ClInclude Include="src\entities\flappy_bird.h" />
     <ClInclude Include="src\entities\pipe.h" />
+    <ClInclude Include="src\game\game.h" />
+    <ClInclude Include="src\game\game_state.h" />
+    <ClInclude Include="src\game\gameplay_base.h" />
     <ClInclude Include="src\math\vector2.h" />
     <ClInclude Include="src\res_manager\texture_manager.h" />
     <ClInclude Include="src\sdl2imgui\imconfig.h" />
@@ -170,11 +188,11 @@
     <ClInclude Include="src\utils\class_type_check.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\game.cpp" />
-    <ClCompile Include="src\core\game_state.cpp" />
-    <ClCompile Include="src\core\gameplay_base.cpp" />
     <ClCompile Include="src\entities\flappy_bird.cpp" />
     <ClCompile Include="src\entities\pipe.cpp" />
+    <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\game\game_state.cpp" />
+    <ClCompile Include="src\game\gameplay_base.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vector2.cpp" />
     <ClCompile Include="src\res_manager\texture_manager.cpp" />
@@ -194,6 +212,11 @@
     <ClCompile Include="src\system_component\transform.cpp" />
     <ClCompile Include="src\system_component\updatable.cpp" />
     <ClCompile Include="src\utils\class_type_check.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\proj-BirdEngine\BirdEngine.vcxproj">
+      <Project>{DCED76F7-C8A5-B844-31AD-91A01D845335}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="core">
-      <UniqueIdentifier>{4E40957C-3A77-960D-E363-7C10CF79120F}</UniqueIdentifier>
-    </Filter>
     <Filter Include="entities">
       <UniqueIdentifier>{AA3F76DB-960C-D1E6-BF25-BF8EAB510675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{9F35977C-8B6C-980D-3459-7E10206F140F}</UniqueIdentifier>
     </Filter>
     <Filter Include="math">
       <UniqueIdentifier>{CF809A7C-BBB7-9B0D-64A4-811050BA170F}</UniqueIdentifier>
@@ -27,20 +27,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\game.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\game_state.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\gameplay_base.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="src\entities\flappy_bird.h">
       <Filter>entities</Filter>
     </ClInclude>
     <ClInclude Include="src\entities\pipe.h">
       <Filter>entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\game.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\game_state.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\gameplay_base.h">
+      <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="src\math\vector2.h">
       <Filter>math</Filter>
@@ -101,20 +101,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\game.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\game_state.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\gameplay_base.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="src\entities\flappy_bird.cpp">
       <Filter>entities</Filter>
     </ClCompile>
     <ClCompile Include="src\entities\pipe.cpp">
       <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\game.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\game_state.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\gameplay_base.cpp">
+      <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vector2.cpp">
