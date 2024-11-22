@@ -13,53 +13,46 @@
 <!-- PROJECT LOGO -->
 <div align="center">
   <a href="https://kordeyrow.github.io/flappy-bird-sdl/">
-    <img src="docs/logo.png" alt="Logo" width="180" height="160">
+    <img src="docs/logo2.png" alt="Logo" width="160" height="160">
   </a>
 </div>
-</br>
 
 <!-- PLAY GAME BUTTON -->
 <div align="center">
   <a href="https://kordeyrow.github.io/flappy-bird-sdl/" style="text-decoration: none">
-      <img src="docs/play-btn-offset.png" alt="Play Button" width="210" height="50">
+      <img src="docs/play-btn.png" alt="Play Button" width="166" height="48">
   </a>
 </div>
 
 <!-- ABOUT THE PROJECT -->
-## Hey there! 😃
-#### Thanks for checking out my SDL study project! 👍
+## $\textsf{\color{#30e0a0}{Hey there! 😃}}$ 
+#### Thanks for checking out my Flappy Bird game project!  ☝️ Play now! ☝️
 #### I chose Flappy Bird game because it is simple, but still has interesting features like gravity, collision and spawnnig. And also because it's a fun game if the developer balance the values carefully.
 #### In the making of this game, I was able to learn the basics of SDL (window management, event polling, rendering), improve my C++ knowledge and learn more about project tools like Premake and Emscripten.
 
-## Built With:
+## $\textsf{\color{#50c090}{Built With:}}$ 
 <!-- TOOLS LOGOS -->
 <a href="https://www.libsdl.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Simple_DirectMedia_Layer%2C_Logo.svg" alt="SDL" style="width:130px; height:auto;"></a>ㅤㅤ<a href="https://isocpp.org/"><img src="https://raw.githubusercontent.com/isocpp/logos/master/cpp_logo.png" alt="C++" style="width:60px; height:auto;"></a>ㅤㅤ<a href="https://visualstudio.microsoft.com/vs/community/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Visual_Studio_Icon_2022.svg/290px-Visual_Studio_Icon_2022.svg.png" alt="Visual Studio" style="width:80px; height:auto;"></a>
-#### Libraries:
+### $\textsf{\color{#d0c080}{Libraries:}}$ 
 * SDL_Image (load images)
 * SDL_TTF (load fonts)
 * ImGui (render UI)
-#### Tools:
+### $\textsf{\color{#d0c080}{Tools:}}$ 
 * Premake (generate project files for Visual Studio)
 * Emscripten (generate web build)
 
-</br>
-
 <!-- LICENSE -->
-## License
+## $\textsf{\color{#50c090}{License}}$ 
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-</br>
-
 <!-- CONTACT -->
-## Contact
+## $\textsf{\color{#50c090}{Contact}}$ 
 
 Matheus Cordeiro - #kordeyrow (discord) - kordeyrow@gmail.com
 
-</br>
-
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## $\textsf{\color{#50c090}{Acknowledgments}}$ 
 
 * [Best README Template (Github)](https://github.com/othneildrew/Best-README-Template/tree/main?tab=readme-ov-file)
 * [The Cherno (Youtube)](https://www.youtube.com/@TheCherno)
