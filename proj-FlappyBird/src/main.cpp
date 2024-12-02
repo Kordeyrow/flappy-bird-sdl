@@ -8,13 +8,12 @@
 
 Game game;
 bool quit = false;
-BirdEngine bird_engine;
 
-// Function to initialize the game
 bool init() {
+    BirdEngine::instance().init();
 
-    // class from dll from engine project
-    bird_engine.init();
+    /*UserInterface& ui = bird_engine.get_user_interface();    
+    ui.*/
 
     return game.init<Playing>();
 }
@@ -22,7 +21,7 @@ bool init() {
 
 // Function to run the game loop
 void run_game() {
-    bird_engine.run();
+    BirdEngine::instance().run();
     quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__
     if (quit) {

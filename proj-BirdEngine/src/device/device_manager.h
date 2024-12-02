@@ -4,10 +4,18 @@
 #include <SDL_image.h>
 #include <user_interface/gui/gui_manager.h>
 
-struct DeviceInitData {
+struct WindowInitData {
 public:
 	std::string title;
-	SDL_Rect desired_rect;
+	int pos_x;
+	int pos_y;
+	int width;
+	int height;
+};
+
+struct DeviceInitData {
+public:
+	WindowInitData window_init_data;
 };
 
 class DeviceManager {
@@ -55,17 +63,23 @@ public:
 		}
 
 		gui_manager.init(window, renderer);
+		init_window(data.window_init_data);
 
 		// TODO: move this setup to "client"
+		SDL_Rect display_rect;
+		SDL_GetDisplayBounds(0, &display_rect);
 		int w = 460;
 		int h = 640;
 		double offset_x = -w * 0.04;
 		double offset_y = -offset_x * 0.6;
 		int pos_x = w / 2 - w / 2 + offset_x;
-		int pos_y = h / 2 - h / 2 + offset_y;
-		setup_window(data.title, data.desired_rect);
-
-		// TODO: move this setup to "client"
+		int pos_y = h / 2 - h / 2 + offset_y;		
+		/*_window_h = r.h * _window_h_percent_from_client;
+		_window_w = _window_h * _window_w_percent_from_h;
+#ifdef __EMSCRIPTEN__
+		_window_h = r.h;
+		_window_w = r.w;
+#endif*/
 		gui_manager.set_dark_colorstyle();
 		ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
 
@@ -91,27 +105,10 @@ private:
 		SDL_Quit();
 	}
 
-	void setup_window(std::string title, SDL_Rect desired_rect) {
-		SDL_Rect display_rect;
-		SDL_GetDisplayBounds(0, &display_rect);
-		/*
-		_window_h = r.h * _window_h_percent_from_client;
-		_window_w = _window_h * _window_w_percent_from_h;
-#ifdef __EMSCRIPTEN__
-		_window_h = r.h;
-		_window_w = r.w;
-#endif
-		*/
-		window_w = 460;
-		window_h = 640;
-
-		SDL_SetWindowSize(window, window_w, window_h);
-		double offset_x = -desired_rect.w * 0.04;
-		double offset_y = -offset_x * 0.6;
-		SDL_SetWindowPosition(window,
-			desired_rect.w / 2 - window_w / 2 + offset_x,
-			desired_rect.h / 2 - window_h / 2 + offset_y);
-		SDL_SetWindowTitle(window, title.c_str());
+	void init_window(WindowInitData data) {
+		SDL_SetWindowSize(window, data.width, data.height);
+		SDL_SetWindowPosition(window, data.pos_x, data.pos_y);
+		SDL_SetWindowTitle(window, data.title.c_str());
 	}
 
 public: 

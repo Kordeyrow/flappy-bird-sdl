@@ -1,21 +1,39 @@
 #include "dll/pch.h"
 #include "dll/framework.h"
 #include "bird-engine.h"
+#include <device/device_manager.h>
+#include <user_interface/user_interface.h>
 #include <iostream>
+#include <mutex>
 
-BirdEngine::BirdEngine() {}
-BirdEngine::~BirdEngine() {}
+struct BirdEngine::Impl {
+    DeviceManager device_manager;
+    UserInterface user_interface;
 
-void BirdEngine::init()
-{
+    Impl() : device_manager(), user_interface() {}
+    ~Impl() = default;
+
+    void init() {
+        //device_manager.init(data);
+    }
+
+    void run() {
+        std::cout << "Engine run()" << std::endl;
+    }
+};
+
+BirdEngine& BirdEngine::instance() {
+    static BirdEngine instance;
+    return instance;
 }
 
-void BirdEngine::run()
-{
-    std::cout << "Engine run()" << std::endl;
-    return;
+BirdEngine::BirdEngine() : pImpl(std::make_unique<Impl>()) {}
+BirdEngine::~BirdEngine() = default;
+
+void BirdEngine::init() {
+    pImpl->init();
 }
 
-UserInterface& BirdEngine::get_user_interface() {
-    return user_interface;
+void BirdEngine::run() {
+    pImpl->run();
 }

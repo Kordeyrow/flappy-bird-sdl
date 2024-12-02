@@ -1,23 +1,26 @@
-// The following ifdef block is the standard way of creating macros which make exporting
-// from a DLL simpler. All files within this DLL are compiled with the BIRDENGINE_EXPORTS
-// symbol defined on the command line. This symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see
-// BIRDENGINE_API functions as being imported from a DLL, whereas this DLL sees symbols
-// defined with this macro as being exported.
 #pragma once
 #include <dll/export_def.h>
-#include <device/device_manager.h>
-#include <user_interface/user_interface.h>
+#include <memory>
 
-// This class is exported from the dll
+// Exported class from the DLL
 class BIRDENGINE_API BirdEngine {
 public:
-	BirdEngine();
-	~BirdEngine();
-	void init();
-	void run();
-	UserInterface& get_user_interface();
+    // Deleted copy constructor and assignment operator
+    BirdEngine(const BirdEngine&) = delete;
+    BirdEngine& operator=(const BirdEngine&) = delete;
+
+    // Static method to access the singleton instance
+    static BirdEngine& instance();
+
+    void init();
+    void run();
+
 private:
-	DeviceManager device_manager;
-	UserInterface user_interface;
+    // Private constructor and destructor
+    BirdEngine();
+    ~BirdEngine();
+
+    // Pimpl idiom: Pointer to the implementation
+    struct Impl;
+    std::unique_ptr<Impl> pImpl;
 };
