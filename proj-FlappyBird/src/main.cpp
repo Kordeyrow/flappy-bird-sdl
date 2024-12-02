@@ -19,7 +19,7 @@ void setup_window() {
     int pos_y = display_size.y / 2 - height / 2 + offset_y;
     WindowRect r{ Size{width, height}, Position{pos_x, pos_y} }; 
     BirdEngine::instance().set_window_rect(r);
-    BirdEngine::instance().set_background_color(Color{120, 200, 250, 255});
+    BirdEngine::instance().set_background_color(Color::BLUE_BIRD());
 }
 
 bool init() {

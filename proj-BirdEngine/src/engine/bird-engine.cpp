@@ -10,7 +10,7 @@ struct BirdEngine::Impl {
     DeviceManager device_manager;
     UserInterface user_interface;
     Color default_renderer_draw_color = Color{ 255, 255, 255, 255 };
-    Color background_color = Color{ 120, 200, 250, 255 };
+    Color background_color = Color::BLUE_BIRD();
 
     Impl() : device_manager(), user_interface() {}
     ~Impl() = default;

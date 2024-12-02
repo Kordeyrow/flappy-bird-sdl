@@ -1,6 +1,7 @@
 #pragma once
 #include <dll/export_def.h>
 #include <device/device_init_data.h>
+#include <containers/containers.h>
 #include <memory>
 
 typedef enum {
