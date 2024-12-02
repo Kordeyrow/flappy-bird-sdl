@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="device">
+      <UniqueIdentifier>{150F89F8-01B1-B3CE-EA6B-C722D6AC3A1F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="dll">
       <UniqueIdentifier>{A16A880B-0D74-887C-96EF-9E7C02F8937C}</UniqueIdentifier>
     </Filter>
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="user_interface">
+      <UniqueIdentifier>{B4E1421C-A0AF-3622-8943-A74875B01287}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\device\device_manager.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dll\export_def.h">
+      <Filter>dll</Filter>
+    </ClInclude>
     <ClInclude Include="src\dll\framework.h">
       <Filter>dll</Filter>
     </ClInclude>
@@ -18,9 +30,33 @@
     <ClInclude Include="src\engine\bird-engine.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\user_interface\SHP_events.h">
+      <Filter>user_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\input_manager.h">
+      <Filter>user_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\user_interface.h">
+      <Filter>user_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imconfig.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_internal.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_rectpack.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_textedit.h" />
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_truetype.h" />
+    <ClInclude Include="src\user_interface\gui\gui_manager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\device\device_manager.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
     <ClCompile Include="src\dll\dllmain.cpp">
+      <Filter>dll</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dll\export_def.cpp">
       <Filter>dll</Filter>
     </ClCompile>
     <ClCompile Include="src\dll\pch.cpp">
@@ -29,5 +65,22 @@
     <ClCompile Include="src\engine\bird-engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\user_interface\SHP_events.cpp">
+      <Filter>user_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\input_manager.cpp">
+      <Filter>user_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\user_interface.cpp">
+      <Filter>user_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_demo.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_draw.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_tables.cpp" />
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_widgets.cpp" />
+    <ClCompile Include="src\user_interface\gui\gui_manager.cpp" />
   </ItemGroup>
 </Project>

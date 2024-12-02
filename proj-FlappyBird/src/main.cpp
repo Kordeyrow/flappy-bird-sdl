@@ -7,14 +7,14 @@
 #endif
 
 Game game;
-bool quit = false; 
+bool quit = false;
+BirdEngine bird_engine;
 
 // Function to initialize the game
 bool init() {
 
     // class from dll from engine project
-    BirdEngine engine;
-    engine.run();
+    bird_engine.init();
 
     return game.init<Playing>();
 }
@@ -22,6 +22,7 @@ bool init() {
 
 // Function to run the game loop
 void run_game() {
+    bird_engine.run();
     quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__
     if (quit) {

@@ -9,9 +9,9 @@
 #include <typeindex>
 #include <string>
 
-#include <sdl2imgui/imgui.h>
-#include <sdl2imgui/imgui_impl_sdl2.h>
-#include <sdl2imgui/imgui_impl_sdlrenderer2.h>
+//#include <sdl2imgui/imgui.h>
+//#include <sdl2imgui/imgui_impl_sdl2.h>
+//#include <sdl2imgui/imgui_impl_sdlrenderer2.h>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -23,6 +23,10 @@
 #include <state_machine_base/state_machine.h>
 #include "game_state.h"
 #include <queue>
+
+#include <containers/func/action.h>
+#include <containers/input/input_group.h>
+
 
 struct BoolCondition {
 	bool& condition;
@@ -212,7 +216,7 @@ private:
 	// StateMachine
 	StateMachine* _state_machine{};
 	// score
-	ImFont* score_font = nullptr;
+	//ImFont* score_font = nullptr;
 	int _score = 0;
 	// pipe
 	std::queue<std::tuple<Pipe*, Pipe*>> pipe_tuple_queue; // when "_next_pipes" is passed by player, get next
@@ -284,7 +288,7 @@ public:
 
 			SDL_SetWindowTitle(_window, "Flappy Bird");
 
-			init_imgui();
+			//init_imgui();
 
 			// texture
 			_texture_manager = new TextureManager(_renderer);
@@ -347,56 +351,59 @@ public:
 	//	_state_machine->init(CreateState<StartStateType>());
 	//}
 
-	void init_imgui() {
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
 
-		ImGuiIO& io = ImGui::GetIO();
-		(void)io;
 
-		// Load custom font (make sure the .ttf file path is correct)
-		score_font = io.Fonts->AddFontFromFileTTF("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
-		ImGui::StyleColorsDark();
 
-		// Setup Platform/Renderer backends
-		ImGui_ImplSDL2_InitForSDLRenderer(_window, _renderer);
-		ImGui_ImplSDLRenderer2_Init(_renderer);
+	//void init_imgui() {
+	//	IMGUI_CHECKVERSION();
+	//	ImGui::CreateContext();
 
-		// Start the Dear ImGui frame
-		ImGui_ImplSDLRenderer2_NewFrame();
-		ImGui_ImplSDL2_NewFrame();
-	}
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	(void)io;
+
+	//	// Load custom font (make sure the .ttf file path is correct)
+	//	score_font = io.Fonts->AddFontFromFileTTF("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
+	//	ImGui::StyleColorsDark();
+
+	//	// Setup Platform/Renderer backends
+	//	ImGui_ImplSDL2_InitForSDLRenderer(_window, _renderer);
+	//	ImGui_ImplSDLRenderer2_Init(_renderer);
+
+	//	// Start the Dear ImGui frame
+	//	ImGui_ImplSDLRenderer2_NewFrame();
+	//	ImGui_ImplSDL2_NewFrame();
+	//}
 
 public:
-	void render_score(const char* score, ImFont* font = nullptr) {
-		if (font == nullptr) { font = score_font; }
+	//void render_score(const char* score, ImFont* font = nullptr) {
+	//	if (font == nullptr) { font = score_font; }
 
-		// Load custom font (make sure the .ttf file path is correct)
-		ImGuiStyle& style = ImGui::GetStyle();
+	//	// Load custom font (make sure the .ttf file path is correct)
+	//	ImGuiStyle& style = ImGui::GetStyle();
 
-		// Set all borders and window decorations to zero or transparent
-		style.WindowBorderSize = 0.0f; // No border on windows
-		style.FrameBorderSize = 0.0f;  // No border on frames
-		style.WindowRounding = 0.0f;   // No corner rounding for window
-		style.FrameRounding = 0.0f;    // No corner rounding for frames
+	//	// Set all borders and window decorations to zero or transparent
+	//	style.WindowBorderSize = 0.0f; // No border on windows
+	//	style.FrameBorderSize = 0.0f;  // No border on frames
+	//	style.WindowRounding = 0.0f;   // No corner rounding for window
+	//	style.FrameRounding = 0.0f;    // No corner rounding for frames
 
-		//// Make window and frame backgrounds fully transparent
-		style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-		style.Colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-		style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-		style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
-		ImGui::PushFont(font);
-		//auto prev_cursor_pos_x = ImGui::GetCursorPosX();
-		auto textWidth = ImGui::CalcTextSize(score).x;
-		const char* score_0 = &score[0];
-		auto textWidth_fix_offset = ImGui::CalcTextSize(score_0).x;
-		ImGui::SetCursorPosX(_window_w / 2 - textWidth / 2 + textWidth_fix_offset/2);
-		ImGui::Text(score);
-		ImGui::PopFont();
-		ImGui::PopStyleColor();
-		//ImGui::SetCursorPosX(prev_cursor_pos_x);
-	}
+	//	//// Make window and frame backgrounds fully transparent
+	//	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	//	style.Colors[ImGuiCol_FrameBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	//	style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	//	style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	//	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+	//	ImGui::PushFont(font);
+	//	//auto prev_cursor_pos_x = ImGui::GetCursorPosX();
+	//	auto textWidth = ImGui::CalcTextSize(score).x;
+	//	const char* score_0 = &score[0];
+	//	auto textWidth_fix_offset = ImGui::CalcTextSize(score_0).x;
+	//	ImGui::SetCursorPosX(_window_w / 2 - textWidth / 2 + textWidth_fix_offset/2);
+	//	ImGui::Text(score);
+	//	ImGui::PopFont();
+	//	ImGui::PopStyleColor();
+	//	//ImGui::SetCursorPosX(prev_cursor_pos_x);
+	//}
 
 	template<typename EndStateType>
 	bool run_until() {
@@ -522,26 +529,26 @@ public:
 		SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 	}
 
-	void render_ui() {
-		ImGui::NewFrame();
+	//void render_ui() {
+	//	ImGui::NewFrame();
 
-		// Custom window with no title bar or resizing options
-		ImGuiCond c = ImGuiCond_FirstUseEver;
+	//	// Custom window with no title bar or resizing options
+	//	ImGuiCond c = ImGuiCond_FirstUseEver;
 
-		// update imgui.ini file on start
-		static bool win_init = false;
-		if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
+	//	// update imgui.ini file on start
+	//	static bool win_init = false;
+	//	if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
 
-		ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
-		ImGui::SetNextWindowPos(ImVec2(0, _window_h / 30), c);
-		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
-		
-		render_score(std::to_string(_score).c_str());
+	//	ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
+	//	ImGui::SetNextWindowPos(ImVec2(0, _window_h / 30), c);
+	//	ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+	//	
+	//	//render_score(std::to_string(_score).c_str());
 
-		ImGui::End();
-		ImGui::Render();
-		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
-	}
+	//	ImGui::End();
+	//	ImGui::Render();
+	//	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
+	//}
 
 	void draw_circle(SDL_Renderer* renderer, const CircleCollider& circle, SDL_Color color = { 255, 0, 0, 255 }, bool outline_only = true, int outline_thickness = 4) {
 		// Ensure renderer is valid
@@ -658,7 +665,7 @@ public:
 	void render() {
 		draw_backgroung();
 		draw_sprites();
-		render_ui();
+		//render_ui();
 		if (_is_debug_gizmos_on) draw_debug_info();
 		SDL_RenderPresent(_renderer);
 		SDL_RenderClear(_renderer);
@@ -701,7 +708,7 @@ public:
    		_score = 0;
 	}
 
-	void close() {
+	/*void close() {
 		ImGui_ImplSDLRenderer2_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
@@ -717,7 +724,7 @@ public:
 
 		IMG_Quit(); 
 		SDL_Quit();
-	}
+	}*/
 
 	template<typename GameStateType>
 	GameState* CreateState() {
@@ -764,7 +771,7 @@ public:
 	Closing(Game* game, StateMachineEventEmitter* emitter) : GameState{ game, emitter } {}
 
 	void enter() override {
-		game->close();
+		//game->close();
 	};
 
 	State* run() override {
@@ -811,6 +818,56 @@ public:
 		previous_time = game->get_current_time();
 	};
 
+	void user_input_fire() {
+		if (game->player()->dead() == false) {
+			game->player()->jump();
+		}
+	}
+
+
+
+
+
+	//typedef enum {
+	//	SHP_QUIT,
+	//	SHP_FINGERTOUCH,
+	//	SHP_MOUSEBUTTONDOWN,
+	//	SHP_KEYDOWN,
+	//	SHP_KEYUP
+	//} SHP_InputType;
+
+	//typedef enum {
+	//	SHP_K_SPACE,
+	//	SHP_K_b
+	//} SHP_Keycode;
+
+	//// engine input setup
+	//std::map<SDL_EventType, SHP_InputType> input_type_from_sdl_event {
+	//	{ SDL_QUIT, SHP_QUIT },
+	//	{ SDL_FINGERDOWN, SHP_FINGERTOUCH },
+	//	{ SDL_MOUSEBUTTONDOWN, SHP_MOUSEBUTTONDOWN },
+	//	{ SDL_KEYDOWN, SHP_KEYDOWN },
+	//	{ SDL_KEYUP, SHP_KEYUP },
+	//};
+	//std::map<SDL_Keycode, SHP_Keycode> input_type_from_sdl_event {
+	//	{ SDLK_SPACE, SHP_K_SPACE },
+	//	{ SDLK_b, SHP_K_b },
+	//};
+
+	//// user input setup
+	//std::map<InputGroup, ActionBase> action_from_input {
+	//	{
+
+	//	},
+	//};
+
+
+	//QuitInput quit_input;
+	//const uint16_t INVALID_KEYCODE = -1;
+
+
+
+
 	State* run() override {
 		// time
 		auto current_time = game->get_current_time();
@@ -824,11 +881,15 @@ public:
 			switch (e.type) {
 			case SDL_QUIT:
 				return game->CreateState<Closing>();
+			case SDL_FINGERDOWN:
+				user_input_fire();
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				user_input_fire();
+				break;
 			case SDL_KEYDOWN:
 				if (keycode == SDLK_SPACE) {
-					if (game->player()->dead() == false) {
-						game->player()->jump();
-					}
+					user_input_fire();
 					if (game->player()->fallen()) {
 						// reset
 					}

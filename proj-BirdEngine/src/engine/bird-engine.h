@@ -4,15 +4,20 @@
 // that uses this DLL. This way any other project whose source files include this file see
 // BIRDENGINE_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
-#ifdef BIRDENGINE_EXPORTS
-#define BIRDENGINE_API __declspec(dllexport)
-#else
-#define BIRDENGINE_API __declspec(dllimport)
-#endif
+#pragma once
+#include <dll/export_def.h>
+#include <device/device_manager.h>
+#include <user_interface/user_interface.h>
 
 // This class is exported from the dll
 class BIRDENGINE_API BirdEngine {
 public:
-	BirdEngine(void);
+	BirdEngine();
+	~BirdEngine();
+	void init();
 	void run();
+	UserInterface& get_user_interface();
+private:
+	DeviceManager device_manager;
+	UserInterface user_interface;
 };
