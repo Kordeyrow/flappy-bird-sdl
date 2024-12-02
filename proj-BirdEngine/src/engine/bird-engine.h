@@ -1,6 +1,17 @@
 #pragma once
 #include <dll/export_def.h>
+#include <device/device_init_data.h>
 #include <memory>
+
+typedef enum {
+    RUNNING,
+    QUIT
+} PROGRAM_STATE;
+
+struct EngineInitData {
+public:
+    DeviceInitData device_init_data;
+};
 
 // Exported class from the DLL
 class BIRDENGINE_API BirdEngine {
@@ -12,8 +23,11 @@ public:
     // Static method to access the singleton instance
     static BirdEngine& instance();
 
-    void init();
-    void run();
+    void init(EngineInitData init_data);
+    PROGRAM_STATE run();
+
+    Size get_display_size();
+    void set_window_rect(WindowRect rect);
 
 private:
     // Private constructor and destructor

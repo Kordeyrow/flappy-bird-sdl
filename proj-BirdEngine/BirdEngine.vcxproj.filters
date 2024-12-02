@@ -48,6 +48,7 @@
     <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_textedit.h" />
     <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_truetype.h" />
     <ClInclude Include="src\user_interface\gui\gui_manager.h" />
+    <ClInclude Include="src\device\device_init_data.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\device\device_manager.cpp">
@@ -82,5 +83,6 @@
     <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_tables.cpp" />
     <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_widgets.cpp" />
     <ClCompile Include="src\user_interface\gui\gui_manager.cpp" />
+    <ClCompile Include="src\device\device_init_data.cpp" />
   </ItemGroup>
 </Project>
