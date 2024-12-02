@@ -25,9 +25,6 @@
     <Filter Include="res_manager">
       <UniqueIdentifier>{C9420098-35F8-788D-BEEC-72642AA16F91}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sdl2imgui">
-      <UniqueIdentifier>{B59E9785-2109-4CFC-6A47-FDA1D6F02951}</UniqueIdentifier>
-    </Filter>
     <Filter Include="state_machine_base">
       <UniqueIdentifier>{54D6E07D-40BA-A1D3-A91A-9C26951D8C55}</UniqueIdentifier>
     </Filter>

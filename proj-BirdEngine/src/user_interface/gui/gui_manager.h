@@ -24,6 +24,12 @@ public:
 		return true;
 	}
 
+	void close(){
+		ImGui_ImplSDLRenderer2_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
+	}
+
 	ImFont* add_font(std::string path, float size_pixels) {
 		return ImGui::GetIO().Fonts->AddFontFromFileTTF(path.c_str(), size_pixels);
 	}

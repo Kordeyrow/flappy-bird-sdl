@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="containers">
+      <UniqueIdentifier>{FB7E5497-E736-96E4-503E-6F403C1531D5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="device">
       <UniqueIdentifier>{150F89F8-01B1-B3CE-EA6B-C722D6AC3A1F}</UniqueIdentifier>
     </Filter>
@@ -13,8 +16,20 @@
     <Filter Include="user_interface">
       <UniqueIdentifier>{B4E1421C-A0AF-3622-8943-A74875B01287}</UniqueIdentifier>
     </Filter>
+    <Filter Include="user_interface\gui">
+      <UniqueIdentifier>{2827A061-140B-61B7-7D6B-5B0A696E4B39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user_interface\gui\imgui_sdl">
+      <UniqueIdentifier>{14FAF70D-00B5-E7B9-A96C-60049506324A}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\containers\containers.h">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\device\device_init_data.h">
+      <Filter>device</Filter>
+    </ClInclude>
     <ClInclude Include="src\device\device_manager.h">
       <Filter>device</Filter>
     </ClInclude>
@@ -33,25 +48,47 @@
     <ClInclude Include="src\user_interface\SHP_events.h">
       <Filter>user_interface</Filter>
     </ClInclude>
+    <ClInclude Include="src\user_interface\gui\gui_manager.h">
+      <Filter>user_interface\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imconfig.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_internal.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_rectpack.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_textedit.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_truetype.h">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClInclude>
     <ClInclude Include="src\user_interface\input_manager.h">
       <Filter>user_interface</Filter>
     </ClInclude>
     <ClInclude Include="src\user_interface\user_interface.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imconfig.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_internal.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_rectpack.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_textedit.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_truetype.h" />
-    <ClInclude Include="src\user_interface\gui\gui_manager.h" />
-    <ClInclude Include="src\device\device_init_data.h" />
-    <ClInclude Include="src\containers\containers.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\containers\containers.cpp">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\device\device_init_data.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
     <ClCompile Include="src\device\device_manager.cpp">
       <Filter>device</Filter>
     </ClCompile>
@@ -70,21 +107,35 @@
     <ClCompile Include="src\user_interface\SHP_events.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
+    <ClCompile Include="src\user_interface\gui\gui_manager.cpp">
+      <Filter>user_interface\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_demo.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_draw.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_tables.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_widgets.cpp">
+      <Filter>user_interface\gui\imgui_sdl</Filter>
+    </ClCompile>
     <ClCompile Include="src\user_interface\input_manager.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
     <ClCompile Include="src\user_interface\user_interface.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_demo.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_draw.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_tables.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_widgets.cpp" />
-    <ClCompile Include="src\user_interface\gui\gui_manager.cpp" />
-    <ClCompile Include="src\device\device_init_data.cpp" />
-    <ClCompile Include="src\containers\containers.cpp" />
   </ItemGroup>
 </Project>

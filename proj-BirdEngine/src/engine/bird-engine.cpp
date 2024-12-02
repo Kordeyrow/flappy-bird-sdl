@@ -18,18 +18,41 @@ struct BirdEngine::Impl {
     }
 
     PROGRAM_STATE run() {
-        std::cout << "Engine run()" << std::endl;
+        // elapsed time
+        float elapsed_time_seconds = calculate_elapsed_time_seconds();
+
+        PROGRAM_STATE state = read_input();
+        if (state == PROGRAM_STATE::QUIT) {
+            return state;
+        }
+
         draw();
 
-		SDL_Event e;
-		while (SDL_PollEvent(&e) != 0) {
-			SDL_Keycode keycode = e.key.keysym.sym;
-			switch (e.type) {
-			case SDL_QUIT:
-				return PROGRAM_STATE::QUIT;
-			}
-		}
+        return state;
+    }
 
+    float calculate_elapsed_time_seconds() {
+        static uint32_t previous_time = 0;
+        auto current_time = get_current_time();
+        auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
+        previous_time = current_time;
+        return elapsed_time_seconds;
+    }
+
+    uint32_t get_current_time()
+    {
+        return SDL_GetTicks64();
+    }
+
+    PROGRAM_STATE read_input() {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0) {
+            SDL_Keycode keycode = e.key.keysym.sym;
+            switch (e.type) {
+            case SDL_QUIT:
+                return PROGRAM_STATE::QUIT;
+            }
+        }
         return PROGRAM_STATE::RUNNING;
     }
 

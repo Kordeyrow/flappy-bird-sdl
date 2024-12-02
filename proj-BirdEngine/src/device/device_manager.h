@@ -66,19 +66,15 @@ public:
 
 private:
 	void close() {
-		ImGui_ImplSDLRenderer2_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
-
 		SDL_DestroyWindow(window);
 		window = nullptr;
-
 		SDL_DestroyRenderer(renderer);
 		renderer = nullptr;
 
 		/*_texture_manager->kill();
 		_texture_manager = nullptr;*/
 
+		gui_manager.close();
 		IMG_Quit();
 		SDL_Quit();
 	}
