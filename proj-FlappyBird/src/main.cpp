@@ -9,6 +9,18 @@
 //Game game;
 PROGRAM_STATE program_state = PROGRAM_STATE::RUNNING;
 
+void setup_window() {
+    int width = 460;
+    int height = 640;
+    double offset_x = -width * 0.04;
+    double offset_y = -offset_x * 0.6;
+    Size display_size = BirdEngine::instance().get_display_size();
+    int pos_x = display_size.x / 2 - width / 2 + offset_x;
+    int pos_y = display_size.y / 2 - height / 2 + offset_y;
+    WindowRect r{ Size{width, height}, Position{pos_x, pos_y} };
+    BirdEngine::instance().set_window_rect(r);
+}
+
 bool init() {
     /*SDL_Rect display_rect;
     SDL_GetDisplayBounds(0, &display_rect);*/
@@ -27,22 +39,13 @@ bool init() {
     EngineInitData eng_data{ dev_data };
     BirdEngine::instance().init(eng_data);
 
-    // set_window_rect()
-    int width = 460;
-    int height = 640;
-    double offset_x = -width * 0.04;
-    double offset_y = -offset_x * 0.6;
-    Size display_size = BirdEngine::instance().get_display_size();
-    int pos_x = display_size.x / 2 - width / 2 + offset_x;
-    int pos_y = display_size.y / 2 - height / 2 + offset_y;
-    WindowRect r{Size{width, height}, Position{pos_x, pos_y}};
-    BirdEngine::instance().set_window_rect(r);
-    return true;
+    setup_window();
 
     /*UserInterface& ui = bird_engine.get_user_interface();    
     ui.*/
 
     //return game.init<Playing>();
+    return true;
 }
 
 // Function to run the game loop

@@ -159,6 +159,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\containers\containers.h" />
     <ClInclude Include="src\device\device_init_data.h" />
     <ClInclude Include="src\user_interface\gui\gui_manager.h" />
     <ClInclude Include="src\device\device_manager.h" />
@@ -179,6 +180,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\user_interface\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\containers\containers.cpp" />
     <ClCompile Include="src\device\device_init_data.cpp" />
     <ClCompile Include="src\user_interface\gui\gui_manager.cpp" />
     <ClCompile Include="src\device\device_manager.cpp" />

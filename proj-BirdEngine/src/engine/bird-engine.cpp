@@ -18,15 +18,8 @@ struct BirdEngine::Impl {
     }
 
     PROGRAM_STATE run() {
-        SDL_SetRenderDrawColor(device_manager.renderer, 120, 200, 250, 255);
-        int w, h;
-        SDL_GetWindowSize(device_manager.window, &w, &h);
-        SDL_Rect r{ 0, 0, w, h };
-        SDL_RenderFillRect(device_manager.renderer, &r);
-        SDL_SetRenderDrawColor(device_manager.renderer, 255, 255, 255, 255);
-        SDL_RenderPresent(device_manager.renderer);
-        SDL_RenderClear(device_manager.renderer);
         std::cout << "Engine run()" << std::endl;
+        draw();
 
 		SDL_Event e;
 		while (SDL_PollEvent(&e) != 0) {
@@ -39,7 +32,23 @@ struct BirdEngine::Impl {
 
         return PROGRAM_STATE::RUNNING;
     }
+
+    void draw_background() {
+        SDL_SetRenderDrawColor(device_manager.renderer, 120, 200, 250, 255);
+        int w, h;
+        SDL_GetWindowSize(device_manager.window, &w, &h);
+        SDL_Rect r{ 0, 0, w, h };
+        SDL_RenderFillRect(device_manager.renderer, &r);
+        SDL_SetRenderDrawColor(device_manager.renderer, 255, 255, 255, 255);
+    }
+
+    void draw() {
+        draw_background();
+        SDL_RenderPresent(device_manager.renderer);
+        SDL_RenderClear(device_manager.renderer);
+    }
 };
+
 BirdEngine& BirdEngine::instance() {
     static BirdEngine instance;
     return instance;

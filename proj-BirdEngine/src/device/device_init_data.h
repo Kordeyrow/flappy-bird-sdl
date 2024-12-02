@@ -1,27 +1,16 @@
 #pragma once
 #include <string>
+#include <containers/containers.h>
 
-struct Vector2 {
-public:
-    int x, y;
-};
+class WindowRect : public Rect { public: WindowRect(Size size = { 0,0 }, Position position = { 0,0 }) : Rect{size, position} {} };
 
-struct Size : public Vector2 { public: Size(int width = 0, int height = 0) : Vector2{ width, height } {} };
-struct Position : public Vector2 { public: Position(int x = 0, int y = 0) : Vector2{ x, y } {} };
-struct Direction : public Vector2 { public: Direction(int x = 0, int y = 0) : Vector2{ x, y } {} };
-
-struct WindowRect {
-    Size size;
-    Position position;
-};
-
-struct WindowInitData {
+class WindowInitData {
 public:
     std::string title;
     WindowRect rect;
 };
 
-struct DeviceInitData {
+class DeviceInitData {
 public:
     WindowInitData window_init_data;
 };
