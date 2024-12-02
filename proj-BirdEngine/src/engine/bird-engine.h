@@ -28,6 +28,7 @@ public:
 
     Size get_display_size();
     void set_window_rect(WindowRect rect);
+    void set_background_color(Color c);
 
 private:
     // Private constructor and destructor

@@ -9,6 +9,8 @@
 struct BirdEngine::Impl {
     DeviceManager device_manager;
     UserInterface user_interface;
+    Color default_renderer_draw_color = Color{ 255, 255, 255, 255 };
+    Color background_color = Color{ 120, 200, 250, 255 };
 
     Impl() : device_manager(), user_interface() {}
     ~Impl() = default;
@@ -56,19 +58,27 @@ struct BirdEngine::Impl {
         return PROGRAM_STATE::RUNNING;
     }
 
+    void reset_render_draw_color() {
+        SDL_SetRenderDrawColor(device_manager.renderer, default_renderer_draw_color.r, default_renderer_draw_color.g, default_renderer_draw_color.b, default_renderer_draw_color.a);
+    }
+
     void draw_background() {
-        SDL_SetRenderDrawColor(device_manager.renderer, 120, 200, 250, 255);
+        SDL_SetRenderDrawColor(device_manager.renderer, background_color.r, background_color.g, background_color.b, background_color.a);
         int w, h;
         SDL_GetWindowSize(device_manager.window, &w, &h);
         SDL_Rect r{ 0, 0, w, h };
         SDL_RenderFillRect(device_manager.renderer, &r);
-        SDL_SetRenderDrawColor(device_manager.renderer, 255, 255, 255, 255);
+        reset_render_draw_color();
     }
 
     void draw() {
         draw_background();
         SDL_RenderPresent(device_manager.renderer);
         SDL_RenderClear(device_manager.renderer);
+    }
+     
+    void set_background_color(Color c) {
+        background_color = c;
     }
 };
 
@@ -95,4 +105,9 @@ Size BirdEngine::get_display_size()
 void BirdEngine::set_window_rect(WindowRect rect)
 {
     pImpl->device_manager.set_window_rect(rect);
+}
+
+void BirdEngine::set_background_color(Color c)
+{
+    return pImpl->set_background_color(c);
 }
