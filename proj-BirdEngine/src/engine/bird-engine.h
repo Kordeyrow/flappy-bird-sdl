@@ -1,7 +1,8 @@
 #pragma once
 #include <dll/export_def.h>
-#include <device/device_init_data.h>
+#include <user_interface/device_interface.h>
 #include <containers/containers.h>
+#include <user_interface/input_manager.h>
 #include <memory>
 
 typedef enum {
@@ -23,6 +24,7 @@ public:
 
     // Static method to access the singleton instance
     static BirdEngine& instance();
+    InputManager& ui_manager();
 
     void init(EngineInitData init_data);
     PROGRAM_STATE run();

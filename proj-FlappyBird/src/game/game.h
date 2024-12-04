@@ -496,10 +496,10 @@ public:
 		pipe_tuple_queue.pop();
 	}
 
-	uint32_t get_current_time()
+	/*uint32_t get_current_time()
 	{
 		return SDL_GetTicks64();
-	}
+	}*/
 
 	// TODO: apply on vector_changed
 	static void sort_sprites_by_layer(std::vector<Drawable*>& sprites) {
@@ -518,16 +518,16 @@ public:
 		}
 	}
 
-	void draw_backgroung()
-	{
-		// Clear the window to white
-		SDL_SetRenderDrawColor(_renderer, 120, 200, 250, 255);
-		int w, h;
-		SDL_GetWindowSize(_window, &w, &h);
-		SDL_Rect r{ 0, 0, w, h };
-		SDL_RenderFillRect(_renderer, &r);
-		SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
-	}
+	//void draw_backgroung()
+	//{
+	//	// Clear the window to white
+	//	SDL_SetRenderDrawColor(_renderer, 120, 200, 250, 255);
+	//	int w, h;
+	//	SDL_GetWindowSize(_window, &w, &h);
+	//	SDL_Rect r{ 0, 0, w, h };
+	//	SDL_RenderFillRect(_renderer, &r);
+	//	SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+	//}
 
 	//void render_ui() {
 	//	ImGui::NewFrame();
@@ -663,7 +663,7 @@ public:
 	}
 
 	void render() {
-		draw_backgroung();
+		//draw_backgroung();
 		draw_sprites();
 		//render_ui();
 		if (_is_debug_gizmos_on) draw_debug_info();
@@ -815,7 +815,7 @@ public:
 
 		// game loop
 		total_elapsed_time = 0;
-		previous_time = game->get_current_time();
+		//previous_time = game->get_current_time();
 	};
 
 	void user_input_fire() {
@@ -870,9 +870,9 @@ public:
 
 	State* run() override {
 		// time
-		auto current_time = game->get_current_time();
-		auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
-		previous_time = current_time;
+		//auto current_time = game->get_current_time();
+		//auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
+		//previous_time = current_time;
 		
 		// input
 		SDL_Event e;
@@ -905,11 +905,13 @@ public:
 
 		// update
 		for (auto u : *game->updatables()) {
-			u->update(elapsed_time_seconds);
+			//u->update(elapsed_time_seconds);
+			u->update(0);
 		}
 
 		// spawn pipes
-		current_spawn_timer_seconds += elapsed_time_seconds;
+		current_spawn_timer_seconds += 0;
+		//current_spawn_timer_seconds += elapsed_time_seconds;
 		if (current_spawn_timer_seconds >= real_spawn_gap_seconds) {
 			current_spawn_timer_seconds = 0;
 			game->spawn_pipe(game->window_w(), game->window_h(), speed_x);
@@ -918,7 +920,8 @@ public:
 		bool player_dead = false;
 
 		// physics
-		total_elapsed_time += elapsed_time_seconds;
+		total_elapsed_time += 0;
+		//total_elapsed_time += elapsed_time_seconds;
 		if (total_elapsed_time > 0.02) {
 			total_elapsed_time -= 0.02;
 

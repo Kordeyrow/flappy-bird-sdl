@@ -1,27 +1,31 @@
 #include "dll/pch.h"
 #include "dll/framework.h"
 #include "bird-engine.h"
-#include <device/device_manager.h>
-#include <user_interface/user_interface.h>
+#include <user_interface/gui_manager.h>
 #include <iostream>
+#include <memory>
 #include <mutex>
 
 struct BirdEngine::Impl {
-    DeviceManager device_manager;
-    UserInterface user_interface;
-    Color default_renderer_draw_color = Color{ 255, 255, 255, 255 };
-    Color background_color = Color::BLUE_BIRD();
+    std::shared_ptr<DeviceInterface> device_interface;
+    std::shared_ptr<GUIManager> gui_manager;
+    std::shared_ptr<InputManager> _input_manager;
+    bool initialized = false;
 
-    Impl() : device_manager(), user_interface() {}
+    Impl() {}
     ~Impl() = default;
 
     void init(EngineInitData init_data) {
-        device_manager.init(init_data.device_init_data);
+        if (initialized) return;
+        device_interface->init(init_data.device_init_data);
+        initialized = true;
     }
 
     PROGRAM_STATE run() {
         // elapsed time
         float elapsed_time_seconds = calculate_elapsed_time_seconds();
+        _input_manager->update(device_interface->get_events());
+        //gui_manager.update_events();
 
         PROGRAM_STATE state = read_input();
         if (state == PROGRAM_STATE::QUIT) {
@@ -57,28 +61,8 @@ struct BirdEngine::Impl {
         }
         return PROGRAM_STATE::RUNNING;
     }
-
-    void reset_render_draw_color() {
-        SDL_SetRenderDrawColor(device_manager.renderer, default_renderer_draw_color.r, default_renderer_draw_color.g, default_renderer_draw_color.b, default_renderer_draw_color.a);
-    }
-
-    void draw_background() {
-        SDL_SetRenderDrawColor(device_manager.renderer, background_color.r, background_color.g, background_color.b, background_color.a);
-        int w, h;
-        SDL_GetWindowSize(device_manager.window, &w, &h);
-        SDL_Rect r{ 0, 0, w, h };
-        SDL_RenderFillRect(device_manager.renderer, &r);
-        reset_render_draw_color();
-    }
-
-    void draw() {
-        draw_background();
-        SDL_RenderPresent(device_manager.renderer);
-        SDL_RenderClear(device_manager.renderer);
-    }
-     
-    void set_background_color(Color c) {
-        background_color = c;
+    InputManager& ui_manager() {
+        return _input_manager;
     }
 };
 
@@ -86,6 +70,11 @@ BirdEngine& BirdEngine::instance() {
     static BirdEngine instance;
     return instance;
 }
+InputManager& BirdEngine::ui_manager()
+{
+    return pImpl->ui_manager();
+}
+
 BirdEngine::BirdEngine() : pImpl(std::make_unique<Impl>()) {}
 BirdEngine::~BirdEngine() = default;
 void BirdEngine::init(EngineInitData init_data) {
@@ -104,7 +93,7 @@ Size BirdEngine::get_display_size()
 
 void BirdEngine::set_window_rect(WindowRect rect)
 {
-    pImpl->device_manager.set_window_rect(rect);
+    pImpl->device_interface.set_window_rect(rect);
 }
 
 void BirdEngine::set_background_color(Color c)

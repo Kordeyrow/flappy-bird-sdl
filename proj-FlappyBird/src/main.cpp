@@ -17,9 +17,10 @@ void setup_window() {
     Size display_size = BirdEngine::instance().get_display_size();
     int pos_x = display_size.x / 2 - width / 2 + offset_x;
     int pos_y = display_size.y / 2 - height / 2 + offset_y;
-    WindowRect r{ Size{width, height}, Position{pos_x, pos_y} }; 
+    WindowRect r{ Size{width, height}, Position{pos_x, pos_y} };
     BirdEngine::instance().set_window_rect(r);
     BirdEngine::instance().set_background_color(Color::BLUE_BIRD());
+    //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
 }
 
 bool init() {
@@ -52,6 +53,14 @@ bool init() {
 // Function to run the game loop
 void run_game() {
     program_state = BirdEngine::instance().run();
+
+    if (BirdEngine::instance().input_manager().is_key_down(SHP_K_SPACE)) {
+        BirdEngine::instance().set_background_color(Color::RED());
+    }
+    else {
+        BirdEngine::instance().set_background_color(Color::BLUE_BIRD());
+    }
+
     //quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__
     if (program_state == PROGRAM_STATE::QUIT) {

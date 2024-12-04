@@ -186,6 +186,7 @@ typedef enum {
     SHP_INIT_EVERYTHING = 0x0010FFFF
 } SHP_InitFlags;
 
+// TODO: send to window class
 // Enums for window flags
 typedef enum {
     SHP_WINDOW_FULLSCREEN = 0x00000001,
@@ -206,25 +207,5 @@ public:
     SHP_Keycode keycode; // For key events; otherwise, set to SHP_K_UNKNOWN
 
     EventData() : type(SHP_FIRSTEVENT), keycode(SHP_K_UNKNOWN) {}
-};
-
-// Initialization parameters
-struct InitParams {
-    SHP_InitFlags init_flags;
-    std::string window_title;
-    SHP_WindowPosition window_x;
-    SHP_WindowPosition window_y;
-    int window_w;
-    int window_h;
-    SHP_WindowFlags window_flags;
-
-    InitParams()
-        : init_flags(SHP_INIT_VIDEO),
-        window_title("Game"),
-        window_x(SHP_WINDOWPOS_CENTERED),
-        window_y(SHP_WINDOWPOS_CENTERED),
-        window_w(800),
-        window_h(600),
-        window_flags(SHP_WINDOW_SHOWN) {}
 };
 

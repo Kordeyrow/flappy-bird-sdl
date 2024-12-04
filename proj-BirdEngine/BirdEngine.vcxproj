@@ -159,45 +159,47 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\user_interface\io_manager.h" />
+    <ClInclude Include="src\user_interface\renderer.h" />
     <ClInclude Include="src\containers\containers.h" />
-    <ClInclude Include="src\device\device_init_data.h" />
-    <ClInclude Include="src\device\device_manager.h" />
+    <ClInclude Include="src\user_interface\device_interface.h" />
     <ClInclude Include="src\dll\export_def.h" />
     <ClInclude Include="src\dll\framework.h" />
     <ClInclude Include="src\dll\pch.h" />
     <ClInclude Include="src\engine\bird-engine.h" />
     <ClInclude Include="src\user_interface\SHP_events.h" />
-    <ClInclude Include="src\user_interface\gui\gui_manager.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imconfig.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imgui_internal.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_rectpack.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_textedit.h" />
-    <ClInclude Include="src\user_interface\gui\imgui_sdl\imstb_truetype.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imconfig.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imgui.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imgui_impl_sdl2.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imgui_internal.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imstb_rectpack.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imstb_textedit.h" />
+    <ClInclude Include="src\user_interface\imgui_sdl\imstb_truetype.h" />
     <ClInclude Include="src\user_interface\input_manager.h" />
-    <ClInclude Include="src\user_interface\user_interface.h" />
+    <ClInclude Include="src\user_interface\gui_manager.h" />
+    <ClInclude Include="src\user_interface\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\user_interface\io_manager.cpp" />
+    <ClCompile Include="src\user_interface\renderer.cpp" />
     <ClCompile Include="src\containers\containers.cpp" />
-    <ClCompile Include="src\device\device_init_data.cpp" />
-    <ClCompile Include="src\device\device_manager.cpp" />
+    <ClCompile Include="src\user_interface\device_interface.cpp" />
     <ClCompile Include="src\dll\dllmain.cpp" />
     <ClCompile Include="src\dll\export_def.cpp" />
     <ClCompile Include="src\dll\pch.cpp" />
     <ClCompile Include="src\engine\bird-engine.cpp" />
     <ClCompile Include="src\user_interface\SHP_events.cpp" />
-    <ClCompile Include="src\user_interface\gui\gui_manager.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_demo.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_draw.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdl2.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_impl_sdlrenderer2.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_tables.cpp" />
-    <ClCompile Include="src\user_interface\gui\imgui_sdl\imgui_widgets.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_demo.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_draw.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_tables.cpp" />
+    <ClCompile Include="src\user_interface\imgui_sdl\imgui_widgets.cpp" />
     <ClCompile Include="src\user_interface\input_manager.cpp" />
-    <ClCompile Include="src\user_interface\user_interface.cpp" />
+    <ClCompile Include="src\user_interface\gui_manager.cpp" />
+    <ClCompile Include="src\user_interface\window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
