@@ -5,7 +5,7 @@
 #define MAP_KEYCODE(sdlk, shpk) { SDLK_##sdlk, SHP_K_##shpk }
 
 HardwareInterface::HardwareInterface()
-    : _window(nullptr), _renderer(nullptr), _window_w(0), _window_h(0) {
+    : _sdl_window(nullptr), _renderer(nullptr), _window_w(0), _window_h(0) {
     // Initialize the input mappings
     initInputMappings();
 }
@@ -67,7 +67,7 @@ bool HardwareInterface::init(SHP_InitFlags initFlags, const std::string& windowT
     if (windowFlags & SHP_WINDOW_METAL) sdlWindowFlags |= SDL_WINDOW_METAL;
 
     // Create Window
-    _window = SDL_CreateWindow(
+    _sdl_window = SDL_CreateWindow(
         windowTitle.c_str(),
         windowX,
         windowY,
@@ -76,7 +76,7 @@ bool HardwareInterface::init(SHP_InitFlags initFlags, const std::string& windowT
         sdlWindowFlags
     );
 
-    if (!_window) {
+    if (!_sdl_window) {
         std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
         IMG_Quit();
         SDL_Quit();
@@ -84,10 +84,10 @@ bool HardwareInterface::init(SHP_InitFlags initFlags, const std::string& windowT
     }
 
     // Create Renderer
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+    _renderer = SDL_CreateRenderer(_sdl_window, -1, SDL_RENDERER_ACCELERATED);
     if (!_renderer) {
         std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(_window);
+        SDL_DestroyWindow(_sdl_window);
         IMG_Quit();
         SDL_Quit();
         return false;
@@ -105,9 +105,9 @@ void HardwareInterface::shutdown() {
         SDL_DestroyRenderer(_renderer);
         _renderer = nullptr;
     }
-    if (_window) {
-        SDL_DestroyWindow(_window);
-        _window = nullptr;
+    if (_sdl_window) {
+        SDL_DestroyWindow(_sdl_window);
+        _sdl_window = nullptr;
     }
     IMG_Quit();
     SDL_Quit();

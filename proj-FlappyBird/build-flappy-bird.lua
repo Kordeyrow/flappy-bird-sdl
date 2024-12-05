@@ -17,7 +17,8 @@ AssetsDir = "assets"
 
 
 project ("" .. ThisProj)
-   kind "WindowedApp"
+   kind "ConsoleApp"
+   -- kind "WindowedApp"
    language "C++"
    cppdialect "C++14"
    staticruntime "off"

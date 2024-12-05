@@ -3,28 +3,38 @@
 #include <string>
 #include <map>
 
-// Enums for warnings and errors
-typedef enum {
-    ALREADY_INITIALIZED,
-} WarningType;
 
 typedef enum {
+    FAILED_TO_CREATE,
     FAILED_TO_INITIALIZE,
 } ErrorType;
 
+typedef enum {
+    ALREADY_CREATED,
+    ALREADY_INITIALIZED,
+} WarningType;
+
+
 class IOManager {
 private:
-    constexpr char* general_error_prefix = "Error: ";
+    const char* general_error_prefix = "Error: ";
     std::map<ErrorType, std::string> prefix_from_error_type = {
+        {FAILED_TO_CREATE, "Failed to create "},
         {FAILED_TO_INITIALIZE, "Failed to initialize "}
     };
 
-    constexpr char* general_warning_prefix = "Warning: ";
+    const char* general_warning_prefix = "Warning: ";
     std::map<WarningType, std::string> prefix_from_warning_type = {
+        {ALREADY_CREATED, "Already created "},
         {ALREADY_INITIALIZED, "Already initialized "}
     };
 
 public:
+    IOManager() {
+    }
+    ~IOManager() {
+    }
+
     void print(const std::string& msg) {
         std::cout << msg;
     }

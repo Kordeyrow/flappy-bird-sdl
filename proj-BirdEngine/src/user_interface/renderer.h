@@ -17,8 +17,8 @@ private:
     bool initialized = false;
 
 public:
-    Renderer(std::shared_ptr<Window> _window, std::shared_ptr<IOManager> _io_manager)
-        : window{ _window }, io_manager{ _io_manager } {
+    Renderer(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<Window> _window)
+        : io_manager{ _io_manager }, window{ _window } {
     }
 
     ~Renderer() {
@@ -27,10 +27,13 @@ public:
     };
 
     bool init() {
-        if (initialized) return true;
+        if (initialized) {
+            io_manager->print_line_warning("Renderer", ALREADY_INITIALIZED);
+            return true;
+        }
         _renderer = SDL_CreateRenderer(window->sdl_window(), -1, SDL_RENDERER_ACCELERATED);
         if (!_renderer) {
-            io_manager->print_line_error("Failed to create renderer: " + std::string(SDL_GetError()));
+            io_manager->print_line_error("Renderer - " + std::string(SDL_GetError()), FAILED_TO_CREATE);
             return false;
         }
         initialized = true;
@@ -47,6 +50,7 @@ public:
         background_color = c;
     }
 
+    // TODO: hide from user
     SDL_Renderer* sdl_renderer() {
         return _renderer;
     }

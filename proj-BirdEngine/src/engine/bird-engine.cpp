@@ -7,32 +7,31 @@
 #include <mutex>
 
 struct BirdEngine::Impl {
-    std::shared_ptr<DeviceInterface> device_interface;
-    std::shared_ptr<GUIManager> gui_manager;
-    std::shared_ptr<InputManager> _input_manager;
+    std::shared_ptr<UserInterface> user_interface = std::make_shared<UserInterface>();
     bool initialized = false;
-
     Impl() {}
     ~Impl() = default;
 
-    void init(EngineInitData init_data) {
-        if (initialized) return;
-        device_interface->init(init_data.device_init_data);
+    bool init(EngineInitData init_data) {
+        if (initialized) return true;
+        if (user_interface->init(init_data.user_interface_init_data)) {
+            return false;
+        };
         initialized = true;
+        return true;
     }
 
-    PROGRAM_STATE run() {
+    ProgramState run() {
+        if ( ! initialized) return ProgramState::QUIT;
         // elapsed time
         float elapsed_time_seconds = calculate_elapsed_time_seconds();
-        _input_manager->update(device_interface->get_events());
-        //gui_manager.update_events();
+        //user_interface->input_manager()->update();
 
-        PROGRAM_STATE state = read_input();
-        if (state == PROGRAM_STATE::QUIT) {
+        ProgramState state = read_input();
+        if (state == ProgramState::QUIT) {
             return state;
         }
-
-        draw();
+        user_interface->renderer()->draw();
 
         return state;
     }
@@ -45,58 +44,40 @@ struct BirdEngine::Impl {
         return elapsed_time_seconds;
     }
 
-    uint32_t get_current_time()
-    {
-        return SDL_GetTicks64();
-    }
+    uint32_t get_current_time() { return SDL_GetTicks64(); }
 
-    PROGRAM_STATE read_input() {
+    ProgramState read_input() {
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0) {
             SDL_Keycode keycode = e.key.keysym.sym;
             switch (e.type) {
             case SDL_QUIT:
-                return PROGRAM_STATE::QUIT;
+                return ProgramState::QUIT;
             }
         }
-        return PROGRAM_STATE::RUNNING;
-    }
-    InputManager& ui_manager() {
-        return _input_manager;
+        return ProgramState::RUNNING;
     }
 };
 
-BirdEngine& BirdEngine::instance() {
-    static BirdEngine instance;
+BirdEngine::BirdEngine() : pImpl(std::make_unique<Impl>()) {}
+BirdEngine::~BirdEngine() {};
+
+std::shared_ptr<BirdEngine> BirdEngine::instance() {
+    static std::shared_ptr<BirdEngine> instance(
+        new BirdEngine(),
+        [](BirdEngine* engine) {
+            delete engine; // Custom deleter to allow destruction of the singleton
+        }
+    );
     return instance;
 }
-InputManager& BirdEngine::ui_manager()
-{
-    return pImpl->ui_manager();
+
+const std::shared_ptr<UserInterface>& BirdEngine::user_interface() { return  pImpl->user_interface; }
+
+bool BirdEngine::init(EngineInitData init_data) {
+    return pImpl->init(init_data);
 }
 
-BirdEngine::BirdEngine() : pImpl(std::make_unique<Impl>()) {}
-BirdEngine::~BirdEngine() = default;
-void BirdEngine::init(EngineInitData init_data) {
-    pImpl->init(init_data);
-}
-PROGRAM_STATE BirdEngine::run() {
+ProgramState BirdEngine::run() {
     return pImpl->run();
-}
-
-Size BirdEngine::get_display_size()
-{
-    SDL_Rect r;
-    SDL_GetDisplayBounds(0, &r);
-    return Size(r.w, r.h);
-}
-
-void BirdEngine::set_window_rect(WindowRect rect)
-{
-    pImpl->device_interface.set_window_rect(rect);
-}
-
-void BirdEngine::set_background_color(Color c)
-{
-    return pImpl->set_background_color(c);
 }

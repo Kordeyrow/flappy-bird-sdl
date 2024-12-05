@@ -165,7 +165,7 @@ class StateTransition : public StateTransitionBase {
 class Game {
 public:
 	// SDL
-	SDL_Window* window() { return _window; }
+	SDL_Window* window() { return _sdl_window; }
 	SDL_Renderer* renderer() { return _renderer; }
 	// Managers 
 	TextureManager* texture_manager() { return _texture_manager; }
@@ -202,7 +202,7 @@ private:
 	double _window_h;
 	double _window_w;
 	// SDL
-	SDL_Window* _window;
+	SDL_Window* _sdl_window;
 	SDL_Renderer* _renderer;
 	// Managers 
 	TextureManager* _texture_manager;
@@ -245,7 +245,7 @@ public:
 
 		try
 		{
-			_window = SDL_CreateWindow(
+			_sdl_window = SDL_CreateWindow(
 				"Flappy Bird",                // Window title
 				0,       // X position
 				0,       // Y position
@@ -254,17 +254,17 @@ public:
 				SDL_WINDOW_SHOWN         // Borderless flag
 			);
 
-			if (!_window) {
+			if (!_sdl_window) {
 				std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
 				SDL_Quit();
 				return -1;
 			}
 
 			// Create a renderer
-			_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+			_renderer = SDL_CreateRenderer(_sdl_window, -1, SDL_RENDERER_ACCELERATED);
 			if (!_renderer) {
 				std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
-				SDL_DestroyWindow(_window);
+				SDL_DestroyWindow(_sdl_window);
 				SDL_Quit();
 				return -1;
 			}
@@ -281,12 +281,12 @@ public:
 			_window_w = 460;
 			_window_h = 640;
 
-			SDL_SetWindowSize(_window, _window_w, _window_h);
+			SDL_SetWindowSize(_sdl_window, _window_w, _window_h);
 			double offset_x = -r.w * 0.04;
 			double offset_y = -offset_x * 0.6;
-			SDL_SetWindowPosition(_window, r.w / 2 - _window_w / 2 + offset_x, r.h / 2 - _window_h / 2 + offset_y);
+			SDL_SetWindowPosition(_sdl_window, r.w / 2 - _window_w / 2 + offset_x, r.h / 2 - _window_h / 2 + offset_y);
 
-			SDL_SetWindowTitle(_window, "Flappy Bird");
+			SDL_SetWindowTitle(_sdl_window, "Flappy Bird");
 
 			//init_imgui();
 

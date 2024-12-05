@@ -310,7 +310,7 @@ public:
     bool PopEvent(EventData& eventData);
 
 private:
-    SDL_Window* _window;
+    SDL_Window* _sdl_window;
     SDL_Renderer* _renderer;
     int _window_w;
     int _window_h;

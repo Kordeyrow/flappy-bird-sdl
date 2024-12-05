@@ -1,8 +1,8 @@
 #include "input_manager.h"
 
 InputManager::InputManager() {
+    //init_input_mappings();
 }
-
 InputManager::~InputManager() {
 }
 
