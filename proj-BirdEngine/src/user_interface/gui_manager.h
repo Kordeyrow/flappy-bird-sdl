@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "io_manager.h"
 
+using FontID = Uint32;
 struct GUIManagerInitParams {};
 
 class BIRDENGINE_API GUIManager {

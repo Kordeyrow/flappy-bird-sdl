@@ -15,7 +15,7 @@
 
 using AssetPath = std::string;
 using AssetID = Uint32;
-constexpr AssetID INVALID_ID = -1;
+constexpr AssetID INVAL_ID = -1;
 
 
 class AssetManager {
@@ -41,11 +41,18 @@ public:
 		IMG_Quit();
 	}
 
-	SDL_Texture* get_texture(AssetID id)	{
+	SDL_Texture* get_texture(AssetID id) {
 		if (texture_from_id.find(id) == texture_from_id.end()) {
 			return nullptr;
 		}
 		return texture_from_id[id];
+	}
+
+	AssetID get_asset_id(AssetPath path) {
+		if (id_from_assetpath.find(path) == id_from_assetpath.end()) {
+			return INVAL_ID;
+		}
+		return id_from_assetpath[path];
 	}
 
 	bool init() {
@@ -58,7 +65,6 @@ public:
 		return true;
 	}
 
-private:
 	// config
 	//std::string SPRITES_PATH = "assets/sprites/";
 	/*std::map<TEXTURE_KEY, std::string> textures_paths{
@@ -81,7 +87,7 @@ private:
 		SDL_Surface* buffer = IMG_Load(path.c_str());
 		if (!buffer) {
 			io_manager->print_line_error('"' + path + "\" - " + std::string(IMG_GetError()), FAILED_LOADING);
-			return INVALID_ID;
+			return INVAL_ID;
 		}
 
 		/*buffer->format->Amask = 0xFF000000;
@@ -98,7 +104,7 @@ private:
 
 		if ( ! texture) {
 			io_manager->print_line_error("sprite" + std::string(IMG_GetError()), FAILED_TO_CREATE);
-			return INVALID_ID;
+			return INVAL_ID;
 		}
 
 		auto id = get_next_id();

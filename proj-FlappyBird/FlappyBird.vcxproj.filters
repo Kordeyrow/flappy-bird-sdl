@@ -69,9 +69,6 @@
     <ClInclude Include="src\game\gameplay_base.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="src\hardware\hardware_interface.h">
-      <Filter>hardware</Filter>
-    </ClInclude>
     <ClInclude Include="src\math\vector2.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -139,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="src\game\gameplay_base.cpp">
       <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hardware\hardware_interface.cpp">
-      <Filter>hardware</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vector2.cpp">

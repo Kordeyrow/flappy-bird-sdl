@@ -1,13 +1,21 @@
 #include <SDL.h>
 //#include <game/game.h>
 #include <engine/bird-engine.h>
+#include <res_manager/texture_manager.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
+
+// runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
+std::shared_ptr<Window> window;
+std::shared_ptr<Renderer> renderer;
+std::shared_ptr<InputManager> input_manager;
+std::shared_ptr<AssetManager> asset_manager;
+TextureManager* texture_manager;
 
 void setup_window() {
     int width = 460;
@@ -22,12 +30,22 @@ void setup_window() {
     int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
     Rect r{ Size{width, height}, Position{pos_x, pos_y} };
-    BirdEngine::instance()->user_interface()->window()->set_rect(r);
-    BirdEngine::instance()->user_interface()->renderer()->set_background_color(Color::BLUE_BIRD());
+    window->set_rect(r);
+    renderer->set_background_color(Color::BLUE_BIRD());
     //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
 }
 
-bool init() {
+bool init_engine() {
+    WindowInitData win_data{ "FlappyBird" };
+    UserInterfaceInitData usin_data{ win_data };
+    EngineInitData eng_data{ usin_data };
+    if (!BirdEngine::instance()->init(eng_data)) {
+        return false;
+    }
+    return true;
+}
+
+bool init_game() {
     /*SDL_Rect display_rect;
     SDL_GetDisplayBounds(0, &display_rect);*/
     //	
@@ -39,17 +57,30 @@ bool init() {
 #endif*/
 //gui_manager.set_dark_colorstyle();
 
-    // init engine
-    WindowInitData win_data{ "FlappyBird" };
-    UserInterfaceInitData usin_data{ win_data };
-    EngineInitData eng_data{ usin_data };
-    if ( ! BirdEngine::instance()->init(eng_data)) {
-        return false;
-    }
+
+
+    auto user_interface = BirdEngine::instance()->user_interface();
+    window = user_interface->window();
+    renderer = user_interface->renderer();
+    input_manager = user_interface->input_manager();
+    asset_manager = user_interface->asset_manager();
 
     setup_window();
 
+    texture_manager = new TextureManager(asset_manager);
+    texture_manager->init();
+
     //return game.init<Playing>();
+    return true;
+}
+
+bool init() {
+    if ( ! init_engine()) {
+        return false;
+    }
+    if ( ! init_game()) {
+        return false;
+    }
     return true;
 }
 
