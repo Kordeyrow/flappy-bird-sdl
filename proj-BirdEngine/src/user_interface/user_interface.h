@@ -58,22 +58,22 @@ public:
         _io_manager = std::make_shared<IOManager>();
 
         _window = std::make_shared<Window>(_io_manager, init_data.win_data);
-        if (_window->init()) {
+        if ( ! _window->init()) {
             return false;
         }
 
         _renderer = std::make_shared<Renderer>(_io_manager, _window);
-        if (_renderer->init()) {
+        if ( ! _renderer->init()) {
             return false;
         }
 
         _gui_manager = std::make_shared<GUIManager>(_io_manager, _window, _renderer);
-        if (_gui_manager->init(GUIManagerInitParams{})) {
+        if ( ! _gui_manager->init(GUIManagerInitParams{})) {
             return false;
         }
 
         _asset_manager = std::make_shared<AssetManager>(_io_manager, _renderer);
-        if (_asset_manager->init()) {
+        if ( ! _asset_manager->init()) {
             return false;
         }
 
@@ -81,6 +81,10 @@ public:
 
         initialized = true;
         return true;
+    }
+
+    ProgramState update(float elapsed_time_seconds) {
+        return _input_manager->update(elapsed_time_seconds);
     }
 };
 

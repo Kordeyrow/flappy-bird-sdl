@@ -14,26 +14,26 @@ struct BirdEngine::Impl {
 
     bool init(EngineInitData init_data) {
         if (initialized) return true;
-        if (user_interface->init(init_data.user_interface_init_data)) {
+        if ( ! user_interface->init(init_data.user_interface_init_data)) {
             return false;
         };
         initialized = true;
         return true;
     }
 
-    ProgramState run() {
+    ProgramState update() {
         if ( ! initialized) return ProgramState::QUIT;
 
         float elapsed_time_seconds = calculate_elapsed_time_seconds();
-        //user_interface->input_manager()->update();
 
-        ProgramState state = read_input();
+        ProgramState state = user_interface->update(elapsed_time_seconds);
         if (state == ProgramState::QUIT) {
             return state;
         }
+
         user_interface->renderer()->draw();
 
-        return state;
+        return ProgramState::RUNNING;
     }
 
     float calculate_elapsed_time_seconds() {
@@ -46,18 +46,6 @@ struct BirdEngine::Impl {
 
     uint32_t get_current_time() { 
         return SDL_GetTicks64(); 
-    }
-
-    ProgramState read_input() {
-        SDL_Event e;
-        while (SDL_PollEvent(&e) != 0) {
-            SDL_Keycode keycode = e.key.keysym.sym;
-            switch (e.type) {
-            case SDL_QUIT:
-                return ProgramState::QUIT;
-            }
-        }
-        return ProgramState::RUNNING;
     }
 };
 
@@ -80,6 +68,6 @@ bool BirdEngine::init(EngineInitData init_data) {
     return pImpl->init(init_data);
 }
 
-ProgramState BirdEngine::run() {
-    return pImpl->run();
+ProgramState BirdEngine::update() {
+    return pImpl->update();
 }

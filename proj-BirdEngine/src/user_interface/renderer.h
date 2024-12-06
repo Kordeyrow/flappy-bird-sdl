@@ -71,8 +71,8 @@ private:
             background_color.b,
             background_color.a
         );
-        SDL_Rect r{ window->rect().position.x,
-            window->rect().position.y,
+        SDL_Rect r{ 0,
+            0,
             window->rect().size.x,
             window->rect().size.y
         };

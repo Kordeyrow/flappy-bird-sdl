@@ -51,11 +51,13 @@ public:
 
     /// setters
     ///
-    void set_rect(Rect rect) {
-        SDL_SetWindowSize(_sdl_window, rect.size.x, rect.size.y);
-        SDL_SetWindowPosition(_sdl_window, rect.position.x, rect.position.y);
+    void set_rect(Rect rect_) {
+        _rect = rect_;
+        SDL_SetWindowSize(_sdl_window, _rect.size.x, _rect.size.y);
+        SDL_SetWindowPosition(_sdl_window, _rect.position.x, _rect.position.y);
     }
-    void set_title(std::string title) {
+    void set_title(std::string title_) {
+        title = title_;
         SDL_SetWindowTitle(_sdl_window, title.c_str());
     }
 
@@ -67,6 +69,11 @@ public:
     // TODO: hide from user
     SDL_Window* sdl_window() {
         return _sdl_window;
+    }
+    const Rect& display_rect() {
+        SDL_Rect display_rect;
+        SDL_GetDisplayBounds(0, &display_rect);
+        return Rect{ Size{display_rect.w, display_rect.h }, Position{display_rect.x, display_rect.y} };
     }
 };
 
