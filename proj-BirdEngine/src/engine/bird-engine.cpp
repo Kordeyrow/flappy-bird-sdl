@@ -23,7 +23,7 @@ struct BirdEngine::Impl {
 
     ProgramState run() {
         if ( ! initialized) return ProgramState::QUIT;
-        // elapsed time
+
         float elapsed_time_seconds = calculate_elapsed_time_seconds();
         //user_interface->input_manager()->update();
 
@@ -44,7 +44,9 @@ struct BirdEngine::Impl {
         return elapsed_time_seconds;
     }
 
-    uint32_t get_current_time() { return SDL_GetTicks64(); }
+    uint32_t get_current_time() { 
+        return SDL_GetTicks64(); 
+    }
 
     ProgramState read_input() {
         SDL_Event e;

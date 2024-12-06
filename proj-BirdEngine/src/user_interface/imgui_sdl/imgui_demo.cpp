@@ -5087,7 +5087,7 @@ enum MyItemColumnID
 
 struct MyItem
 {
-    int         ID;
+    int         AssetID;
     const char* Name;
     int         Quantity;
 
@@ -5121,7 +5121,7 @@ struct MyItem
             int delta = 0;
             switch (sort_spec->ColumnUserID)
             {
-            case MyItemColumnID_ID:             delta = (a->ID - b->ID);                break;
+            case MyItemColumnID_ID:             delta = (a->AssetID - b->AssetID);                break;
             case MyItemColumnID_Name:           delta = (strcmp(a->Name, b->Name));     break;
             case MyItemColumnID_Quantity:       delta = (a->Quantity - b->Quantity);    break;
             case MyItemColumnID_Description:    delta = (strcmp(a->Name, b->Name));     break;
@@ -5136,7 +5136,7 @@ struct MyItem
         // qsort() is instable so always return a way to differenciate items.
         // Your own compare function may want to avoid fallback on implicit sort specs.
         // e.g. a Name compare if it wasn't already part of the sort specs.
-        return (a->ID - b->ID);
+        return (a->AssetID - b->AssetID);
     }
 };
 const ImGuiTableSortSpecs* MyItem::s_current_sort_specs = NULL;
@@ -6734,7 +6734,7 @@ static void ShowDemoWindowTables()
             {
                 const int template_n = n % IM_ARRAYSIZE(template_items_names);
                 MyItem& item = items[n];
-                item.ID = n;
+                item.AssetID = n;
                 item.Name = template_items_names[template_n];
                 item.Quantity = (n * n - n) % 20; // Assign default quantities
             }
@@ -6784,10 +6784,10 @@ static void ShowDemoWindowTables()
                 {
                     // Display a data item
                     MyItem* item = &items[row_n];
-                    ImGui::PushID(item->ID);
+                    ImGui::PushID(item->AssetID);
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn();
-                    ImGui::Text("%04d", item->ID);
+                    ImGui::Text("%04d", item->AssetID);
                     ImGui::TableNextColumn();
                     ImGui::TextUnformatted(item->Name);
                     ImGui::TableNextColumn();
@@ -6963,7 +6963,7 @@ static void ShowDemoWindowTables()
             {
                 const int template_n = n % IM_ARRAYSIZE(template_items_names);
                 MyItem& item = items[n];
-                item.ID = n;
+                item.AssetID = n;
                 item.Name = template_items_names[template_n];
                 item.Quantity = (template_n == 3) ? 10 : (template_n == 4) ? 20 : 0; // Assign default quantities
             }
@@ -7029,14 +7029,14 @@ static void ShowDemoWindowTables()
                     //if (!filter.PassFilter(item->Name))
                     //    continue;
 
-                    const bool item_is_selected = selection.contains(item->ID);
-                    ImGui::PushID(item->ID);
+                    const bool item_is_selected = selection.contains(item->AssetID);
+                    ImGui::PushID(item->AssetID);
                     ImGui::TableNextRow(ImGuiTableRowFlags_None, row_min_height);
 
                     // For the demo purpose we can select among different type of items submitted in the first column
                     ImGui::TableSetColumnIndex(0);
                     char label[32];
-                    sprintf(label, "%04d", item->ID);
+                    sprintf(label, "%04d", item->AssetID);
                     if (contents_type == CT_Text)
                         ImGui::TextUnformatted(label);
                     else if (contents_type == CT_Button)
@@ -7053,14 +7053,14 @@ static void ShowDemoWindowTables()
                             if (ImGui::GetIO().KeyCtrl)
                             {
                                 if (item_is_selected)
-                                    selection.find_erase_unsorted(item->ID);
+                                    selection.find_erase_unsorted(item->AssetID);
                                 else
-                                    selection.push_back(item->ID);
+                                    selection.push_back(item->AssetID);
                             }
                             else
                             {
                                 selection.clear();
-                                selection.push_back(item->ID);
+                                selection.push_back(item->AssetID);
                             }
                         }
                     }
@@ -9989,10 +9989,10 @@ void ShowExampleAppDocuments(bool* p_open)
 
 struct ExampleAsset
 {
-    ImGuiID ID;
+    ImGuiID AssetID;
     int     Type;
 
-    ExampleAsset(ImGuiID id, int type) { ID = id; Type = type; }
+    ExampleAsset(ImGuiID id, int type) { AssetID = id; Type = type; }
 
     static const ImGuiTableSortSpecs* s_current_sort_specs;
 
@@ -10014,7 +10014,7 @@ struct ExampleAsset
             const ImGuiTableColumnSortSpecs* sort_spec = &s_current_sort_specs->Specs[n];
             int delta = 0;
             if (sort_spec->ColumnIndex == 0)
-                delta = ((int)a->ID - (int)b->ID);
+                delta = ((int)a->AssetID - (int)b->AssetID);
             else if (sort_spec->ColumnIndex == 1)
                 delta = (a->Type - b->Type);
             if (delta > 0)
@@ -10022,7 +10022,7 @@ struct ExampleAsset
             if (delta < 0)
                 return (sort_spec->SortDirection == ImGuiSortDirection_Ascending) ? -1 : +1;
         }
-        return ((int)a->ID - (int)b->ID);
+        return ((int)a->AssetID - (int)b->AssetID);
     }
 };
 const ImGuiTableSortSpecs* ExampleAsset::s_current_sort_specs = NULL;
@@ -10208,7 +10208,7 @@ struct ExampleAssetsBrowser
 
             // Use custom selection adapter: store ID in selection (recommended)
             Selection.UserData = this;
-            Selection.AdapterIndexToStorageId = [](ImGuiSelectionBasicStorage* self_, int idx) { ExampleAssetsBrowser* self = (ExampleAssetsBrowser*)self_->UserData; return self->Items[idx].ID; };
+            Selection.AdapterIndexToStorageId = [](ImGuiSelectionBasicStorage* self_, int idx) { ExampleAssetsBrowser* self = (ExampleAssetsBrowser*)self_->UserData; return self->Items[idx].AssetID; };
             Selection.ApplyRequests(ms_io);
 
             const bool want_delete = (ImGui::Shortcut(ImGuiKey_Delete, ImGuiInputFlags_Repeat) && (Selection.Size > 0)) || RequestDelete;
@@ -10244,14 +10244,14 @@ struct ExampleAssetsBrowser
                     for (int item_idx = item_min_idx_for_current_line; item_idx < item_max_idx_for_current_line; ++item_idx)
                     {
                         ExampleAsset* item_data = &Items[item_idx];
-                        ImGui::PushID((int)item_data->ID);
+                        ImGui::PushID((int)item_data->AssetID);
 
                         // Position item
                         ImVec2 pos = ImVec2(start_pos.x + (item_idx % column_count) * LayoutItemStep.x, start_pos.y + line_idx * LayoutItemStep.y);
                         ImGui::SetCursorScreenPos(pos);
 
                         ImGui::SetNextItemSelectionUserData(item_idx);
-                        bool item_is_selected = Selection.Contains((ImGuiID)item_data->ID);
+                        bool item_is_selected = Selection.Contains((ImGuiID)item_data->AssetID);
                         bool item_is_visible = ImGui::IsRectVisible(LayoutItemSize);
                         ImGui::Selectable("", item_is_selected, ImGuiSelectableFlags_None, LayoutItemSize);
 
@@ -10275,7 +10275,7 @@ struct ExampleAssetsBrowser
                                 void* it = NULL;
                                 ImGuiID id = 0;
                                 if (!item_is_selected)
-                                    payload_items.push_back(item_data->ID);
+                                    payload_items.push_back(item_data->AssetID);
                                 else
                                     while (Selection.GetNextSelectedItem(&it, &id))
                                         payload_items.push_back(id);
@@ -10307,7 +10307,7 @@ struct ExampleAssetsBrowser
                             {
                                 ImU32 label_col = ImGui::GetColorU32(item_is_selected ? ImGuiCol_Text : ImGuiCol_TextDisabled);
                                 char label[32];
-                                sprintf(label, "%d", item_data->ID);
+                                sprintf(label, "%d", item_data->AssetID);
                                 draw_list->AddText(ImVec2(box_min.x, box_max.y - ImGui::GetFontSize()), label_col, label);
                             }
                         }

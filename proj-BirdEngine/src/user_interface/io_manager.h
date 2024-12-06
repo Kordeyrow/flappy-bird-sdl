@@ -7,11 +7,13 @@
 typedef enum {
     FAILED_TO_CREATE,
     FAILED_TO_INITIALIZE,
+    FAILED_LOADING,
 } ErrorType;
 
 typedef enum {
     ALREADY_CREATED,
     ALREADY_INITIALIZED,
+    ALREADY_LOADED,
 } WarningType;
 
 
@@ -20,13 +22,15 @@ private:
     const char* general_error_prefix = "Error: ";
     std::map<ErrorType, std::string> prefix_from_error_type = {
         {FAILED_TO_CREATE, "Failed to create "},
-        {FAILED_TO_INITIALIZE, "Failed to initialize "}
+        {FAILED_TO_INITIALIZE, "Failed to initialize "},
+        {FAILED_LOADING, "Failed to load "}
     };
 
     const char* general_warning_prefix = "Warning: ";
     std::map<WarningType, std::string> prefix_from_warning_type = {
         {ALREADY_CREATED, "Already created "},
-        {ALREADY_INITIALIZED, "Already initialized "}
+        {ALREADY_INITIALIZED, "Already initialized "},
+        {ALREADY_LOADED, "Already loaded "}
     };
 
 public:

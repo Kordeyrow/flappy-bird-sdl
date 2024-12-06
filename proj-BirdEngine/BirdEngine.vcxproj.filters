@@ -78,6 +78,7 @@
     <ClInclude Include="src\user_interface\window.h">
       <Filter>user_interface</Filter>
     </ClInclude>
+    <ClInclude Include="src\user_interface\asset_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\containers\containers.cpp">
@@ -137,5 +138,6 @@
     <ClCompile Include="src\user_interface\window.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
+    <ClCompile Include="src\user_interface\asset_manager.cpp" />
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "io_manager.h"
 #include "gui_manager.h"
+#include "asset_manager.h"
 #include "input_manager.h"
 #include <iostream>
 #include <string>
@@ -22,6 +23,7 @@ private:
     std::shared_ptr<Renderer> _renderer;
     std::shared_ptr<IOManager> _io_manager;
     std::shared_ptr<GUIManager> _gui_manager;
+    std::shared_ptr<AssetManager> _asset_manager;
     std::shared_ptr<InputManager> _input_manager;
     // runtime
     bool initialized = false;
@@ -32,12 +34,12 @@ public:
     std::shared_ptr<Renderer>& renderer() { return _renderer; };
     std::shared_ptr<IOManager>& io_manager() { return _io_manager; };
     std::shared_ptr<GUIManager>& gui_manager() { return _gui_manager; };
+    std::shared_ptr<AssetManager>& asset_manager() { return _asset_manager; };
     std::shared_ptr<InputManager>& input_manager() { return _input_manager; };
 
     UserInterface() {
     }
     ~UserInterface() {
-        IMG_Quit();
         SDL_Quit();
     }
 
@@ -52,16 +54,8 @@ public:
             SDL_Quit();
             return false;
         }
-        // SDL_image
-        if (IMG_Init(IMG_INIT_PNG) < 0) {
-            IMG_Quit();
-            SDL_Quit();
-            _io_manager->print_line_error("SDL_image - " + std::string(IMG_GetError()), FAILED_TO_INITIALIZE);
-            return false;
-        }
 
         _io_manager = std::make_shared<IOManager>();
-        _input_manager = std::make_shared<InputManager>();
 
         _window = std::make_shared<Window>(_io_manager, init_data.win_data);
         if (_window->init()) {
@@ -77,6 +71,13 @@ public:
         if (_gui_manager->init(GUIManagerInitParams{})) {
             return false;
         }
+
+        _asset_manager = std::make_shared<AssetManager>(_io_manager, _renderer);
+        if (_asset_manager->init()) {
+            return false;
+        }
+
+        _input_manager = std::make_shared<InputManager>();
 
         initialized = true;
         return true;

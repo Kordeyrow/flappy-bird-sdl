@@ -1085,11 +1085,11 @@ struct IMGUI_API ImGuiMenuColumns
 // Internal temporary state for deactivating InputText() instances.
 struct IMGUI_API ImGuiInputTextDeactivatedState
 {
-    ImGuiID            ID;              // widget id owning the text state (which just got deactivated)
+    ImGuiID            AssetID;              // widget id owning the text state (which just got deactivated)
     ImVector<char>     TextA;           // text buffer
 
     ImGuiInputTextDeactivatedState()    { memset(this, 0, sizeof(*this)); }
-    void    ClearFreeMemory()           { ID = 0; TextA.clear(); }
+    void    ClearFreeMemory()           { AssetID = 0; TextA.clear(); }
 };
 
 // Forward declare imstb_textedit.h structure + make its main configuration define accessible
@@ -1109,7 +1109,7 @@ struct IMGUI_API ImGuiInputTextState
 {
     ImGuiContext*           Ctx;                    // parent UI context (needs to be set explicitly by parent).
     ImStbTexteditState*     Stb;                    // State for stb_textedit.h
-    ImGuiID                 ID;                     // widget id owning the text state
+    ImGuiID                 AssetID;                     // widget id owning the text state
     int                     CurLenA;                // UTF-8 length of the string in TextA (in bytes)
     ImVector<char>          TextA;                  // main UTF8 buffer.
     ImVector<char>          InitialTextA;           // value to revert to when pressing Escape = backup of end-user buffer at the time of focus (in UTF-8, unaltered)
@@ -1233,7 +1233,7 @@ struct ImGuiNextItemData
 // Status storage for the last submitted item
 struct ImGuiLastItemData
 {
-    ImGuiID                 ID;
+    ImGuiID                 AssetID;
     ImGuiItemFlags          ItemFlags;          // See ImGuiItemFlags_
     ImGuiItemStatusFlags    StatusFlags;        // See ImGuiItemStatusFlags_
     ImRect                  Rect;               // Full rectangle
@@ -1252,7 +1252,7 @@ struct ImGuiLastItemData
 //   Only stored when the node is a potential candidate for landing on a Left arrow jump.
 struct ImGuiTreeNodeStackData
 {
-    ImGuiID                 ID;
+    ImGuiID                 AssetID;
     ImGuiTreeNodeFlags      TreeFlags;
     ImGuiItemFlags          ItemFlags;  // Used for nav landing
     ImRect                  NavRect;    // Used for nav landing
@@ -1597,7 +1597,7 @@ enum ImGuiNavLayer
 struct ImGuiNavItemData
 {
     ImGuiWindow*        Window;         // Init,Move    // Best candidate window (result->ItemWindow->RootWindowForNav == request->Window)
-    ImGuiID             ID;             // Init,Move    // Best candidate item ID
+    ImGuiID             AssetID;             // Init,Move    // Best candidate item ID
     ImGuiID             FocusScopeId;   // Init,Move    // Best candidate focus scope ID
     ImRect              RectRel;        // Init,Move    // Best candidate bounding box in window relative space
     ImGuiItemFlags      ItemFlags;      // ????,Move    // Best candidate item flags
@@ -1607,13 +1607,13 @@ struct ImGuiNavItemData
     ImGuiSelectionUserData SelectionUserData;//I+Mov    // Best candidate SetNextItemSelectionUserData() value. Valid if (ItemFlags & ImGuiItemFlags_HasSelectionUserData)
 
     ImGuiNavItemData()  { Clear(); }
-    void Clear()        { Window = NULL; ID = FocusScopeId = 0; ItemFlags = 0; SelectionUserData = -1; DistBox = DistCenter = DistAxial = FLT_MAX; }
+    void Clear()        { Window = NULL; AssetID = FocusScopeId = 0; ItemFlags = 0; SelectionUserData = -1; DistBox = DistCenter = DistAxial = FLT_MAX; }
 };
 
 // Storage for PushFocusScope(), g.FocusScopeStack[], g.NavFocusRoute[]
 struct ImGuiFocusScopeData
 {
-    ImGuiID             ID;
+    ImGuiID             AssetID;
     ImGuiID             WindowID;
 };
 
@@ -1691,7 +1691,7 @@ struct ImGuiOldColumnData
 
 struct ImGuiOldColumns
 {
-    ImGuiID             ID;
+    ImGuiID             AssetID;
     ImGuiOldColumnFlags Flags;
     bool                IsFirstFrame;
     bool                IsBeingResized;
@@ -1717,7 +1717,7 @@ struct ImGuiOldColumns
 struct ImGuiBoxSelectState
 {
     // Active box-selection data (persistent, 1 active at a time)
-    ImGuiID                 ID;
+    ImGuiID                 AssetID;
     bool                    IsActive;
     bool                    IsStarting;
     bool                    IsStartedFromVoid;  // Starting click was not from an item.
@@ -1774,7 +1774,7 @@ struct IMGUI_API ImGuiMultiSelectTempData
 struct IMGUI_API ImGuiMultiSelectState
 {
     ImGuiWindow*            Window;
-    ImGuiID                 ID;
+    ImGuiID                 AssetID;
     int                     LastFrameActive;    // Last used frame-count, for GC.
     int                     LastSelectionSize;  // Set by BeginMultiSelect() based on optional info provided by user. May be -1 if unknown.
     ImS8                    RangeSelected;      // -1 (don't have) or true/false
@@ -1782,7 +1782,7 @@ struct IMGUI_API ImGuiMultiSelectState
     ImGuiSelectionUserData  RangeSrcItem;       //
     ImGuiSelectionUserData  NavIdItem;          // SetNextItemSelectionUserData() value for NavId (if part of submitted items)
 
-    ImGuiMultiSelectState() { Window = NULL; ID = 0; LastFrameActive = LastSelectionSize = 0; RangeSelected = NavIdSelected = -1; RangeSrcItem = NavIdItem = ImGuiSelectionUserData_Invalid; }
+    ImGuiMultiSelectState() { Window = NULL; AssetID = 0; LastFrameActive = LastSelectionSize = 0; RangeSelected = NavIdSelected = -1; RangeSrcItem = NavIdItem = ImGuiSelectionUserData_Invalid; }
 };
 
 //-----------------------------------------------------------------------------
@@ -1838,7 +1838,7 @@ struct ImGuiViewportP : public ImGuiViewport
 // (this is designed to be stored in a ImChunkStream buffer, with the variable-length Name following our structure)
 struct ImGuiWindowSettings
 {
-    ImGuiID     ID;
+    ImGuiID     AssetID;
     ImVec2ih    Pos;
     ImVec2ih    Size;
     bool        Collapsed;
@@ -1968,7 +1968,7 @@ struct ImGuiMetricsConfig
 
 struct ImGuiStackLevelInfo
 {
-    ImGuiID                 ID;
+    ImGuiID                 AssetID;
     ImS8                    QueryFrameCount;            // >= 1: Query in progress
     bool                    QuerySuccess;               // Obtained result from DebugHookIdInfo()
     ImGuiDataType           DataType : 8;
@@ -2438,7 +2438,7 @@ struct IMGUI_API ImGuiWindow
 {
     ImGuiContext*           Ctx;                                // Parent UI context (needs to be set explicitly by parent).
     char*                   Name;                               // Window name, owned by the window.
-    ImGuiID                 ID;                                 // == ImHashStr(Name)
+    ImGuiID                 AssetID;                                 // == ImHashStr(Name)
     ImGuiWindowFlags        Flags;                              // See enum ImGuiWindowFlags_
     ImGuiChildFlags         ChildFlags;                         // Set when window is a child window. See enum ImGuiChildFlags_
     ImGuiViewportP*         Viewport;                           // Always set in Begin(). Inactive windows may have a NULL value here if their viewport was discarded.
@@ -2581,7 +2581,7 @@ enum ImGuiTabItemFlagsPrivate_
 // Storage for one active tab item (sizeof() 40 bytes)
 struct ImGuiTabItem
 {
-    ImGuiID             ID;
+    ImGuiID             AssetID;
     ImGuiTabItemFlags   Flags;
     int                 LastFrameVisible;
     int                 LastFrameSelected;      // This allows us to infer an ordered list of the last activated tabs with little maintenance
@@ -2603,7 +2603,7 @@ struct IMGUI_API ImGuiTabBar
     ImGuiWindow*        Window;
     ImVector<ImGuiTabItem> Tabs;
     ImGuiTabBarFlags    Flags;
-    ImGuiID             ID;                     // Zero for tab-bars used by docking
+    ImGuiID             AssetID;                     // Zero for tab-bars used by docking
     ImGuiID             SelectedTabId;          // Selected tab/window
     ImGuiID             NextSelectedTabId;      // Next selected tab/window. Will also trigger a scrolling animation
     ImGuiID             VisibleTabId;           // Can occasionally be != SelectedTabId (e.g. when previewing contents for CTRL+TAB preview)
@@ -2747,7 +2747,7 @@ struct ImGuiTableInstanceData
 // sizeof() ~ 592 bytes + heap allocs described in TableBeginInitMemory()
 struct IMGUI_API ImGuiTable
 {
-    ImGuiID                     ID;
+    ImGuiID                     AssetID;
     ImGuiTableFlags             Flags;
     void*                       RawData;                    // Single allocation to hold Columns[], DisplayOrderToIndex[] and RowCellData[]
     ImGuiTableTempData*         TempData;                   // Transient data while table is active. Point within g.CurrentTableStack[]
@@ -2918,7 +2918,7 @@ struct ImGuiTableColumnSettings
 // This is designed to be stored in a single ImChunkStream (1 header followed by N ImGuiTableColumnSettings, etc.)
 struct ImGuiTableSettings
 {
-    ImGuiID                     ID;                     // Set to 0 to invalidate/delete the setting
+    ImGuiID                     AssetID;                     // Set to 0 to invalidate/delete the setting
     ImGuiTableFlags             SaveFlags;              // Indicate data we want to save using the Resizable/Reorderable/Sortable/Hideable flags (could be using its own flags..)
     float                       RefScale;               // Reference scale to be able to rescale columns on font/dpi changes.
     ImGuiTableColumnIdx         ColumnsCount;
@@ -3254,7 +3254,7 @@ namespace ImGui
     IMGUI_API void          MultiSelectItemFooter(ImGuiID id, bool* p_selected, bool* p_pressed);
     IMGUI_API void          MultiSelectAddSetAll(ImGuiMultiSelectTempData* ms, bool selected);
     IMGUI_API void          MultiSelectAddSetRange(ImGuiMultiSelectTempData* ms, bool selected, int range_dir, ImGuiSelectionUserData first_item, ImGuiSelectionUserData last_item);
-    inline ImGuiBoxSelectState*     GetBoxSelectState(ImGuiID id)   { ImGuiContext& g = *GImGui; return (id != 0 && g.BoxSelectState.ID == id && g.BoxSelectState.IsActive) ? &g.BoxSelectState : NULL; }
+    inline ImGuiBoxSelectState*     GetBoxSelectState(ImGuiID id)   { ImGuiContext& g = *GImGui; return (id != 0 && g.BoxSelectState.AssetID == id && g.BoxSelectState.IsActive) ? &g.BoxSelectState : NULL; }
     inline ImGuiMultiSelectState*   GetMultiSelectState(ImGuiID id) { ImGuiContext& g = *GImGui; return g.MultiSelectStorage.GetByKey(id); }
 
     // Internal Columns API (this is not exposed because we will encourage transitioning to the Tables API)
@@ -3430,7 +3430,7 @@ namespace ImGui
     IMGUI_API bool          TempInputText(const ImRect& bb, ImGuiID id, const char* label, char* buf, int buf_size, ImGuiInputTextFlags flags);
     IMGUI_API bool          TempInputScalar(const ImRect& bb, ImGuiID id, const char* label, ImGuiDataType data_type, void* p_data, const char* format, const void* p_clamp_min = NULL, const void* p_clamp_max = NULL);
     inline bool             TempInputIsActive(ImGuiID id)       { ImGuiContext& g = *GImGui; return (g.ActiveId == id && g.TempInputId == id); }
-    inline ImGuiInputTextState* GetInputTextState(ImGuiID id)   { ImGuiContext& g = *GImGui; return (id != 0 && g.InputTextState.ID == id) ? &g.InputTextState : NULL; } // Get input text state if active
+    inline ImGuiInputTextState* GetInputTextState(ImGuiID id)   { ImGuiContext& g = *GImGui; return (id != 0 && g.InputTextState.AssetID == id) ? &g.InputTextState : NULL; } // Get input text state if active
     IMGUI_API void          SetNextItemRefVal(ImGuiDataType data_type, void* p_data);
 
     // Color

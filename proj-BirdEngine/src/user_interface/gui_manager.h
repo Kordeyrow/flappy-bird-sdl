@@ -7,6 +7,7 @@
 #include "SHP_events.h"
 #include "window.h"
 #include "renderer.h"
+#include "io_manager.h"
 
 struct GUIManagerInitParams {};
 

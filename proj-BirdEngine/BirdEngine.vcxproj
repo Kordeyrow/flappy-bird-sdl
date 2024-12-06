@@ -159,6 +159,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\user_interface\asset_manager.h" />
     <ClInclude Include="src\containers\containers.h" />
     <ClInclude Include="src\dll\export_def.h" />
     <ClInclude Include="src\dll\framework.h" />
@@ -181,6 +182,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\user_interface\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\user_interface\asset_manager.cpp" />
     <ClCompile Include="src\containers\containers.cpp" />
     <ClCompile Include="src\dll\dllmain.cpp" />
     <ClCompile Include="src\dll\export_def.cpp" />
