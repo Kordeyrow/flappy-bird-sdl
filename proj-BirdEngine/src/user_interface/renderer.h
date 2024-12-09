@@ -1,24 +1,38 @@
 #pragma once
+// libs
 #include <SDL.h>
-#include <containers/containers.h>
-#include "window.h"
+// cpp
 #include <memory>
+#include <algorithm>
+#include <cinttypes>
+// internal
+#include "window.h"
+#include "irenderer.h"
+#include "asset_manager.h"
+#include <ecs/component/sprite.h>
+#include <containers/containers.h>
+#include <ecs/component/drawable.h>
 
-class Renderer {
+using DrawableID = uint32_t;
+
+class Renderer : public IRenderer {
 private:
     // config
     Color default_renderer_draw_color = Color::WHITE();
     // dependency
+    std::shared_ptr<AssetManager> asset_manager;
     std::shared_ptr<IOManager> io_manager;
     std::shared_ptr<Window> window;
     // runtime
     SDL_Renderer* _renderer;
     Color background_color = Color::BLUE_BIRD();
+
+    std::vector<Drawable> drawable_list;
     bool initialized = false;
 
 public:
-    Renderer(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<Window> _window)
-        : io_manager{ _io_manager }, window{ _window } {
+    Renderer(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<Window> _window, std::shared_ptr<AssetManager> _asset_manager)
+        : io_manager{ _io_manager }, window{ _window }, asset_manager{ _asset_manager } {
     }
 
     ~Renderer() {
@@ -42,8 +56,20 @@ public:
 
     void draw() {
         draw_background();
+
+        // draw textures
+        std::sort(drawable_list.begin(), drawable_list.end(), less_than_compare_key());
+   		for (auto d : drawable_list) {
+            auto rect = SDL_Rect{ d.transform.position.x, d.transform.position.y, d.transform.size.x, d.transform.size.y };
+   			SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform.rotation, NULL, SDL_FLIP_NONE);
+   		}
+
         SDL_RenderPresent(_renderer);
         SDL_RenderClear(_renderer);
+    }
+
+    void add_drawwable(Drawable drawable) {
+        drawable_list.push_back(drawable);
     }
 
     void set_background_color(Color c) {

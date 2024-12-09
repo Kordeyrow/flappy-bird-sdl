@@ -71,9 +71,9 @@ public:
         return _sdl_window;
     }
     const Rect& display_rect() {
-        SDL_Rect display_rect;
-        SDL_GetDisplayBounds(0, &display_rect);
-        return Rect{ Size{display_rect.w, display_rect.h }, Position{display_rect.x, display_rect.y} };
+        SDL_Rect r;
+        SDL_GetDisplayBounds(0, &r);
+        return Rect{ Position{r.x, r.y}, Size{r.w, r.h } };
     }
 };
 

@@ -29,7 +29,7 @@ void setup_window() {
     Rect display_size = user_interface->window()->display_rect();
     int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
-    Rect r{ Size{width, height}, Position{pos_x, pos_y} };
+    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
     window->set_rect(r);
     renderer->set_background_color(Color::BLUE_BIRD());
     //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);

@@ -159,6 +159,11 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ecs\system\sparse_set.h" />
+    <ClInclude Include="src\ecs\component\component.h" />
+    <ClInclude Include="src\user_interface\irenderer.h" />
+    <ClInclude Include="src\ecs\component\drawable.h" />
+    <ClInclude Include="src\ecs\component\sprite.h" />
     <ClInclude Include="src\user_interface\asset_manager.h" />
     <ClInclude Include="src\containers\containers.h" />
     <ClInclude Include="src\dll\export_def.h" />
@@ -180,8 +185,14 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\user_interface\renderer.h" />
     <ClInclude Include="src\user_interface\user_interface.h" />
     <ClInclude Include="src\user_interface\window.h" />
+    <ClInclude Include="src\ecs\component\transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ecs\system\sparse_set.cpp" />
+    <ClCompile Include="src\ecs\component\component.cpp" />
+    <ClCompile Include="src\user_interface\irenderer.cpp" />
+    <ClCompile Include="src\ecs\component\drawable.cpp" />
+    <ClCompile Include="src\ecs\component\sprite.cpp" />
     <ClCompile Include="src\user_interface\asset_manager.cpp" />
     <ClCompile Include="src\containers\containers.cpp" />
     <ClCompile Include="src\dll\dllmain.cpp" />
@@ -202,6 +213,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClCompile Include="src\user_interface\renderer.cpp" />
     <ClCompile Include="src\user_interface\user_interface.cpp" />
     <ClCompile Include="src\user_interface\window.cpp" />
+    <ClCompile Include="src\ecs\component\transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

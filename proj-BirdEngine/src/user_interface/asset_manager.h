@@ -8,29 +8,28 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cinttypes>
 // internal
-#include "renderer.h"
+#include "irenderer.h"
 #include "io_manager.h"
 
-
 using AssetPath = std::string;
-using AssetID = Uint32;
+using AssetID = uint32_t;
 constexpr AssetID INVAL_ID = -1;
-
 
 class AssetManager {
 private:
 	// dependency
 	std::shared_ptr<IOManager> io_manager;
-	std::shared_ptr<Renderer> renderer;
+	std::shared_ptr<IRendererContainer> renderer_container;
 
 	// runtime
 	std::map<AssetPath, AssetID> id_from_assetpath;
 	std::map<AssetID, SDL_Texture*> texture_from_id;
 
 public:
-	AssetManager(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<Renderer> _renderer)
-		: io_manager{ _io_manager }, renderer{ _renderer } {
+	AssetManager(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<IRendererContainer> _renderer_container)
+		: io_manager{ _io_manager }, renderer_container{ _renderer_container } {
 	}
 	~AssetManager() {
 		id_from_assetpath.clear();
@@ -95,10 +94,10 @@ public:
 		Uint32 colorkey = SDL_MapRGB(buffer->format, 255, 255, 255);
 		SDL_SetColorKey(buffer, SDL_TRUE, colorkey);*/
 
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer->sdl_renderer(), buffer);
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer_container->renderer->sdl_renderer(), buffer);
 		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 		//SDL_SetTextureAlphaMod(texture, 140);
-		SDL_SetRenderDrawBlendMode(renderer->sdl_renderer(), SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawBlendMode(renderer_container->renderer->sdl_renderer(), SDL_BLENDMODE_BLEND);
 		SDL_FreeSurface(buffer);
 		buffer = nullptr;
 
@@ -113,6 +112,7 @@ public:
 		return id;
 	}
 
+private:
 	AssetID get_next_id() {
 		static AssetID next_id = 0;
 		return ++next_id;

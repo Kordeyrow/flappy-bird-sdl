@@ -54,7 +54,7 @@ private:
 	}
 
 	AssetID load_texture(TEXTURE_KEY key) {
-		auto id = asset_manager->load_texture(path_from_texture_key[key]);
+		auto id = asset_manager->load_texture(TEXTURE_PATH + path_from_texture_key[key]);
 		loaded_textures[key] = id;
 		return id;
 	}

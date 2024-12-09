@@ -62,18 +62,21 @@ public:
             return false;
         }
 
-        _renderer = std::make_shared<Renderer>(_io_manager, _window);
+        std::shared_ptr<IRendererContainer> irenderer_container = std::make_shared<IRendererContainer>();
+
+        _asset_manager = std::make_shared<AssetManager>(_io_manager, irenderer_container);
+        if (!_asset_manager->init()) {
+            return false;
+        }
+
+        _renderer = std::make_shared<Renderer>(_io_manager, _window, _asset_manager);
         if ( ! _renderer->init()) {
             return false;
         }
+        irenderer_container->renderer = std::shared_ptr<IRenderer>(_renderer);
 
         _gui_manager = std::make_shared<GUIManager>(_io_manager, _window, _renderer);
         if ( ! _gui_manager->init(GUIManagerInitParams{})) {
-            return false;
-        }
-
-        _asset_manager = std::make_shared<AssetManager>(_io_manager, _renderer);
-        if ( ! _asset_manager->init()) {
             return false;
         }
 

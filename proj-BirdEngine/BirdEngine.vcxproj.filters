@@ -79,6 +79,12 @@
       <Filter>user_interface</Filter>
     </ClInclude>
     <ClInclude Include="src\user_interface\asset_manager.h" />
+    <ClInclude Include="src\ecs\component\sprite.h" />
+    <ClInclude Include="src\ecs\component\drawable.h" />
+    <ClInclude Include="src\user_interface\irenderer.h" />
+    <ClInclude Include="src\ecs\component\transform.h" />
+    <ClInclude Include="src\ecs\component\component.h" />
+    <ClInclude Include="src\ecs\system\sparse_set.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\containers\containers.cpp">
@@ -139,5 +145,11 @@
       <Filter>user_interface</Filter>
     </ClCompile>
     <ClCompile Include="src\user_interface\asset_manager.cpp" />
+    <ClCompile Include="src\ecs\component\sprite.cpp" />
+    <ClCompile Include="src\ecs\component\drawable.cpp" />
+    <ClCompile Include="src\user_interface\irenderer.cpp" />
+    <ClCompile Include="src\ecs\component\transform.cpp" />
+    <ClCompile Include="src\ecs\component\component.cpp" />
+    <ClCompile Include="src\ecs\system\sparse_set.cpp" />
   </ItemGroup>
 </Project>

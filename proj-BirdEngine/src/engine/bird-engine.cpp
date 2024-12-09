@@ -6,6 +6,10 @@
 #include <memory>
 #include <mutex>
 
+
+
+#include <containers/containers.h>  
+
 struct BirdEngine::Impl {
     std::shared_ptr<UserInterface> user_interface = std::make_shared<UserInterface>();
     bool initialized = false;
@@ -17,6 +21,13 @@ struct BirdEngine::Impl {
         if ( ! user_interface->init(init_data.user_interface_init_data)) {
             return false;
         };
+
+        auto asset_manager = user_interface->asset_manager();
+        auto renderer = user_interface->renderer();
+        auto id = asset_manager->load_texture("assets/sprites/pipe-green.png");
+        //auto tex = asset_manager->get_texture(id);
+        renderer->add_drawwable(Drawable{ id, Transform{Position{100, 100}, Size{140, 140} }} );
+
         initialized = true;
         return true;
     }
