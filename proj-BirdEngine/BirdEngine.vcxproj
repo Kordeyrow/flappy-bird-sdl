@@ -160,8 +160,8 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\api\birdengine_api.h" />
-    <ClInclude Include="src\api\registry_api.h" />
-    <ClInclude Include="src\engine\registry.h" />
+    <ClInclude Include="src\api\registry.h" />
+    <ClInclude Include="src\core\registry.h" />
     <ClInclude Include="src\utils\container\sparse_set.h" />
     <ClInclude Include="src\device_interface\irenderer.h" />
     <ClInclude Include="src\ecs\component\drawable.h" />
@@ -170,7 +170,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\dll\export_def.h" />
     <ClInclude Include="src\dll\framework.h" />
     <ClInclude Include="src\dll\pch.h" />
-    <ClInclude Include="src\engine\bird-engine.h" />
+    <ClInclude Include="src\core\bird-engine.h" />
     <ClInclude Include="src\device_interface\SHP_events.h" />
     <ClInclude Include="src\device_interface\gui_manager.h" />
     <ClInclude Include="src\device_interface\imgui_sdl\imconfig.h" />
@@ -188,7 +188,8 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\device_interface\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\registry.cpp" />
+    <ClCompile Include="src\api\registry.cpp" />
+    <ClCompile Include="src\core\registry.cpp" />
     <ClCompile Include="src\utils\container\sparse_set.cpp" />
     <ClCompile Include="src\device_interface\irenderer.cpp" />
     <ClCompile Include="src\ecs\component\drawable.cpp" />
@@ -197,7 +198,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClCompile Include="src\dll\dllmain.cpp" />
     <ClCompile Include="src\dll\export_def.cpp" />
     <ClCompile Include="src\dll\pch.cpp" />
-    <ClCompile Include="src\engine\bird-engine.cpp" />
+    <ClCompile Include="src\core\bird-engine.cpp" />
     <ClCompile Include="src\device_interface\SHP_events.cpp" />
     <ClCompile Include="src\device_interface\gui_manager.cpp" />
     <ClCompile Include="src\device_interface\imgui_sdl\imgui.cpp" />

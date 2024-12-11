@@ -2,19 +2,14 @@
 
 Registry::Registry() {}
 Registry::~Registry() {};
-//std::shared_ptr<Registry> Registry::instance() {
-//	static std::shared_ptr<Registry> instance(
-//		new RegistryInternal(),
-//		[](RegistryInternal* reg) {
-//			delete reg; // Custom deleter to allow destruction of the singleton
-//		}
-//	);
-//	return instance;
-//}
-
-std::shared_ptr<RegistryInternal> RegistryInternal::instance()
-{
-	return std::shared_ptr<RegistryInternal>();
+std::shared_ptr<Registry> Registry::instance() {
+	static std::shared_ptr<Registry> instance(
+		new Registry(),
+		[](Registry* reg) {
+			delete reg; // Custom deleter to allow destruction of the singleton
+		}
+	);
+	return instance;
 }
 
 SceneID Registry::create_new_scene() {

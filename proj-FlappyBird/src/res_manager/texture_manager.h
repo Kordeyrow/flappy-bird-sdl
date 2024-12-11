@@ -7,7 +7,7 @@
 #include <iostream>
 //#include <SDL.h>
 //#include <SDL_image.h>
-#include <engine/bird-engine.h>
+#include <core/bird-engine.h>
 
 enum TEXTURE_KEY {
 	TEXTURE_FLAPPY_BIRD_UP_WING,

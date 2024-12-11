@@ -102,6 +102,7 @@ public:
 	}
 };
 
+using SceneID = uint32_t;
 class Scene {
 private:
 	SceneID _id = next_id();

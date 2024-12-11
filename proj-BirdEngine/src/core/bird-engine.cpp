@@ -69,7 +69,7 @@ struct BirdEngine::Impl {
     }
 
     void init_game() {
-        current_scene = Registry::instance()->init_start_scene();
+        //current_scene = Registry::instance()->init_start_scene();
     }
 
     ProgramState update() {

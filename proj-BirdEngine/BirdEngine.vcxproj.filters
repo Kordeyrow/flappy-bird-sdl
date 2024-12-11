@@ -30,7 +30,7 @@
     <ClInclude Include="src\dll\pch.h">
       <Filter>dll</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\bird-engine.h">
+    <ClInclude Include="src\core\bird-engine.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="src\device_interface\SHP_events.h">
@@ -82,8 +82,8 @@
     <ClInclude Include="src\ecs\component\drawable.h" />
     <ClInclude Include="src\device_interface\irenderer.h" />
     <ClInclude Include="src\utils\container\sparse_set.h" />
-    <ClInclude Include="src\engine\registry.h" />
-    <ClInclude Include="src\api\registry_api.h" />
+    <ClInclude Include="src\core\registry.h" />
+    <ClInclude Include="src\api\registry.h" />
     <ClInclude Include="src\api\birdengine_api.h" />
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +99,7 @@
     <ClCompile Include="src\dll\pch.cpp">
       <Filter>dll</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\bird-engine.cpp">
+    <ClCompile Include="src\core\bird-engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\device_interface\SHP_events.cpp">
@@ -148,6 +148,7 @@
     <ClCompile Include="src\ecs\component\drawable.cpp" />
     <ClCompile Include="src\device_interface\irenderer.cpp" />
     <ClCompile Include="src\utils\container\sparse_set.cpp" />
-    <ClCompile Include="src\engine\registry.cpp" />
+    <ClCompile Include="src\core\registry.cpp" />
+    <ClCompile Include="src\api\registry.cpp" />
   </ItemGroup>
 </Project>
