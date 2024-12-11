@@ -84,7 +84,7 @@
     <ClInclude Include="src\utils\container\sparse_set.h" />
     <ClInclude Include="src\core\registry.h" />
     <ClInclude Include="src\api\registry.h" />
-    <ClInclude Include="src\api\birdengine_api.h" />
+    <ClInclude Include="src\api\birdengine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\containers\containers.cpp">
@@ -149,6 +149,6 @@
     <ClCompile Include="src\device_interface\irenderer.cpp" />
     <ClCompile Include="src\utils\container\sparse_set.cpp" />
     <ClCompile Include="src\core\registry.cpp" />
-    <ClCompile Include="src\api\registry.cpp" />
+    <ClCompile Include="src\core\registry_api.cpp" />
   </ItemGroup>
 </Project>

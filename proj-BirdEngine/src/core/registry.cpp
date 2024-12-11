@@ -1,7 +1,9 @@
 #include "registry.h"
+#include <iostream>
 
-Registry::Registry() {}
+Registry::Registry() {};
 Registry::~Registry() {};
+
 std::shared_ptr<Registry> Registry::instance() {
 	static std::shared_ptr<Registry> instance(
 		new Registry(),
@@ -10,6 +12,14 @@ std::shared_ptr<Registry> Registry::instance() {
 		}
 	);
 	return instance;
+}
+
+void Registry::test() {
+	std::cout << "aaaaaaaaaaaa" << std::endl;
+}
+
+void Registry::oi() {
+	std::cout << "oi" << std::endl;
 }
 
 SceneID Registry::create_new_scene() {

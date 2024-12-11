@@ -1,7 +1,7 @@
-#include <SDL.h>
-//#include <game/game.h>
-//////////#include <api/birdengine_api.h>
-//////////#include <api/registry_api.h>
+#include <SDL.h> // libs
+//#include <api/birdengine.h> // engine
+#include <api/registry.h>
+//#include <game/game.h> // internal
 #include <res_manager/texture_manager.h>
 
 #ifdef __EMSCRIPTEN__
@@ -80,7 +80,9 @@ bool init_game() {
             Transform { Position{100, 100}, Size{140, 140}, 0 } 
         }
     );*/
-    ///////////*auto main_scene_id = Registry::instance()->create_new_scene();
+    auto registry = RegistryAPI::instance();
+    //registry->testa = true;
+    registry->oi();
     //////////auto pipe = Registry::instance()->create_new_gameobject();
     //////////pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     //////////Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);

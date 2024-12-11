@@ -3,8 +3,9 @@
 #include <cinttypes> // cpp
 #include <memory>
 #include <containers/containers.h> // internal
+#include <iostream>
 
-class BIRDENGINE_API Registry {
+class Registry {
 private:
 	std::vector<GameObject*> all_gameobjects_list;
 	std::map<GameObjectID, GameObject*> gameobject_from_id;
@@ -16,15 +17,18 @@ private:
 	/*SceneID current_editing_scene_id;
 	std::vector<SceneID> build_scene_list;*/
 
-	SceneID create_new_scene();
-	void set_starting_scene(SceneID id);
-	GameObject* create_new_gameobject();
-	void add_gameobject_to_scene(GameObject* go_id, SceneID scene_id);
-
 public:
 	Registry(const Registry&) = delete;
 	Registry& operator=(const Registry&) = delete;
 	static std::shared_ptr<Registry> instance();
+
+	void test();
+	void oi();
+
+	SceneID create_new_scene();
+	void set_starting_scene(SceneID id);
+	GameObject* create_new_gameobject();
+	void add_gameobject_to_scene(GameObject* go_id, SceneID scene_id);
 
 // TODO: internal only
 public:
@@ -32,10 +36,7 @@ public:
 		scene_from_id[starting_scene_id]->init();
 		return scene_from_id[starting_scene_id];
 	}*/
-
 private:
 	Registry();
 	~Registry();
-
 };
-
