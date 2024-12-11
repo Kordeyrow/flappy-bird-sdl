@@ -16,7 +16,7 @@
 ////////std::shared_ptr<Renderer> renderer;
 ////////std::shared_ptr<InputManager> input_manager;
 ////////std::shared_ptr<AssetManager> asset_manager;
-////////TextureManager* texture_manager;
+TextureManager* texture_manager;
 //////
 ////////void setup_window() {
 ////////    int width = 460;
@@ -67,8 +67,8 @@ bool init_game() {
 
     ////////setup_window();
 
-    ////////texture_manager = new TextureManager(asset_manager);
-    ////////texture_manager->init();*/
+    texture_manager = new TextureManager(asset_manager);
+    texture_manager->init();
 
 
     // TEST
@@ -80,13 +80,11 @@ bool init_game() {
             Transform { Position{100, 100}, Size{140, 140}, 0 } 
         }
     );*/
-    auto registry = RegistryAPI::instance();
-    //registry->testa = true;
-    registry->oi();
-    //////////auto pipe = Registry::instance()->create_new_gameobject();
-    //////////pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
-    //////////Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);
-    //////////Registry::instance()->set_starting_scene(main_scene_id);*/
+    auto main_scene_id = RegistryAPI::instance()->create_new_scene();
+    auto pipe = Registry::instance()->create_new_gameobject();
+    pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);
+    Registry::instance()->set_starting_scene(main_scene_id);
     // ======================
     
 

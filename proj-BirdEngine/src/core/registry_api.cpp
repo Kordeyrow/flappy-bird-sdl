@@ -17,18 +17,22 @@ std::shared_ptr<RegistryAPI> RegistryAPI::instance(){
 	return instance;
 }
 
-void RegistryAPI::test()
+SceneID RegistryAPI::create_new_scene()
 {
-	Registry::instance()->test();
+	return Registry::instance()->create_new_scene();
 }
 
-void RegistryAPI::oi()
+void RegistryAPI::set_starting_scene(SceneID id)
 {
-	Registry::instance()->oi();
+	Registry::instance()->set_starting_scene(id);
 }
 
-//SceneID RegistryAPI::create_new_scene()
-//{
-//	//return SceneID();
-//	return Registry::instance()->create_new_scene();
-//}
+GameObject* RegistryAPI::create_new_gameobject()
+{
+	return Registry::instance()->create_new_gameobject();
+}
+
+void RegistryAPI::add_gameobject_to_scene(GameObject* go_id, SceneID scene_id)
+{
+	Registry::instance()->add_gameobject_to_scene(go_id, scene_id);
+}
