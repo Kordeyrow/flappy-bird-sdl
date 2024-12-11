@@ -18,10 +18,6 @@ void Registry::test() {
 	std::cout << "aaaaaaaaaaaa" << std::endl;
 }
 
-void Registry::oi() {
-	std::cout << "oi" << std::endl;
-}
-
 SceneID Registry::create_new_scene() {
 	Scene* new_scene = new Scene();
 	instance()->all_scenes_list.push_back(new_scene);

@@ -1,13 +1,15 @@
 #pragma once
-#include <dll/export_def.h> // dll
+// dll
+#include <dll/export_def.h> 
+// cpp
 #include <memory>
+// classes
 #include <containers/containers.h>
 
 struct BIRDENGINE_API RegistryAPI {
 	RegistryAPI(const RegistryAPI&) = delete;
 	RegistryAPI& operator=(const RegistryAPI&) = delete;
 	static std::shared_ptr<RegistryAPI> instance();
-
 
 	SceneID create_new_scene();
 	void set_starting_scene(SceneID id);

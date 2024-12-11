@@ -23,7 +23,6 @@ public:
 	static std::shared_ptr<Registry> instance();
 
 	void test();
-	void oi();
 
 	SceneID create_new_scene();
 	void set_starting_scene(SceneID id);

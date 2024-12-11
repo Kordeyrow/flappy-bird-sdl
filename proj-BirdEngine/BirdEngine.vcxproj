@@ -159,7 +159,8 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\api\birdengine.h" />
+    <ClInclude Include="src\api\asset_manager.h" />
+    <ClInclude Include="src\api\bird_engine.h" />
     <ClInclude Include="src\api\registry.h" />
     <ClInclude Include="src\core\registry.h" />
     <ClInclude Include="src\utils\container\sparse_set.h" />
@@ -170,7 +171,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\dll\export_def.h" />
     <ClInclude Include="src\dll\framework.h" />
     <ClInclude Include="src\dll\pch.h" />
-    <ClInclude Include="src\core\bird-engine.h" />
+    <ClInclude Include="src\core\bird_engine.h" />
     <ClInclude Include="src\device_interface\SHP_events.h" />
     <ClInclude Include="src\device_interface\gui_manager.h" />
     <ClInclude Include="src\device_interface\imgui_sdl\imconfig.h" />
@@ -188,6 +189,8 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClInclude Include="src\device_interface\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\device_interface\asset_manager_api.cpp" />
+    <ClCompile Include="src\core\bird_engine_api.cpp" />
     <ClCompile Include="src\core\registry_api.cpp" />
     <ClCompile Include="src\core\registry.cpp" />
     <ClCompile Include="src\utils\container\sparse_set.cpp" />
@@ -198,7 +201,7 @@ IF EXIST "C:\dev\FlappyBird\FlappyBird\bin\windows-x86_64\Debug\BirdEngine\BirdE
     <ClCompile Include="src\dll\dllmain.cpp" />
     <ClCompile Include="src\dll\export_def.cpp" />
     <ClCompile Include="src\dll\pch.cpp" />
-    <ClCompile Include="src\core\bird-engine.cpp" />
+    <ClCompile Include="src\core\bird_engine.cpp" />
     <ClCompile Include="src\device_interface\SHP_events.cpp" />
     <ClCompile Include="src\device_interface\gui_manager.cpp" />
     <ClCompile Include="src\device_interface\imgui_sdl\imgui.cpp" />

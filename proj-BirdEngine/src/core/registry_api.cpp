@@ -1,9 +1,9 @@
 #include "api/registry.h"
 #include "core/registry.h"
-#include <cinttypes>
+//#include <cinttypes>
 
 // TODO: use same class name but different namespace
-namespace API {}
+//namespace API {}
 
 RegistryAPI::RegistryAPI() {};
 RegistryAPI::~RegistryAPI() {};
