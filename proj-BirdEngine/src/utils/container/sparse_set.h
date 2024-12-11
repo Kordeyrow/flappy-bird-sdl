@@ -11,17 +11,17 @@ public:
 	}
 
 	template<typename ...Args>
-	void add(uint32_t val, Args&&... args) {
-		if (!val_valid(val) || !has_space()) {
+	void add(uint32_t id, Args&&... args) {
+		if (!val_valid(id) || !has_space()) {
 			return;
 		}
-		dense.push_back(val);
-		data_v.emplace_back(std::forward<Args>(args)...);
-		if (sparse.size() < val) {
+		dense.push_back(id);
+		elements_list.emplace_back(std::forward<Args>(args)...);
+		if (sparse.size() < id) {
 			//resize_sparse(k*2+1);
-			resize_sparse(val * 2 + 1);
+			resize_sparse(id * 2 + 1);
 		}
-		sparse[val] = count;
+		sparse[id] = count;
 		count++;
 	}
 
@@ -29,11 +29,11 @@ public:
 		if (i >= count) {
 			return INVALID;
 		}
-		return data_v[i];
+		return elements_list[i];
 	}
 
 	bool has_val(uint32_t val) {
-		if (!val_valid(val)) {
+		if (!id_valid(val)) {
 			return false;
 		}
 		auto i = sparse[val];
@@ -41,12 +41,12 @@ public:
 	}
 
 	const std::vector<Data>& get_all() const {
-		return data_v;
+		return elements_list;
 	}
 
 private:
-	bool val_valid(uint32_t val) const {
-		return val < MAX && val != INVALID;
+	bool id_valid(uint32_t id) const {
+		return id < MAX && id != INVALID;
 	}
 
 	bool has_space() const {
@@ -62,10 +62,10 @@ private:
 
 private:
 	std::vector<uint32_t> dense;
-	std::vector<Data> data_v;
+	std::vector<Data> elements_list;
 	std::vector<uint32_t> sparse;
 	uint32_t count = 0;
-	uint32_t MAX = 1000;
+	uint32_t MAX = 100;
 	uint32_t INVALID = -1;
 };
 

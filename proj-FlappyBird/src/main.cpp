@@ -1,6 +1,7 @@
 #include <SDL.h>
 //#include <game/game.h>
-#include <engine/bird-engine.h>
+//////////#include <api/birdengine_api.h>
+//////////#include <api/registry_api.h>
 #include <res_manager/texture_manager.h>
 
 #ifdef __EMSCRIPTEN__
@@ -10,38 +11,37 @@
 
 // runtime
 //Game game;
-ProgramState program_state = ProgramState::RUNNING;
-std::shared_ptr<Window> window;
-std::shared_ptr<Renderer> renderer;
-std::shared_ptr<InputManager> input_manager;
-std::shared_ptr<AssetManager> asset_manager;
-TextureManager* texture_manager;
-
-void setup_window() {
-    int width = 460;
-    int height = 640;
-    double offset_x = -width * 0.04;
-    double offset_y = -offset_x * 0.6;
-    auto user_interface = BirdEngine::instance()->user_interface();
-    auto win = user_interface->window();
-    std::cout << user_interface->window()->rect().position.x << std::endl;
-    //system("pause");
-    Rect display_size = user_interface->window()->display_rect();
-    int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
-    int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
-    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
-    window->set_rect(r);
-    renderer->set_background_color(Color::BLUE_BIRD());
-    //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
-}
+////////ProgramState program_state = ProgramState::RUNNING;
+////////std::shared_ptr<Window> window;
+////////std::shared_ptr<Renderer> renderer;
+////////std::shared_ptr<InputManager> input_manager;
+////////std::shared_ptr<AssetManager> asset_manager;
+////////TextureManager* texture_manager;
+//////
+////////void setup_window() {
+////////    int width = 460;
+////////    int height = 640;
+////////    double offset_x = -width * 0.04;
+////////    double offset_y = -offset_x * 0.6;
+////////    auto device_interface = BirdEngine::instance()->device_interface();
+////////    auto win = device_interface->window();
+////////    std::cout << device_interface->window()->rect().position.x << std::endl;
+////////    //system("pause");
+////////    Rect display_size = device_interface->window()->display_rect();
+////////    int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
+////////    int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
+////////    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
+////////    window->set_rect(r);
+////////    renderer->set_background_color(Color::BLUE_BIRD());
+////////}
 
 bool init_engine() {
-    WindowInitData win_data{ "FlappyBird" };
-    UserInterfaceInitData usin_data{ win_data };
-    EngineInitData eng_data{ usin_data };
-    if (!BirdEngine::instance()->init(eng_data)) {
-        return false;
-    }
+    /////////*WindowInitData win_data{ "FlappyBird" };
+    ////////UserInterfaceInitData usin_data{ win_data };
+    ////////EngineInitData eng_data{ usin_data };
+    ////////if (!BirdEngine::instance()->init()) {
+    ////////    return false;
+    ////////}*/
     return true;
 }
 
@@ -59,17 +59,36 @@ bool init_game() {
 
 
 
-    auto user_interface = BirdEngine::instance()->user_interface();
-    window = user_interface->window();
-    renderer = user_interface->renderer();
-    input_manager = user_interface->input_manager();
-    asset_manager = user_interface->asset_manager();
+    /////////*auto device_interface = BirdEngine::instance()->device_interface();
+    ////////window = device_interface->window();
+    ////////renderer = device_interface->renderer();
+    ////////input_manager = device_interface->input_manager();
+    ////////asset_manager = device_interface->asset_manager();
 
-    setup_window();
+    ////////setup_window();
 
-    texture_manager = new TextureManager(asset_manager);
-    texture_manager->init();
+    ////////texture_manager = new TextureManager(asset_manager);
+    ////////texture_manager->init();*/
 
+
+    // TEST
+    // ======================
+    //
+    /*device_interface->renderer()->add_drawwable (
+        Drawable { 
+            texture_manager->get_texture_id(TEXTURE_KEY::PIPE),
+            Transform { Position{100, 100}, Size{140, 140}, 0 } 
+        }
+    );*/
+    ///////////*auto main_scene_id = Registry::instance()->create_new_scene();
+    //////////auto pipe = Registry::instance()->create_new_gameobject();
+    //////////pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    //////////Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);
+    //////////Registry::instance()->set_starting_scene(main_scene_id);*/
+    // ======================
+    
+
+    //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
     //return game.init<Playing>();
     return true;
 }
@@ -85,14 +104,20 @@ bool init() {
 }
 
 void run_game() {
-    program_state = BirdEngine::instance()->update();
+    //////////////program_state = BirdEngine::instance()->update();
 
-    if (BirdEngine::instance()->user_interface()->input_manager()->is_key_down(SHP_K_SPACE)) {
-        BirdEngine::instance()->user_interface()->renderer()->set_background_color(Color::RED());
-    }
-    else {
-        BirdEngine::instance()->user_interface()->renderer()->set_background_color(Color::BLUE_BIRD());
-    }
+
+    // TEST
+    // ======================
+    //
+    /////////////////////*if (input_manager->is_key_down(SHP_K_SPACE)) {
+    ////////////////////    renderer->set_background_color(Color::RED());
+    ////////////////////}
+    ////////////////////else {
+    ////////////////////    renderer->set_background_color(Color::BLUE_BIRD());
+    ////////////////////}*/
+    // ======================
+
 
     //quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__
@@ -117,9 +142,9 @@ extern "C" void start_game() {
 #else
 int main(int argc, char** argv) {
     if ( ! init()) return 0;
-    while (program_state != ProgramState::QUIT) {
-        run_game();
-    }
+    /////////////*while (program_state != ProgramState::QUIT) {
+    ////////////    run_game();
+    ////////////}*/
     return 0;
 }
 #endif

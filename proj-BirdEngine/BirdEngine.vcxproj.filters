@@ -33,58 +33,58 @@
     <ClInclude Include="src\engine\bird-engine.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\SHP_events.h">
+    <ClInclude Include="src\device_interface\SHP_events.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\gui_manager.h">
+    <ClInclude Include="src\device_interface\gui_manager.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imconfig.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imconfig.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imgui.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imgui.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imgui_impl_sdl2.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imgui_impl_sdl2.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imgui_impl_sdlrenderer2.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imgui_impl_sdlrenderer2.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imgui_internal.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imgui_internal.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imstb_rectpack.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imstb_rectpack.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imstb_textedit.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imstb_textedit.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\imgui_sdl\imstb_truetype.h">
+    <ClInclude Include="src\device_interface\imgui_sdl\imstb_truetype.h">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\input_manager.h">
+    <ClInclude Include="src\device_interface\input_manager.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\io_manager.h">
+    <ClInclude Include="src\device_interface\io_manager.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\renderer.h">
+    <ClInclude Include="src\device_interface\renderer.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\user_interface.h">
+    <ClInclude Include="src\device_interface\device_interface.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\window.h">
+    <ClInclude Include="src\device_interface\window.h">
       <Filter>user_interface</Filter>
     </ClInclude>
-    <ClInclude Include="src\user_interface\asset_manager.h" />
-    <ClInclude Include="src\ecs\component\sprite.h" />
+    <ClInclude Include="src\device_interface\asset_manager.h" />
     <ClInclude Include="src\ecs\component\drawable.h" />
-    <ClInclude Include="src\user_interface\irenderer.h" />
-    <ClInclude Include="src\ecs\component\transform.h" />
-    <ClInclude Include="src\ecs\component\component.h" />
-    <ClInclude Include="src\ecs\system\sparse_set.h" />
+    <ClInclude Include="src\device_interface\irenderer.h" />
+    <ClInclude Include="src\utils\container\sparse_set.h" />
+    <ClInclude Include="src\engine\registry.h" />
+    <ClInclude Include="src\api\registry_api.h" />
+    <ClInclude Include="src\api\birdengine_api.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\containers\containers.cpp">
@@ -102,54 +102,52 @@
     <ClCompile Include="src\engine\bird-engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\SHP_events.cpp">
+    <ClCompile Include="src\device_interface\SHP_events.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\gui_manager.cpp">
+    <ClCompile Include="src\device_interface\gui_manager.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_demo.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_demo.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_draw.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_draw.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_impl_sdl2.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_impl_sdl2.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_impl_sdlrenderer2.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_impl_sdlrenderer2.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_tables.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_tables.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\imgui_sdl\imgui_widgets.cpp">
+    <ClCompile Include="src\device_interface\imgui_sdl\imgui_widgets.cpp">
       <Filter>user_interface\imgui_sdl</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\input_manager.cpp">
+    <ClCompile Include="src\device_interface\input_manager.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\io_manager.cpp">
+    <ClCompile Include="src\device_interface\io_manager.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\renderer.cpp">
+    <ClCompile Include="src\device_interface\renderer.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\user_interface.cpp">
+    <ClCompile Include="src\device_interface\device_interface.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\window.cpp">
+    <ClCompile Include="src\device_interface\window.cpp">
       <Filter>user_interface</Filter>
     </ClCompile>
-    <ClCompile Include="src\user_interface\asset_manager.cpp" />
-    <ClCompile Include="src\ecs\component\sprite.cpp" />
+    <ClCompile Include="src\device_interface\asset_manager.cpp" />
     <ClCompile Include="src\ecs\component\drawable.cpp" />
-    <ClCompile Include="src\user_interface\irenderer.cpp" />
-    <ClCompile Include="src\ecs\component\transform.cpp" />
-    <ClCompile Include="src\ecs\component\component.cpp" />
-    <ClCompile Include="src\ecs\system\sparse_set.cpp" />
+    <ClCompile Include="src\device_interface\irenderer.cpp" />
+    <ClCompile Include="src\utils\container\sparse_set.cpp" />
+    <ClCompile Include="src\engine\registry.cpp" />
   </ItemGroup>
 </Project>

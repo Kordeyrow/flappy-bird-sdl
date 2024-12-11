@@ -16,7 +16,7 @@ struct UserInterfaceInitData {
     WindowInitData win_data;
 };
 
-class UserInterface {
+class DeviceInterface {
 private:
     // owns
     std::shared_ptr<Window> _window;
@@ -37,9 +37,9 @@ public:
     std::shared_ptr<AssetManager>& asset_manager() { return _asset_manager; };
     std::shared_ptr<InputManager>& input_manager() { return _input_manager; };
 
-    UserInterface() {
+    DeviceInterface() {
     }
-    ~UserInterface() {
+    ~DeviceInterface() {
         SDL_Quit();
     }
 

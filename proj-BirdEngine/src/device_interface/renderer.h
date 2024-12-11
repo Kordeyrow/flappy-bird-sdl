@@ -9,7 +9,6 @@
 #include "window.h"
 #include "irenderer.h"
 #include "asset_manager.h"
-#include <ecs/component/sprite.h>
 #include <containers/containers.h>
 #include <ecs/component/drawable.h>
 
@@ -58,17 +57,25 @@ public:
         draw_background();
 
         // draw textures
-        std::sort(drawable_list.begin(), drawable_list.end(), less_than_compare_key());
+        std::sort(drawable_list.begin(), drawable_list.end(), less_than_compare_key_Drawable());
    		for (auto d : drawable_list) {
-            auto rect = SDL_Rect{ d.transform.position.x, d.transform.position.y, d.transform.size.x, d.transform.size.y };
-   			SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform.rotation, NULL, SDL_FLIP_NONE);
+            auto rect = SDL_Rect{ d.transform->position.x, d.transform->position.y, d.transform->size.x, d.transform->size.y };
+   			SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
    		}
+    }
+
+    void apply_draw() {
 
         SDL_RenderPresent(_renderer);
         SDL_RenderClear(_renderer);
     }
 
-    void add_drawwable(Drawable drawable) {
+    void draw_drawable(Drawable d) {
+        auto rect = SDL_Rect{ d.transform->position.x, d.transform->position.y, d.transform->size.x, d.transform->size.y };
+        SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
+    }
+
+    void add_drawable(Drawable drawable) {
         drawable_list.push_back(drawable);
     }
 
@@ -79,15 +86,6 @@ public:
     // TODO: hide from user
     SDL_Renderer* sdl_renderer() {
         return _renderer;
-    }
-
-private:
-    void reset_render_draw_color() {
-        SDL_SetRenderDrawColor(_renderer, 
-            default_renderer_draw_color.r, 
-            default_renderer_draw_color.g, 
-            default_renderer_draw_color.b, 
-            default_renderer_draw_color.a);
     }
 
     void draw_background() {
@@ -106,5 +104,13 @@ private:
         reset_render_draw_color();
     }
 
+private:
+    void reset_render_draw_color() {
+        SDL_SetRenderDrawColor(_renderer, 
+            default_renderer_draw_color.r, 
+            default_renderer_draw_color.g, 
+            default_renderer_draw_color.b, 
+            default_renderer_draw_color.a);
+    }
 };
 
