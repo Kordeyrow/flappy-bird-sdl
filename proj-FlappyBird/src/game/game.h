@@ -24,6 +24,9 @@
 #include "game_state.h"
 #include <queue>
 
+#include <GL/glew.h>
+#include <SDL_opengl.h>
+
 class Game {
 public:
 	// SDL
@@ -99,6 +102,11 @@ public:
 			return false;
 		}
 
+		// Request OpenGL 3.3 Core context
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
 		// IMG
 		if (IMG_Init(IMG_INIT_PNG) < 0) {
 			std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
@@ -113,7 +121,7 @@ public:
 				0,       // Y position
 				0,                          // Width
 				0,                          // Height
-				SDL_WINDOW_SHOWN         // Borderless flag
+				SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN         // Borderless flag
 			);
 
 			if (!_window) {
@@ -121,6 +129,23 @@ public:
 				SDL_Quit();
 				return -1;
 			}
+
+			// Create OpenGL context
+			SDL_GLContext gl_context = SDL_GL_CreateContext(_window);
+			if (!gl_context) {
+				std::cerr << "Failed to create OpenGL context: " << SDL_GetError() << std::endl;
+				return false;
+			}
+
+			// Initialize GLEW or equivalent
+			if (glewInit() != GLEW_OK) {
+				std::cerr << "Failed to initialize GLEW" << std::endl;
+				return false;
+			}
+
+			SDL_GL_MakeCurrent(_window, gl_context);
+			glViewport(0, 0, _window_w, _window_h);
+
 
 			// Create a renderer
 			_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);

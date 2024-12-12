@@ -8,6 +8,12 @@ GameProj = "FlappyBird"
 ThisProj = EngineProjName
 TargetDLLdir = BinariesDir.. OutputDir.. GameProj
 
+-- Libs
+SDL2DllPath = "../SDL2/lib/x64/"
+SDL2DllPathFile = SDL2DllPath .. "SDL2.dll"
+SDL2_imageDllPath = "../SDL2_image/lib/x64/"
+SDL2_imageDllPathFile = SDL2_imageDllPath .. "SDL2_image.dll"
+
 project "BirdEngine"
    kind "SharedLib"
    language "C++"
@@ -19,7 +25,22 @@ project "BirdEngine"
 
    includedirs
    {
-        SourceDir
+        SourceDir,
+        "../SDL2/include",
+        "../SDL2_image/include",
+   }
+
+   links
+   {
+        "SDL2",
+        "SDL2main",
+        "SDL2_image",
+   }
+
+   libdirs
+   {
+        SDL2DllPath,
+        SDL2_imageDllPath,
    }
 
    filter "system:windows"

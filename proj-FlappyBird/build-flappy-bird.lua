@@ -12,6 +12,8 @@ SDL2DllPath = "../SDL2/lib/x64/"
 SDL2DllPathFile = SDL2DllPath .. "SDL2.dll"
 SDL2_imageDllPath = "../SDL2_image/lib/x64/"
 SDL2_imageDllPathFile = SDL2_imageDllPath .. "SDL2_image.dll"
+glewLib_FolderPath = "../vendor/libs/glew-2.1.0/lib/Release/x64/"
+glewDLL_FilePath = "../vendor/libs/glew-2.1.0/bin/Release/x64/glew32.dll"
 -- Assets
 AssetsDir = "assets"
 
@@ -30,14 +32,17 @@ project ("" .. ThisProj)
         SourceDir,
         "../SDL2/include",
         "../SDL2_image/include",
+        "../vendor/libs/glew-2.1.0/include",
 	    "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
    }
-
+   
    links
    {
         "SDL2",
         "SDL2main",
         "SDL2_image",
+        "glew32",
+        "opengl32",
         EngineProjName,
    }
 
@@ -45,6 +50,7 @@ project ("" .. ThisProj)
    {
         SDL2DllPath,
         SDL2_imageDllPath,
+        glewLib_FolderPath,
    }
 
    dependson
@@ -59,6 +65,7 @@ project ("" .. ThisProj)
        postbuildcommands {
            '{COPY} "'..SDL2DllPathFile..'" "%{cfg.targetdir}"',
            '{COPY} "'..SDL2_imageDllPathFile..'" "%{cfg.targetdir}"',
+           '{COPY} "'..glewDLL_FilePath..'" "%{cfg.targetdir}"',
            '{MKDIR} "%{cfg.targetdir}/' .. path.getname(AssetsDir) .. '"',
            '{COPYDIR} "' .. AssetsDir .. '" "%{cfg.targetdir}/' .. path.getname(AssetsDir) .. '"'
        }

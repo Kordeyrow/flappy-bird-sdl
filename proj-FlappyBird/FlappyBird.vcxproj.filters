@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="containers">
+      <UniqueIdentifier>{FB7E5497-E736-96E4-503E-6F403C1531D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers\func">
+      <UniqueIdentifier>{7682DE82-E20D-4C47-EB1E-CF3B5729A847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers\input">
+      <UniqueIdentifier>{5A4FE1DE-4648-0031-6F7A-E5B55BD2DF3C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="entities">
       <UniqueIdentifier>{AA3F76DB-960C-D1E6-BF25-BF8EAB510675}</UniqueIdentifier>
     </Filter>
     <Filter Include="game">
       <UniqueIdentifier>{9F35977C-8B6C-980D-3459-7E10206F140F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hardware">
+      <UniqueIdentifier>{736183B2-5F2E-DEBD-8847-CC657473134C}</UniqueIdentifier>
     </Filter>
     <Filter Include="math">
       <UniqueIdentifier>{CF809A7C-BBB7-9B0D-64A4-811050BA170F}</UniqueIdentifier>
@@ -27,6 +39,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\containers\func\action.h">
+      <Filter>containers\func</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers\func\action_base.h">
+      <Filter>containers\func</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers\input\input.h">
+      <Filter>containers\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers\input\input_group.h">
+      <Filter>containers\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers\input\mobile_input.h">
+      <Filter>containers\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers\input\pc_input.h">
+      <Filter>containers\input</Filter>
+    </ClInclude>
     <ClInclude Include="src\entities\flappy_bird.h">
       <Filter>entities</Filter>
     </ClInclude>
@@ -41,6 +71,9 @@
     </ClInclude>
     <ClInclude Include="src\game\gameplay_base.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hardware\hardware_interface.h">
+      <Filter>hardware</Filter>
     </ClInclude>
     <ClInclude Include="src\math\vector2.h">
       <Filter>math</Filter>
@@ -101,6 +134,24 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\containers\func\action.cpp">
+      <Filter>containers\func</Filter>
+    </ClCompile>
+    <ClCompile Include="src\containers\func\action_base.cpp">
+      <Filter>containers\func</Filter>
+    </ClCompile>
+    <ClCompile Include="src\containers\input\input.cpp">
+      <Filter>containers\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\containers\input\input_group.cpp">
+      <Filter>containers\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\containers\input\mobile_input.cpp">
+      <Filter>containers\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\containers\input\pc_input.cpp">
+      <Filter>containers\input</Filter>
+    </ClCompile>
     <ClCompile Include="src\entities\flappy_bird.cpp">
       <Filter>entities</Filter>
     </ClCompile>
@@ -115,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="src\game\gameplay_base.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hardware\hardware_interface.cpp">
+      <Filter>hardware</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vector2.cpp">
