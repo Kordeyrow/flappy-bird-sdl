@@ -27,6 +27,7 @@
 #include <GL/glew.h>
 #include <SDL_opengl.h>
 
+
 class Game {
 public:
 	// SDL
@@ -69,6 +70,27 @@ private:
 	// SDL
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
+	// OpenGL
+	SDL_GLContext gl_context;
+	GLuint shader_program;
+	GLuint VBO, VAO;
+
+
+	const char* vertex_shader_source = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+}
+)";
+
+	const char* fragment_shader_source = R"(
+#version 330 core
+out vec4 FragColor;
+void main() {
+    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+}
+)";
 	// Managers 
 	TextureManager* _texture_manager;
 	// Gameobjects
@@ -102,11 +124,6 @@ public:
 			return false;
 		}
 
-		// Request OpenGL 3.3 Core context
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
 		// IMG
 		if (IMG_Init(IMG_INIT_PNG) < 0) {
 			std::cout << "Error initializing SDL_image: " << IMG_GetError() << std::endl;
@@ -129,22 +146,6 @@ public:
 				SDL_Quit();
 				return -1;
 			}
-
-			// Create OpenGL context
-			SDL_GLContext gl_context = SDL_GL_CreateContext(_window);
-			if (!gl_context) {
-				std::cerr << "Failed to create OpenGL context: " << SDL_GetError() << std::endl;
-				return false;
-			}
-
-			// Initialize GLEW or equivalent
-			if (glewInit() != GLEW_OK) {
-				std::cerr << "Failed to initialize GLEW" << std::endl;
-				return false;
-			}
-
-			SDL_GL_MakeCurrent(_window, gl_context);
-			glViewport(0, 0, _window_w, _window_h);
 
 
 			// Create a renderer
@@ -190,6 +191,99 @@ public:
 			std::cout << "Error initializing: " << e.what() << std::endl;
 			return false;
 		}
+
+		// Request OpenGL 3.3 Core context
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+		int major, minor, profile;
+		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
+		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
+		SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profile);
+		std::cout << "OpenGL version: " << major << "." << minor << " Profile: " << profile << std::endl;
+
+		// Create OpenGL context
+		gl_context = SDL_GL_CreateContext(_window);
+		if (!gl_context) {
+			std::cerr << "Failed to create OpenGL context: " << SDL_GetError() << std::endl;
+			return false;
+		}
+
+		// Initialize GLEW or equivalent
+		if (glewInit() != GLEW_OK) {
+			std::cerr << "Failed to initialize GLEW" << std::endl;
+			return false;
+		}
+
+		// opengl view port
+		SDL_GL_MakeCurrent(_window, gl_context);
+		glViewport(0, 0, _window_w, _window_h);
+
+		glClearColor(0.0f, 0.5f, 1.0f, 1.0f); // Background color
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
+		glCompileShader(vertex_shader);
+
+		// Check for vertex shader compilation errors
+		GLint success;
+		GLchar infoLog[512];
+		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+		if (!success) {
+			glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
+			std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
+
+		GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+		glCompileShader(fragment_shader);
+
+		// Check for fragment shader compilation errors
+		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+		if (!success) {
+			glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
+			std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
+
+		shader_program = glCreateProgram();
+		glAttachShader(shader_program, vertex_shader);
+		glAttachShader(shader_program, fragment_shader);
+		glLinkProgram(shader_program);
+
+		// Check for shader program linking errors
+		glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
+		if (!success) {
+			glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
+			std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		}
+
+		glDeleteShader(vertex_shader);
+		glDeleteShader(fragment_shader);
+
+		float vertices[] = {
+		0.0f,  0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f
+		};
+
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+
+		glBindVertexArray(VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+
+
 
 		return true;
 	}
@@ -546,13 +640,21 @@ public:
 		}
 	}
 
+
+
 	void render() {
-		draw_backgroung();
+		/*draw_backgroung();
 		draw_sprites();
 		render_ui();
 		if (_is_debug_gizmos_on) draw_debug_info();
 		SDL_RenderPresent(_renderer);
-		SDL_RenderClear(_renderer);
+		SDL_RenderClear(_renderer);*/
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glUseProgram(shader_program);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		SDL_GL_SwapWindow(_window);
 	}
 
 	void reset() {
@@ -605,6 +707,11 @@ public:
 
 		_texture_manager->kill();
 		_texture_manager = nullptr;
+
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+		glDeleteProgram(shader_program);
+		SDL_GL_DeleteContext(gl_context);
 
 		IMG_Quit(); 
 		SDL_Quit();
