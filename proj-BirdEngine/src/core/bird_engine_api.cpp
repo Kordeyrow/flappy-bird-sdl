@@ -1,23 +1,23 @@
-#include "api/bird_engine.h"
-#include "core/bird_engine.h"
+#include <WING.h>
+//#include "core/bird_engine.h"
 
-// TODO: use same class name but different namespace
-//namespace API {}
+namespace BIRDENGINE_API {
+	BirdEngine::BirdEngine() {};
+	BirdEngine::~BirdEngine() {};
+	std::shared_ptr<BirdEngine> BirdEngine::instance() {
+		static std::shared_ptr<BirdEngine> instance(
+			new BirdEngine(),
+			[](BirdEngine* reg) {
+				delete reg; // Custom deleter to allow destruction of the singleton
+			}
+		);
+		return instance;
+	}
 
-BirdEngineAPI::BirdEngineAPI() {};
-BirdEngineAPI::~BirdEngineAPI() {};
-std::shared_ptr<BirdEngineAPI> BirdEngineAPI::instance() {
-	static std::shared_ptr<BirdEngineAPI> instance(
-		new BirdEngineAPI(),
-		[](BirdEngineAPI* reg) {
-			delete reg; // Custom deleter to allow destruction of the singleton
-		}
-	);
-	return instance;
-}
+	bool BirdEngine::init() {
+		return true;
+	}
 
-bool BirdEngineAPI::init()
-{
-	return true;
-	//return BirdEngine::instance()->init();
+	void BirdEngine::lauch() {
+	}
 }

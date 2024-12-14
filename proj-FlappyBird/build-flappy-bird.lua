@@ -23,7 +23,7 @@ project ("" .. ThisProj)
    cppdialect "C++14"
    staticruntime "off"
    targetdir (BinariesDir .. OutputDir .. ThisProj)
-   objdir (BinariesDir .. "Intermediates/" .. OutputDir .. ThisProj)
+   objdir (BinariesDir .. "Intermediates/" .. OutputDir .. ThisProj .. "/")
    files { SourceDir .. "**.h",  SourceDir .. "**.cpp" }
    
    includedirs
@@ -31,7 +31,7 @@ project ("" .. ThisProj)
         SourceDir,
         "../SDL2/include",
         "../SDL2_image/include",
-	    "../" .. ProjectPrefix .. EngineProjName .. "/" .. SourceDir,
+	    "../" .. ProjectPrefix .. EngineProjName .. "/include/",
    }
 
    links

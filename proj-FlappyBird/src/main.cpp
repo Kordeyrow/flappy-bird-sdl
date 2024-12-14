@@ -1,7 +1,9 @@
-#include <SDL.h> // libs
-//#include <api/birdengine.h> // engine
-#include <api/registry.h>
-//#include <game/game.h> // internal
+// libs
+#include <SDL.h>
+// engine
+#include <WING.h>
+// internal
+//#include <game/game.h> 
 #include <res_manager/texture_manager.h>
 
 #ifdef __EMSCRIPTEN__
@@ -12,7 +14,7 @@
 // runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
-std::shared_ptr<Window> window;
+//std::shared_ptr<WindowAPI> window;
 ////////std::shared_ptr<Renderer> renderer;
 ////////std::shared_ptr<InputManager> input_manager;
 ////////std::shared_ptr<AssetManager> asset_manager;
@@ -80,6 +82,8 @@ bool init_game() {
             Transform { Position{100, 100}, Size{140, 140}, 0 } 
         }
     );*/
+
+    BIRDENGINE_API::WindowAPI::set_rect({});
     auto main_scene_id = RegistryAPI::instance()->create_new_scene();
     auto pipe = RegistryAPI::instance()->create_new_gameobject();
     /*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));

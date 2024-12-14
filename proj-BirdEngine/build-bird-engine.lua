@@ -24,6 +24,7 @@ project "BirdEngine"
 
    includedirs
    {
+        "include/",
         SourceDir,
         "../SDL2/include",
         "../SDL2_image/include",
