@@ -15,7 +15,7 @@
 
 class Pipe : public StateMachineListener, public Transform, public Drawable, public Updatable, public Entity, public RectangleCollider {
 public:
-    Pipe(StateMachineEventEmitter* game_sm_emitter, SDL_Texture* texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
+    Pipe(StateMachineEventEmitter* game_sm_emitter, GLuint texture, Vector2 position, Vector2 size, float speed_x, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : game_sm_emitter{ game_sm_emitter },
         Transform{ position, size },
         Drawable{ texture, this, 0, flip },

@@ -129,6 +129,9 @@
     <ClInclude Include="src\system_component\updatable.h">
       <Filter>system_component</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\OpenGLDebugger.h">
+      <Filter>utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\utils\class_type_check.h">
       <Filter>utils</Filter>
     </ClInclude>
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="src\system_component\updatable.cpp">
       <Filter>system_component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\OpenGLDebugger.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\class_type_check.cpp">
       <Filter>utils</Filter>

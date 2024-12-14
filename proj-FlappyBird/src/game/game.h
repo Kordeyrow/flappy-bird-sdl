@@ -78,19 +78,42 @@ private:
 
 	const char* vertex_shader_source = R"(
 #version 330 core
-layout (location = 0) in vec3 aPos;
+layout (location = 0) in vec3 aPos;    // Vertex position
+layout (location = 1) in vec2 aTexCoord; // Texture coordinates
+
+out vec2 TexCoord;
+
 void main() {
     gl_Position = vec4(aPos, 1.0);
+    TexCoord = aTexCoord;
+	//TexCoord = vec2(1, 1);
 }
 )";
 
 	const char* fragment_shader_source = R"(
 #version 330 core
-out vec4 FragColor;
+layout (location = 0) out vec4 color;
+
+in vec2 TexCoord;
+
+uniform sampler2D tex; // Texture sampler
+
 void main() {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    vec4 FragColor = texture(tex, TexCoord);
+	// color = vec3(FragColor.x, FragColor.y, 1);
+	// color = vec4(TexCoord.x, TexCoord.y, 0.0, 1.0);
+	color = FragColor;
 }
 )";
+
+//	const char* fragment_shader_source = R"(
+//#version 330 core
+//out vec4 FragColor;
+//
+//void main() {
+//    FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Output red
+//}
+//)";
 	// Managers 
 	TextureManager* _texture_manager;
 	// Gameobjects
@@ -114,6 +137,32 @@ void main() {
 public:
 	Game() {}
 		
+
+	void CheckOpenGLError(const char* stmt, const char* fname, int line)
+	{
+		bool found_error = false;
+		GLenum err = glGetError();
+		while (err) {
+			if (err == GL_NO_ERROR) break;
+			printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
+			found_error = true;
+			err = glGetError();
+		}
+		if (found_error) {
+			abort();
+		}
+	}
+
+#ifdef _DEBUG
+#define GL_CHECK(stmt) do { \
+            stmt; \
+            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
+        } while (0)
+#else
+#define GL_CHECK(stmt) stmt
+#endif
+
+
 	template<typename StartStateType>
 	bool init() {
 
@@ -177,14 +226,6 @@ public:
 			SDL_SetWindowTitle(_window, "Flappy Bird");
 
 			init_imgui();
-
-			// texture
-			_texture_manager = new TextureManager(_renderer);
-			_texture_manager->load_init_textures();
-
-			// state machine
-			_state_machine = new StateMachine();
-			_state_machine->init(CreateState<StartStateType>());
 		}
 		catch (const std::exception& e)
 		{
@@ -192,18 +233,24 @@ public:
 			return false;
 		}
 
-		// Request OpenGL 3.3 Core context
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		//// Request OpenGL 3.3 Core context
+		//GL_CHECK(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3));
+		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		int major, minor, profile;
-		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
-		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
-		SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profile);
-		std::cout << "OpenGL version: " << major << "." << minor << " Profile: " << profile << std::endl;
+		//int major, minor, profile;
+		//SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
+		//SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
+		//SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profile);
+		//std::cout << "OpenGL version: " << major << "." << minor << " Profile: " << profile << std::endl;
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		// Create OpenGL context
+		//GL_CHECK(gl_context = SDL_GL_CreateContext(_window));
 		gl_context = SDL_GL_CreateContext(_window);
 		if (!gl_context) {
 			std::cerr << "Failed to create OpenGL context: " << SDL_GetError() << std::endl;
@@ -215,13 +262,19 @@ public:
 			std::cerr << "Failed to initialize GLEW" << std::endl;
 			return false;
 		}
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		// opengl view port
 		SDL_GL_MakeCurrent(_window, gl_context);
 		glViewport(0, 0, _window_w, _window_h);
 
-		glClearColor(0.0f, 0.5f, 1.0f, 1.0f); // Background color
+		glClearColor(2.0f, 0.5f, 1.0f, 1.0f); // Background color
 		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
+		//GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -261,9 +314,10 @@ public:
 		}
 
 		glDeleteShader(vertex_shader);
+		//GL_CHECK(glDeleteShader(fragment_shader));
 		glDeleteShader(fragment_shader);
 
-		float vertices[] = {
+		/*float vertices[] = {
 		0.0f,  0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
 		 0.5f, -0.5f, 0.0f
@@ -281,8 +335,16 @@ public:
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 
+
+		// texture
+		_texture_manager = new TextureManager();
+		_texture_manager->load_init_textures();
+
+		// state machine
+		_state_machine = new StateMachine();
+		_state_machine->init(CreateState<StartStateType>());
 
 
 		return true;
@@ -394,12 +456,33 @@ public:
 		return false;
 	}
 
-	void spawn_player() {
+	/*void spawn_player() {
 		Vector2 player_size = Vector2{ 48, 36 };
 		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
 		double ground_y = _window_h + 3;
 		_player = new FlappyBird{
 			_texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
+			ground_y,
+			player_start_pos,
+			player_size,
+			17
+		};
+		_sprites.push_back(_player);
+		_updatables.push_back(_player);
+	}*/
+	void spawn_player() {
+		Vector2 player_size = Vector2{ 48, 36 };
+		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
+		double ground_y = _window_h + 3;
+
+		GLuint player_texture = _texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING);
+		if (player_texture == 0) {
+			std::cerr << "Error: Failed to load player texture!" << std::endl;
+			return;
+		}
+
+		_player = new FlappyBird{
+			player_texture, // Use OpenGL texture ID
 			ground_y,
 			player_start_pos,
 			player_size,
@@ -490,42 +573,176 @@ public:
 	{
 		sort_sprites_by_layer(_sprites);
 
-		for (auto s : _sprites) {
+		/*for (auto s : _sprites) {
 			auto rect = s->get_rect();
 			SDL_RenderCopyEx(_renderer, s->get_texture(), NULL, &rect, s->get_rotation(), NULL, s->flip());
+		}*/
+
+		for (Drawable* s : _sprites) {
+			// Get sprite properties
+			SDL_Rect rect = s->get_rect();
+			GLuint texture = s->get_texture(); // Ensure your Drawable class provides OpenGL texture ID
+			float rotation = s->get_rotation();
+			SDL_RendererFlip flip = s->flip();
+
+			// Bind the texture
+			glBindTexture(GL_TEXTURE_2D, texture);
+
+			// Render quad with the sprite's texture
+			render_quad(texture, rect, rotation, flip);
+
+			// Unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 
-	void draw_backgroung()
+	void render_quad(GLuint texture, const SDL_Rect& rect, float rotation, SDL_RendererFlip flip) {
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		
+		// Use the shader program
+		//GL_CHECK(glUseProgram(shader_program));
+		glUseProgram(shader_program);
+
+		// Activate texture unit 0
+		glActiveTexture(GL_TEXTURE0);
+		// Bind the texture to the active texture unit
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		// Set the sampler uniform to use texture unit 0
+		GLint textureLocation = glGetUniformLocation(texture, "tex");
+		glUniform1i(textureLocation, 0);
+
+		// Calculate NDC coordinates
+		float x1 = 2.0f * rect.x / _window_w - 1.0f;
+		float y1 = 1.0f - 2.0f * rect.y / _window_h;
+		float x2 = 2.0f * (rect.x + rect.w) / _window_w - 1.0f;
+		float y2 = 1.0f - 2.0f * (rect.y + rect.h) / _window_h;
+
+		// Quad vertices: position (x, y, z), texture (u, v)
+		float vertices[] = {
+			x1, y1, 0.0f, 0.0f, flip == SDL_FLIP_VERTICAL ? 1.0f : 0.0f,
+			x2, y1, 0.0f, 1.0f, flip == SDL_FLIP_VERTICAL ? 1.0f : 0.0f,
+			x2, y2, 0.0f, 1.0f, flip == SDL_FLIP_VERTICAL ? 0.0f : 1.0f,
+			x1, y2, 0.0f, 0.0f, flip == SDL_FLIP_VERTICAL ? 0.0f : 1.0f
+		};
+
+		GLuint indices[] = { 0, 1, 2, 2, 3, 0 };
+
+		GLuint VBO, VAO, EBO;
+
+		// Generate and bind the VAO
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+
+		// VBO
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		// EBO
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+		// Position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// Texture coordinate attribute
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+
+
+		// Draw the quad
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//GL_CHECK();
+
+
+		/*int X = 0;
+		int Y = 0;
+		int Width = 100;
+		int Height = 100;
+
+		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0); glVertex3f(X, Y, 0);
+		glTexCoord2f(1, 0); glVertex3f(X + Width, Y, 0);
+		glTexCoord2f(1, 1); glVertex3f(X + Width, Y + Height, 0);
+		glTexCoord2f(0, 1); glVertex3f(X, Y + Height, 0);
+		glEnd();*/
+
+
+		// Cleanup
+		glBindVertexArray(0);
+		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &EBO);
+		glDeleteVertexArrays(1, &VAO);
+
+
+
+		//GL_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+
+
+
+	void draw_background()
 	{
-		// Clear the window to white
-		SDL_SetRenderDrawColor(_renderer, 120, 200, 250, 255);
-		int w, h;
-		SDL_GetWindowSize(_window, &w, &h);
-		SDL_Rect r{ 0, 0, w, h };
-		SDL_RenderFillRect(_renderer, &r);
-		SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+		//// Clear the window to white
+		//SDL_SetRenderDrawColor(_renderer, 120, 200, 250, 255);
+		//int w, h;
+		//SDL_GetWindowSize(_window, &w, &h);
+		//SDL_Rect r{ 0, 0, w, h };
+		//SDL_RenderFillRect(_renderer, &r);
+		//SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+
+
+		glClearColor(0.47f, 0.78f, 0.98f, 1.0f); // Sky blue background (RGB: 120, 200, 250)
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	void render_ui() {
-		ImGui::NewFrame();
+		//ImGui::NewFrame();
 
-		// Custom window with no title bar or resizing options
-		ImGuiCond c = ImGuiCond_FirstUseEver;
+		//// Custom window with no title bar or resizing options
+		//ImGuiCond c = ImGuiCond_FirstUseEver;
 
-		// update imgui.ini file on start
-		static bool win_init = false;
-		if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
+		//// update imgui.ini file on start
+		//static bool win_init = false;
+		//if ( ! win_init) { c = ImGuiCond_Once; win_init = true;}
 
-		ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
-		ImGui::SetNextWindowPos(ImVec2(0, _window_h / 30), c);
-		ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
-		
-		render_score(std::to_string(_score).c_str());
+		//ImGui::SetNextWindowSize(ImVec2(_window_w, 0), c);
+		//ImGui::SetNextWindowPos(ImVec2(0, _window_h / 30), c);
+		//ImGui::Begin("ScoreWindow", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+		//
+		//render_score(std::to_string(_score).c_str());
 
-		ImGui::End();
-		ImGui::Render();
-		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
+		//ImGui::End();
+		//ImGui::Render();
+		//ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);
+
+
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplSDL2_NewFrame(_window);
+		//ImGui::NewFrame();
+
+		//// Create the score window
+		//ImGui::Begin("Score", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
+		//render_score(std::to_string(_score).c_str());
+		//ImGui::End();
+
+		//// Render ImGui
+		//ImGui::Render();
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void draw_circle(SDL_Renderer* renderer, const CircleCollider& circle, SDL_Color color = { 255, 0, 0, 255 }, bool outline_only = true, int outline_thickness = 4) {
@@ -631,6 +848,15 @@ public:
 	}
 
 	void draw_debug_info() {
+		// Example: Draw a red rectangle for player collision bounds
+		//glColor4f(1.0f, 0.0f, 0.0f, 1.0f); // Red color
+		//glBegin(GL_LINE_LOOP);
+		//glVertex2f(player->left(), player->top());
+		//glVertex2f(player->right(), player->top());
+		//glVertex2f(player->right(), player->bottom());
+		//glVertex2f(player->left(), player->bottom());
+		//glEnd();
+
 		draw_circle(_renderer, *_player->circle_collider());
 		for (Drawable* s : _sprites) {
 			RectangleCollider* col = dynamic_cast<RectangleCollider*>(s);
@@ -649,11 +875,24 @@ public:
 		if (_is_debug_gizmos_on) draw_debug_info();
 		SDL_RenderPresent(_renderer);
 		SDL_RenderClear(_renderer);*/
-
+		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(shader_program);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// 1. Draw the background
+		draw_background();
+
+		// 2. Draw the sprites (pipes, player, etc.)
+		draw_sprites();
+
+		// 3. Render the ImGui-based UI
+		render_ui();
+
+		// 4. Draw debug gizmos if enabled
+		if (_is_debug_gizmos_on) {
+			draw_debug_info();
+		}
+
+		// Swap the OpenGL buffers
 		SDL_GL_SwapWindow(_window);
 	}
 

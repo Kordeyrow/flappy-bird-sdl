@@ -2,17 +2,24 @@
 #include <SDL.h>
 #include <math/vector2.h>
 #include <system_component/transform.h>
+#include <GL/glew.h>
 
 class Drawable {
+protected:
+	SDL_RendererFlip _flip;
+	int _layer_index;
+	GLuint gl_tex;
+	SDL_Texture* texture;
+	Transform* draw_transform;
 
 public:
-	Drawable(SDL_Texture* texture, Transform* t, int layer_index = 0, SDL_RendererFlip flip = SDL_FLIP_NONE)
-		: texture{ texture }, draw_transform{ t }, _layer_index{ layer_index }, _flip { flip } {}
+	Drawable(GLuint _gl_tex, Transform* t, int layer_index = 0, SDL_RendererFlip flip = SDL_FLIP_NONE)
+		: gl_tex{ _gl_tex }, draw_transform{ t }, _layer_index{ layer_index }, _flip { flip } {}
 
 	virtual ~Drawable() = default;
 
-	SDL_Texture* get_texture() const {
-		return texture;
+	GLuint get_texture() const {
+		return gl_tex;
 	}
 
 	SDL_Rect get_rect(){
@@ -30,11 +37,5 @@ public:
 	SDL_RendererFlip flip() const {
 		return _flip;
 	}
-
-protected:
-	SDL_RendererFlip _flip;
-	int _layer_index;
-	SDL_Texture* texture;
-	Transform* draw_transform;
 };
 

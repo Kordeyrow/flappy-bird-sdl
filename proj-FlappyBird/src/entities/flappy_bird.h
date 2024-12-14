@@ -7,12 +7,13 @@
 #include <system_component/updatable.h>
 #include <system_component/entity.h>
 #include <system_component/collider.h>
+#include <GL/glew.h>
 
 class FlappyBird : public Transform, public Drawable, public Updatable, public Entity, public CircleCollider {
 public:
-    FlappyBird(SDL_Texture* texture, double ground_y, Vector2 position, Vector2 size, double circle_collider_radius, SDL_RendererFlip flip = SDL_FLIP_NONE)
+    FlappyBird(GLuint gl_tex, double ground_y, Vector2 position, Vector2 size, double circle_collider_radius, SDL_RendererFlip flip = SDL_FLIP_NONE)
         : Transform{ position, size },
-        Drawable{ texture, this, -10, flip },
+        Drawable{ gl_tex, this, -10, flip },
         Entity{ std::set<TAG>{ PLAYER } },
         CircleCollider{ this, this, circle_collider_radius },
         ground_y{ ground_y } {}

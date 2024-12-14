@@ -195,6 +195,7 @@ xcopy /Q /E /Y /I "assets" "..\bin\windows-x86_64\Dist\FlappyBird\assets"</Comma
     <ClInclude Include="src\system_component\entity.h" />
     <ClInclude Include="src\system_component\transform.h" />
     <ClInclude Include="src\system_component\updatable.h" />
+    <ClInclude Include="src\utils\OpenGLDebugger.h" />
     <ClInclude Include="src\utils\class_type_check.h" />
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +229,7 @@ xcopy /Q /E /Y /I "assets" "..\bin\windows-x86_64\Dist\FlappyBird\assets"</Comma
     <ClCompile Include="src\system_component\entity.cpp" />
     <ClCompile Include="src\system_component\transform.cpp" />
     <ClCompile Include="src\system_component\updatable.cpp" />
+    <ClCompile Include="src\utils\OpenGLDebugger.cpp" />
     <ClCompile Include="src\utils\class_type_check.cpp" />
   </ItemGroup>
   <ItemGroup>
