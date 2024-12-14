@@ -4,7 +4,6 @@
 #include <map>
 
 
-
 typedef enum {
     FAILED_TO_CREATE,
     FAILED_TO_INITIALIZE,

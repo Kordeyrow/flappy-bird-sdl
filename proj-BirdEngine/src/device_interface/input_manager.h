@@ -1,15 +1,11 @@
 #pragma once
-// libs
 #include <SDL.h>
-// cpp
+#include "SHP_events.h"
+#include "containers.h"
 #include <vector>
 #include <unordered_map>
-// internal
-#include "SHP_events.h"
-#include <dll/export_def.h>
-#include <containers/containers.h>
 
-class BIRDENGINE_API InputManager {
+class InputManager {
 private:
     // config
     std::map<uint32_t, SHP_InputType> input_type_from_sdl_event;

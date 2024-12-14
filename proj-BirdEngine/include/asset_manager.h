@@ -1,8 +1,11 @@
 #pragma once
-#include <containers/containers.h>
+#include "declspec.h"
+#include "containers.h"
 
-class AssetManagerAPI {
-public:
-	AssetID load_texture(AssetPath path);
-};
+namespace BIRDENGINE_API {
+	class DECLSPEC AssetManager {
+	public:
+		AssetID load_texture(AssetPath path);
+	};
+}
 

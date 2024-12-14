@@ -1,9 +1,9 @@
 #pragma once
+// cpp
 #include <cinttypes>
 #include <vector>
 #include <string>
 #include <map>
-//#include <utils/container/sparse_set.h>
 
 struct Vector2 { public: int x, y; };
 struct Direction : public Vector2 { public: Direction(int x = 0, int y = 0) : Vector2{ x, y } {} };

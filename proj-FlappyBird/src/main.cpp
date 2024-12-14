@@ -83,12 +83,12 @@ bool init_game() {
         }
     );*/
 
-    BIRDENGINE_API::WindowAPI::set_rect({});
-    auto main_scene_id = RegistryAPI::instance()->create_new_scene();
-    auto pipe = RegistryAPI::instance()->create_new_gameobject();
-    /*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
-    Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);*/
-    RegistryAPI::instance()->set_starting_scene(main_scene_id);
+    BIRDENGINE_API::Window::set_rect({});
+    //auto main_scene_id = Registry::instance()->create_new_scene();
+    //auto pipe = Registry::instance()->create_new_gameobject();
+    ///*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    //Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);*/
+    //Registry::instance()->set_starting_scene(main_scene_id);
     // ======================
     
 

@@ -1,9 +1,7 @@
 #pragma once
-// cpp
-#include <memory>
-// internal
 #include "declspec.h"
-//#include <containers/containers.h>
+#include "containers.h"
+#include <memory>
 
 namespace BIRDENGINE_API {
 	struct DECLSPEC Registry {

@@ -1,5 +1,4 @@
 #pragma once
-#include <dll/export_def.h>
 #include <SDL.h>
 #include "imgui_sdl/imgui.h"
 #include "imgui_sdl/imgui_impl_sdl2.h"
@@ -12,7 +11,7 @@
 using FontID = Uint32;
 struct GUIManagerInitParams {};
 
-class BIRDENGINE_API GUIManager {
+class GUIManager {
 private:
     // dependency
     std::shared_ptr<IOManager> io_manager;

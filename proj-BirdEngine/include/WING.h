@@ -1,11 +1,10 @@
 #pragma once
-// cpp
-#include <memory>
-// internal
+#include "declspec.h"
 #include "registry.h"
 #include "window.h"
-#include "declspec.h"
-//#include <containers/containers.h>
+#include "asset_manager.h"
+//#include "containers.h"
+#include <memory> // cpp
 
 namespace BIRDENGINE_API {
     struct DECLSPEC BirdEngine {

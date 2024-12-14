@@ -5,7 +5,8 @@
 #include <string>
 #include <memory>
 #include <iostream>
-#include <api/asset_manager.h>
+#include <WING.h>
+using namespace BIRDENGINE_API;
 
 enum TEXTURE_KEY {
 	TEXTURE_FLAPPY_BIRD_UP_WING,
@@ -25,12 +26,12 @@ private:
 		static_cast<TEXTURE_KEY>(PIPE)
 	};
 	// dependency
-	std::shared_ptr<AssetManagerAPI> asset_manager;
+	std::shared_ptr<AssetManager> asset_manager;
 	// runtime
 	std::map<TEXTURE_KEY, AssetID> loaded_textures;
 
 public:
-	TextureManager(std::shared_ptr<AssetManagerAPI> asset_manager)	
+	TextureManager(std::shared_ptr<AssetManager> asset_manager)
 		: asset_manager{ asset_manager } {
 	}
 
