@@ -59,9 +59,11 @@ struct BirdEngine::Impl {
     Impl() {}
     ~Impl() = default;
 
-    bool init(EngineInitData init_data) {
+    //bool init(EngineInitData init_data) {
+    bool init() {
         if (initialized) return true;
-        if ( ! device_interface->init(init_data.device_interface_init_data)) {
+        //if (!device_interface->init(init_data.device_interface_init_data)) {
+        if ( ! device_interface->init()) {
             return false;
         };
         initialized = true;
@@ -115,20 +117,27 @@ BirdEngine::BirdEngine() : pImpl(std::make_unique<Impl>()) {}
 BirdEngine::~BirdEngine() {};
 
 std::shared_ptr<BirdEngine> BirdEngine::instance() {
+    static bool initialized = false;
     static std::shared_ptr<BirdEngine> instance(
         new BirdEngine(),
         [](BirdEngine* engine) {
             delete engine; // Custom deleter to allow destruction of the singleton
         }
     );
+    if ( ! initialized) {
+        instance->init();
+    }
     return instance;
 }
 
 const std::shared_ptr<DeviceInterface>& BirdEngine::device_interface() { return  pImpl->device_interface; }
 
-bool BirdEngine::init(EngineInitData init_data) {
-    return pImpl->init(init_data);
+bool BirdEngine::init() {
+    return pImpl->init();
 }
+//bool BirdEngine::init(EngineInitData init_data) {
+//    return pImpl->init(init_data);
+//}
 
 ProgramState BirdEngine::update() {
     return pImpl->update();

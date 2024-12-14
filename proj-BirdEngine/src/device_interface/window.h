@@ -21,8 +21,9 @@ private:
     bool initialized = false;
 
 public:
-    Window(std::shared_ptr<IOManager> _io_manager, WindowInitData init_data) 
-        : io_manager{ _io_manager }, title{ init_data.title }, _rect{init_data.rect } {
+    //Window(std::shared_ptr<IOManager> _io_manager, WindowInitData init_data)
+    Window(std::shared_ptr<IOManager> _io_manager) 
+        : io_manager{ _io_manager }, title{ "MyGame" }, _rect{ Rect{{100, 100}, {100, 100}} } {
     }
     ~Window() { 
         SDL_DestroyWindow(_sdl_window);

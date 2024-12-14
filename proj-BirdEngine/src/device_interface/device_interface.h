@@ -43,7 +43,8 @@ public:
         SDL_Quit();
     }
 
-    bool init(UserInterfaceInitData init_data) {
+    //bool init(UserInterfaceInitData init_data) {
+    bool init() {
         if (initialized) {
             _io_manager->print_line_warning("DeviceManager", ALREADY_INITIALIZED);
             return true;
@@ -57,7 +58,8 @@ public:
 
         _io_manager = std::make_shared<IOManager>();
 
-        _window = std::make_shared<Window>(_io_manager, init_data.win_data);
+        //_window = std::make_shared<Window>(_io_manager, init_data.win_data);
+        _window = std::make_shared<Window>(_io_manager);
         if ( ! _window->init()) {
             return false;
         }

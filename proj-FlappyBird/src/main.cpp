@@ -1,41 +1,37 @@
-// libs
 #include <SDL.h>
-// engine
 #include <WING.h>
-// internal
 //#include <game/game.h> 
 #include <res_manager/texture_manager.h>
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
 
-
 // runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
+
 //std::shared_ptr<WindowAPI> window;
 ////////std::shared_ptr<Renderer> renderer;
 ////////std::shared_ptr<InputManager> input_manager;
 ////////std::shared_ptr<AssetManager> asset_manager;
 TextureManager* texture_manager;
 //////
-////////void setup_window() {
-////////    int width = 460;
-////////    int height = 640;
-////////    double offset_x = -width * 0.04;
-////////    double offset_y = -offset_x * 0.6;
-////////    auto device_interface = BirdEngine::instance()->device_interface();
-////////    auto win = device_interface->window();
-////////    std::cout << device_interface->window()->rect().position.x << std::endl;
-////////    //system("pause");
-////////    Rect display_size = device_interface->window()->display_rect();
-////////    int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
-////////    int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
-////////    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
-////////    window->set_rect(r);
-////////    renderer->set_background_color(Color::BLUE_BIRD());
-////////}
+void setup_window() {
+    int width = 460;
+    int height = 640;
+    double offset_x = -width * 0.04;
+    double offset_y = -offset_x * 0.6;
+    //auto device_interface = BirdEngine::instance()->device_interface();
+    //auto win = device_interface->window();
+    std::cout << Window::rect().position.x << std::endl;
+    //system("pause");
+    Rect display_size = Window::display_rect();
+    int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
+    int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
+    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
+    //Window::set_rect(r);
+    //renderer->set_background_color(Color::BLUE_BIRD());
+}
 
 bool init_engine() {
     /////////*WindowInitData win_data{ "FlappyBird" };

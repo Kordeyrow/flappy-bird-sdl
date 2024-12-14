@@ -5,9 +5,9 @@
 namespace BIRDENGINE_API {
 	struct DECLSPEC Window {
 		static void set_rect(Rect rect);
-		//static void set_title(std::string title);
-		//static const Rect& rect();
-		//static const Rect& display_rect();
+		static void set_title(std::string title);
+		static const Rect& rect();
+		static const Rect& display_rect();
 	};
 }
 

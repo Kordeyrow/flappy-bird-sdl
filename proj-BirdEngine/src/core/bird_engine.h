@@ -19,7 +19,8 @@ public:
     BirdEngine& operator=(const BirdEngine&) = delete;
     static std::shared_ptr<BirdEngine> instance();
 
-    bool init(EngineInitData init_data);
+    //bool init(EngineInitData init_data);
+    bool init();
     ProgramState update();
 
     const std::shared_ptr<DeviceInterface>& device_interface();
