@@ -1,9 +1,8 @@
 #pragma once
-// dll
-#include <dll/export_def.h> 
 // cpp
 #include <memory>
-// classes
+// internal
+#include <dll/export_def.h> 
 #include <containers/containers.h>
 
 struct BIRDENGINE_API RegistryAPI {

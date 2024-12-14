@@ -66,14 +66,14 @@ public:
     const Rect& rect() {
         return _rect;
     }
-    // TODO: hide from user
-    SDL_Window* sdl_window() {
-        return _sdl_window;
-    }
     const Rect& display_rect() {
         SDL_Rect r;
         SDL_GetDisplayBounds(0, &r);
         return Rect{ Position{r.x, r.y}, Size{r.w, r.h } };
+    }
+
+    SDL_Window* sdl_window() {
+        return _sdl_window;
     }
 };
 

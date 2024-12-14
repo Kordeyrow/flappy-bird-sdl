@@ -1,6 +1,7 @@
 #pragma once
 #include <cinttypes>
 #include <vector>
+#include <string>
 #include <map>
 //#include <utils/container/sparse_set.h>
 
@@ -119,3 +120,11 @@ public:
 
 	}
 };
+
+typedef enum {
+	RUNNING,
+	QUIT
+} ProgramState;
+
+using AssetPath = std::string;
+using AssetID = uint32_t;

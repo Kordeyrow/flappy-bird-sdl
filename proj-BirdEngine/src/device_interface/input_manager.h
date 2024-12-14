@@ -1,14 +1,12 @@
 #pragma once
-#include <dll/export_def.h>
+// libs
 #include <SDL.h>
-#include "SHP_events.h"
+// cpp
 #include <unordered_map>
 #include <vector>
-
-typedef enum {
-    RUNNING,
-    QUIT
-} ProgramState;
+// internal
+#include <dll/export_def.h>
+#include "SHP_events.h"
 
 class BIRDENGINE_API InputManager {
 private:

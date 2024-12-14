@@ -13,8 +13,6 @@
 #include "irenderer.h"
 #include "io_manager.h"
 
-using AssetPath = std::string;
-using AssetID = uint32_t;
 constexpr AssetID INVAL_ID = -1;
 
 class AssetManager {

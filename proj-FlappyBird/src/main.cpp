@@ -11,8 +11,8 @@
 
 // runtime
 //Game game;
-////////ProgramState program_state = ProgramState::RUNNING;
-////////std::shared_ptr<Window> window;
+ProgramState program_state = ProgramState::RUNNING;
+std::shared_ptr<Window> window;
 ////////std::shared_ptr<Renderer> renderer;
 ////////std::shared_ptr<InputManager> input_manager;
 ////////std::shared_ptr<AssetManager> asset_manager;
@@ -81,10 +81,10 @@ bool init_game() {
         }
     );*/
     auto main_scene_id = RegistryAPI::instance()->create_new_scene();
-    auto pipe = Registry::instance()->te();
+    auto pipe = RegistryAPI::instance()->create_new_gameobject();
     /*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);*/
-    Registry::instance()->set_starting_scene(main_scene_id);
+    RegistryAPI::instance()->set_starting_scene(main_scene_id);
     // ======================
     
 
