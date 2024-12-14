@@ -29,8 +29,8 @@ void setup_window() {
     int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
     Rect r{ Position{pos_x, pos_y}, Size{width, height} };
-    //Window::set_rect(r);
-    //renderer->set_background_color(Color::BLUE_BIRD());
+    Window::set_rect(r);
+    //Renderer::set_background_color(Color::BLUE_BIRD());
 }
 
 bool init_engine() {
@@ -63,7 +63,7 @@ bool init_game() {
     ////////input_manager = device_interface->input_manager();
     ////////asset_manager = device_interface->asset_manager();
 
-    ////////setup_window();
+    setup_window();
 
     /*texture_manager = new TextureManager(asset_manager);
     texture_manager->init();*/
@@ -79,7 +79,7 @@ bool init_game() {
         }
     );*/
 
-    BIRDENGINE_API::Window::set_rect({});
+    //BIRDENGINE_API::Window::set_rect({});
     //auto main_scene_id = Registry::instance()->create_new_scene();
     //auto pipe = Registry::instance()->create_new_gameobject();
     ///*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
@@ -142,9 +142,9 @@ extern "C" void start_game() {
 #else
 int main(int argc, char** argv) {
     if ( ! init()) return 0;
-    /////////////*while (program_state != ProgramState::QUIT) {
-    ////////////    run_game();
-    ////////////}*/
+    while (program_state != ProgramState::QUIT) {
+        run_game();
+    }
     return 0;
 }
 #endif
