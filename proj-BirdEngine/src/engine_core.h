@@ -11,24 +11,25 @@ namespace WING {
     };
 
     class EngineCore {
-    private:
-        struct Impl;
-        std::unique_ptr<Impl> pImpl;
-
     public:
+        // singleton
         EngineCore(const EngineCore&) = delete;
         EngineCore& operator=(const EngineCore&) = delete;
         static std::shared_ptr<EngineCore> instance();
+
+        // getters
+        const std::shared_ptr<DeviceInterface>& device_interface();
+        const std::shared_ptr<Registry>& registry();
 
         //bool init(EngineInitData init_data);
         bool init();
         ProgramState update();
 
-        const std::shared_ptr<DeviceInterface>& device_interface();
-        const std::shared_ptr<Registry>& registry();
-
     private:
         EngineCore();
         ~EngineCore();
+        void init_game();
+        uint32_t get_current_time();
+        float calculate_elapsed_time_seconds();
     };
 }

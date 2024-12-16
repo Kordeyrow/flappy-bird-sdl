@@ -6,6 +6,8 @@
 #include <emscripten/emscripten.h>
 #endif
 
+using namespace WING_API;
+
 // runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
@@ -73,10 +75,10 @@ bool init_game() {
 
     auto main_scene_id = Registry::create_new_scene();
     // TODO: could be the first scene created
-    Registry::set_starting_scene(main_scene_id);
+    Registry::set_start_scene(main_scene_id);
     auto pipe = Registry::create_new_gameobject();
     pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
-    //Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);
+    Registry::add_gameobject_to_scene(pipe, main_scene_id);
     // ======================
     
 

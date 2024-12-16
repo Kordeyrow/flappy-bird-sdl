@@ -8,8 +8,8 @@ namespace WING_API {
 		return WING::EngineCore::instance()->registry()->create_new_scene();
 	}
 
-	void Registry::set_starting_scene(SceneID id) {
-		WING::EngineCore::instance()->registry()->set_starting_scene(id);
+	void Registry::set_start_scene(SceneID id) {
+		WING::EngineCore::instance()->registry()->set_start_scene(id);
 	}
 
 	GameObject* Registry::create_new_gameobject() {
@@ -30,9 +30,9 @@ namespace WING {
 		return new_scene->id();
 	}
 
-	void Registry::set_starting_scene(SceneID id) {
+	void Registry::set_start_scene(SceneID id) {
 		if (id_scene_map.find(id) != id_scene_map.end()) {
-			starting_scene_id = id;
+			_starting_scene_id = id;
 		}
 	}
 
@@ -47,5 +47,11 @@ namespace WING {
 		if (id_scene_map.find(scene_id) != id_scene_map.end()) {
 			id_scene_map[scene_id]->gameobject_list.push_back(go_id);
 		}
+	}
+	SceneID Registry::start_scene_id() {
+		return _starting_scene_id;
+	}
+	Scene* Registry::start_scene() {
+		return id_scene_map[_starting_scene_id];
 	}
 }

@@ -13,22 +13,20 @@ namespace WING {
 
 		std::vector<Scene*> all_scenes_list;
 		std::map<SceneID, Scene*> id_scene_map;
-		SceneID starting_scene_id;
-		/*SceneID current_editing_scene_id;
-		std::vector<SceneID> build_scene_list;*/
+		SceneID _starting_scene_id;
+
+		SceneID current_editing_scene_id;
+		std::vector<SceneID> build_scene_list;
 
 	public:
-
+		// API
 		SceneID create_new_scene();
-		void set_starting_scene(SceneID id);
+		void set_start_scene(SceneID id);
 		GameObject* create_new_gameobject();
 		void add_gameobject_to_scene(GameObject* go_id, SceneID scene_id);
 
-		// TODO: internal only
-	//public:
-		/*Scene* init_start_scene() {
-			scene_from_id[starting_scene_id]->init();
-			return scene_from_id[starting_scene_id];
-		}*/
+		// internal
+		SceneID start_scene_id();
+		Scene* start_scene();
 	};
 }

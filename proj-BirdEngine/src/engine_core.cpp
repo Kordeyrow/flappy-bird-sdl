@@ -82,14 +82,14 @@ namespace WING {
 
     class RenderSystem {
     private:
-        std::shared_ptr<DeviceInterface> device_interface;
+        std::shared_ptr<DeviceInterface> _device_interface;
     public:
-        RenderSystem(std::shared_ptr<DeviceInterface> _device_interface)
-            : device_interface{ _device_interface } {}
+        RenderSystem(std::shared_ptr<DeviceInterface> device_interface_)
+            : _device_interface{ device_interface_ } {}
 
         void update(std::vector<RenderSystemComponent*> comps) {
 
-            device_interface->renderer()->draw();
+            _device_interface->renderer()->draw();
 
             //device_interface->renderer()->draw_background();
 
@@ -104,76 +104,70 @@ namespace WING {
         }
     };
 
-    struct EngineCore::Impl {
-        std::shared_ptr<DeviceInterface> device_interface = std::make_shared<DeviceInterface>();
-        std::shared_ptr<WING::Registry> registry = std::make_shared<WING::Registry>();
-        bool initialized = false;
-        bool game_initialized = false;
-        RenderSystem render_system{ device_interface };
-        Scene* current_scene = nullptr;
-        Impl() {}
-        ~Impl() = default;
+    std::shared_ptr<DeviceInterface> _device_interface = std::make_shared<DeviceInterface>();
+    std::shared_ptr<WING::Registry> _registry = std::make_shared<WING::Registry>();
+    bool initialized = false;
+    bool game_initialized = false;
+    RenderSystem render_system{ _device_interface };
+    Scene* current_scene = nullptr;
 
-        //bool init(EngineInitData init_data) {
-        bool init() {
-            if (initialized) return true;
-            //if (!device_interface->init(init_data.device_interface_init_data)) {
-            if (!device_interface->init()) {
-                return false;
-            };
-            initialized = true;
-            return true;
+    //bool init(EngineInitData init_data) {
+    bool EngineCore::init() {
+        if (initialized) return true;
+        //if (!device_interface->init(init_data.device_interface_init_data)) {
+        if (!_device_interface->init()) {
+            return false;
+        };
+        initialized = true;
+        return true;
+    }
+
+    void EngineCore::init_game() {
+        current_scene = _registry->start_scene();
+        game_initialized = true;
+    }
+
+    ProgramState EngineCore::update() {
+        if ( ! initialized) init();
+        if ( ! game_initialized) init_game();
+
+        float elapsed_time_seconds = calculate_elapsed_time_seconds();
+
+        ProgramState state = _device_interface->update(elapsed_time_seconds);
+        if (state == ProgramState::QUIT) {
+            return state;
         }
 
-        void init_game() {
-            //current_scene = Registry::instance()->init_start_scene();
-        }
+        std::vector<RenderSystemComponent*> comps;
 
-        ProgramState update() {
-            if (game_initialized) {
-                init_game();
-            }
-
-            if (!initialized) return ProgramState::QUIT;
-
-            float elapsed_time_seconds = calculate_elapsed_time_seconds();
-
-            ProgramState state = device_interface->update(elapsed_time_seconds);
-            if (state == ProgramState::QUIT) {
-                return state;
-            }
-
-            std::vector<RenderSystemComponent*> comps;
-
-            if (current_scene != nullptr) {
-                for (auto& go : current_scene->gameobject_list) {
-                    auto* comp = go->get_component<RenderSystemComponent>();
-                    if (comp) {
-                        comps.push_back(comp);
-                    }
+        if (current_scene != nullptr) {
+            for (auto& go : current_scene->gameobject_list) {
+                auto* comp = go->get_component<RenderSystemComponent>();
+                if (comp) {
+                    comps.push_back(comp);
                 }
             }
-
-            render_system.update(comps);
-            //device_interface->renderer()->draw();
-
-            return ProgramState::RUNNING;
         }
 
-        float calculate_elapsed_time_seconds() {
-            static uint32_t previous_time = 0;
-            auto current_time = get_current_time();
-            auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
-            previous_time = current_time;
-            return elapsed_time_seconds;
-        }
+        render_system.update(comps);
+        //device_interface->renderer()->draw();
 
-        uint32_t get_current_time() {
-            return SDL_GetTicks64();
-        }
-    };
+        return ProgramState::RUNNING;
+    }
 
-    EngineCore::EngineCore() : pImpl(std::make_unique<Impl>()) {}
+    uint32_t EngineCore::get_current_time() {
+        return SDL_GetTicks64();
+    }
+
+    float EngineCore::calculate_elapsed_time_seconds() {
+        static uint32_t previous_time = 0;
+        auto current_time = get_current_time();
+        auto elapsed_time_seconds = (current_time - previous_time) / 1000.0f; // Convert to seconds.
+        previous_time = current_time;
+        return elapsed_time_seconds;
+    }
+
+    EngineCore::EngineCore() {};
     EngineCore::~EngineCore() {};
 
     std::shared_ptr<EngineCore> EngineCore::instance() {
@@ -190,17 +184,10 @@ namespace WING {
         return instance;
     }
 
-    const std::shared_ptr<DeviceInterface>& EngineCore::device_interface() { return  pImpl->device_interface; }
-    const std::shared_ptr<WING::Registry>& EngineCore::registry() { return  pImpl->registry; }
+    const std::shared_ptr<DeviceInterface>& EngineCore::device_interface() { return _device_interface; }
+    const std::shared_ptr<WING::Registry>& EngineCore::registry() { return _registry; }
 
-    bool EngineCore::init() {
-        return pImpl->init();
-    }
     //bool BirdEngine::init(EngineInitData init_data) {
     //    return pImpl->init(init_data);
     //}
-
-    ProgramState EngineCore::update() {
-        return pImpl->update();
-    }
 }

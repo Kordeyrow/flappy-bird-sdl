@@ -5,7 +5,8 @@
 #include <string>
 #include <memory>
 #include <iostream>
-#include <Wing.h>
+#include <wing.h>
+
 using namespace WING_API;
 
 enum TEXTURE_KEY {
