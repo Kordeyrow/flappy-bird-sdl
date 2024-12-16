@@ -65,21 +65,6 @@ namespace WING {
 
     };
 
-    class RenderSystemComponent : Component {
-    public:
-        RenderSystemComponent(GameObjectID owner_id)
-            : Component{ owner_id } {}
-        virtual AssetID texture_id() = 0;
-        virtual Transform* transform() = 0;
-        virtual int layer_index() = 0;
-    };
-
-    struct less_than_compare_key_RenderSystemComponent {
-        inline bool operator() (RenderSystemComponent* d1, RenderSystemComponent* d2) {
-            return (d1->layer_index() < d2->layer_index());
-        }
-    };
-
     class RenderSystem {
     private:
         std::shared_ptr<DeviceInterface> _device_interface;
@@ -89,18 +74,18 @@ namespace WING {
 
         void update(std::vector<RenderSystemComponent*> comps) {
 
-            _device_interface->renderer()->draw();
+            //_device_interface->renderer()->draw();
 
-            //device_interface->renderer()->draw_background();
+            _device_interface->renderer()->draw_background();
 
-            //std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
-            //for (RenderSystemComponent* c : comps)
-            //{
-            //    auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
-            //    device_interface->renderer()->draw_drawable(d);
-            //}
+            std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
+            for (RenderSystemComponent* c : comps)
+            {
+                auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
+                _device_interface->renderer()->draw_drawable(d);
+            }
 
-            //device_interface->renderer()->apply_draw();
+            _device_interface->renderer()->apply_draw();
         }
     };
 

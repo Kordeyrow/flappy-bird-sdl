@@ -25,7 +25,7 @@ void setup_window() {
     double offset_y = -offset_x * 0.6;
     //auto device_interface = BirdEngine::instance()->device_interface();
     //auto win = device_interface->window();
-    std::cout << Window::rect().position.x << std::endl;
+    //std::cout << Window::rect().position.x << std::endl;
     //system("pause");
     Rect display_size = Window::display_rect();
     int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
@@ -77,7 +77,11 @@ bool init_game() {
     // TODO: could be the first scene created
     Registry::set_start_scene(main_scene_id);
     auto pipe = Registry::create_new_gameobject();
-    pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    pipe->get_component<Transform>()->position.x = 100;
+    pipe->get_component<Transform>()->position.y = 100;
+    pipe->get_component<Transform>()->size.x = 100;
+    pipe->get_component<Transform>()->size.y = 100;
+    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
     // ======================
     

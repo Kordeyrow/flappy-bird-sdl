@@ -29,7 +29,19 @@ struct Color {
 	uint8_t a;
 };
 
+
+typedef enum {
+	RUNNING,
+	QUIT
+} ProgramState;
+
+
+using AssetPath = std::string;
+using AssetID = uint32_t;
 using GameObjectID = uint32_t;
+using SceneID = uint32_t;
+
+
 class Component {
 protected:
 	GameObjectID _owner_id;
@@ -52,14 +64,39 @@ public:
 		: position(pos), size(sz), rotation(rot), Component { owner_id } {}
 };
 
-using AssetID = uint32_t;
-class Sprite : public Component {
+class RenderSystemComponent : public Component {
 public:
-	GameObjectID owner_id;
-	AssetID texture_id;
-	int layer_index = 0;
-	Sprite(GameObjectID owner_id, AssetID texture_id)
-		: texture_id{ texture_id }, owner_id{ owner_id }, Component{ owner_id } {}
+	RenderSystemComponent(GameObjectID owner_id)
+		: Component{ owner_id } {}
+	virtual AssetID texture_id() = 0;
+	virtual Transform* transform() = 0;
+	virtual int layer_index() = 0;
+};
+
+struct less_than_compare_key_RenderSystemComponent {
+	inline bool operator() (RenderSystemComponent* d1, RenderSystemComponent* d2) {
+		return (d1->layer_index() < d2->layer_index());
+	}
+};
+
+class Sprite : public RenderSystemComponent {
+public:
+	Transform* _transform;
+	AssetID _texture_id;
+	int _layer_index = 0;
+	Sprite(GameObjectID owner_id, Transform* transform, AssetID texture_id)
+		: _texture_id{ texture_id }, _transform{ transform }, RenderSystemComponent{ owner_id } {}
+
+	// RenderSystemComponent
+	AssetID texture_id() {
+		return _texture_id;
+	}
+	Transform* transform() {
+		return _transform;
+	}
+	int layer_index() {
+		return _layer_index;
+	}
 };
 
 class GameObject { 
@@ -103,7 +140,6 @@ public:
 	}
 };
 
-using SceneID = uint32_t;
 class Scene {
 private:
 	SceneID _id = next_id();
@@ -120,11 +156,3 @@ public:
 
 	}
 };
-
-typedef enum {
-	RUNNING,
-	QUIT
-} ProgramState;
-
-using AssetPath = std::string;
-using AssetID = uint32_t;

@@ -64,6 +64,9 @@ namespace WING {
             //	SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
             //}
             // apply_draw
+        }
+
+        void apply_draw() {
             SDL_RenderPresent(_renderer);
             SDL_RenderClear(_renderer);
         }
