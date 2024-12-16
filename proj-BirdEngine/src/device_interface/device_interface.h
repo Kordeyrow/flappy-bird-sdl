@@ -46,12 +46,12 @@ public:
     //bool init(UserInterfaceInitData init_data) {
     bool init() {
         if (initialized) {
-            _io_manager->print_line_warning("DeviceManager", ALREADY_INITIALIZED);
+            _io_manager->print_warning("DeviceManager", ALREADY_INITIALIZED);
             return true;
         };
         // SDL
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            _io_manager->print_line_error("SDL - " + std::string(SDL_GetError()), FAILED_TO_INITIALIZE);
+            _io_manager->print_error("SDL - " + std::string(SDL_GetError()), FAILED_TO_INITIALIZE);
             SDL_Quit();
             return false;
         }

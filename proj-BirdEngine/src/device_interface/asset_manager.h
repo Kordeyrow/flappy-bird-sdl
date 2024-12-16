@@ -56,7 +56,7 @@ public:
 		// SDL_image
 		if (IMG_Init(IMG_INIT_PNG) < 0) {
 			IMG_Quit();
-			io_manager->print_line_error("SDL_image - " + std::string(IMG_GetError()), FAILED_TO_INITIALIZE);
+			io_manager->print_error("SDL_image - " + std::string(IMG_GetError()), FAILED_TO_INITIALIZE);
 			return false;
 		}
 		return true;
@@ -83,7 +83,7 @@ public:
 
 		SDL_Surface* buffer = IMG_Load(path.c_str());
 		if (!buffer) {
-			io_manager->print_line_error('"' + path + "\" - " + std::string(IMG_GetError()), FAILED_LOADING);
+			io_manager->print_error('"' + path + "\" - " + std::string(IMG_GetError()), FAILED_LOADING);
 			return INVAL_ID;
 		}
 
@@ -100,7 +100,7 @@ public:
 		buffer = nullptr;
 
 		if ( ! texture) {
-			io_manager->print_line_error("sprite" + std::string(IMG_GetError()), FAILED_TO_CREATE);
+			io_manager->print_error("sprite" + std::string(IMG_GetError()), FAILED_TO_CREATE);
 			return INVAL_ID;
 		}
 

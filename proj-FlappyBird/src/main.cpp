@@ -30,7 +30,7 @@ void setup_window() {
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
     Rect r{ Position{pos_x, pos_y}, Size{width, height} };
     Window::set_rect(r);
-    //Renderer::set_background_color(Color::BLUE_BIRD());
+    Renderer::set_background_color(Color::BLUE_BIRD());
 }
 
 bool init_engine() {
@@ -106,7 +106,7 @@ bool init() {
 void run_game() {
     //////////////program_state = BirdEngine::instance()->update();
 
-
+    Wing::run_game();
     // TEST
     // ======================
     //
@@ -118,6 +118,7 @@ void run_game() {
     ////////////////////}*/
     // ======================
 
+    //Renderer::set_background_color(Color::BLUE_BIRD());
 
     //quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__

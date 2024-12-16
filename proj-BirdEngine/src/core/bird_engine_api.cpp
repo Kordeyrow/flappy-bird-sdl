@@ -1,14 +1,15 @@
 #include <WING.h>
-//#include "core/bird_engine.h"
+#include <thread>
+#include "core/bird_engine.h"
 
 namespace BIRDENGINE_API {
-	BirdEngine::BirdEngine() {};
-	BirdEngine::~BirdEngine() {};
-	std::shared_ptr<BirdEngine> BirdEngine::instance() {
+	Wing::Wing() {};
+	Wing::~Wing() {};
+	std::shared_ptr<Wing> Wing::instance() {
 		static bool initialized = false;
-		static std::shared_ptr<BirdEngine> instance(
-			new BirdEngine(),
-			[](BirdEngine* reg) {
+		static std::shared_ptr<Wing> instance(
+			new Wing(),
+			[](Wing* reg) {
 				delete reg; // Custom deleter to allow destruction of the singleton
 			}
 		);
@@ -18,10 +19,32 @@ namespace BIRDENGINE_API {
 		return instance;
 	}
 
-	bool BirdEngine::init() {
+	bool Wing::init() {
 		return true;
 	}
 
-	void BirdEngine::lauch() {
+	void Wing::lauch() {
 	}
+
+	void run() {
+
+	}
+
+	std::thread run_game_t;
+	bool running = false;
+	bool closing = false;
+	void Wing::run_game()	{
+		BirdEngine::instance()->update();
+		//if (running) return;
+		//running = true;
+		//run_game_t = std::thread{ run, "Hello" };
+		//while ( ! closing) {
+		//	BirdEngine::instance()->update();
+		//}
+	}
+
+	//void Wing::close_game() {
+	//	if ( ! running) return;
+	//	closing = true;
+	//}
 }

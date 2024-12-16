@@ -10,5 +10,3 @@ namespace BIRDENGINE_API {
 		static const Rect& display_rect();
 	};
 }
-
-

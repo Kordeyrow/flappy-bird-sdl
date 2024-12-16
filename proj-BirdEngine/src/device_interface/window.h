@@ -32,7 +32,7 @@ public:
 
     bool init() {
         if (initialized) {
-            io_manager->print_line_warning("Window", ALREADY_INITIALIZED);
+            io_manager->print_warning("Window", ALREADY_INITIALIZED);
             return true;
         }
         _sdl_window = SDL_CreateWindow(title.c_str(),
@@ -43,7 +43,7 @@ public:
             SDL_WINDOW_SHOWN
         );
         if ( !_sdl_window) {
-            io_manager->print_line_error("Window - " + std::string(SDL_GetError()), FAILED_TO_CREATE);
+            io_manager->print_error("Window - " + std::string(SDL_GetError()), FAILED_TO_CREATE);
             return false;
         }
         initialized = true;

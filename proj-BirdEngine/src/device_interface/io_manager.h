@@ -48,12 +48,12 @@ public:
     }
 
     // Error printing methods
-    void print_line_error(const std::string& msg, ErrorType type) {
+    void print_error(const std::string& msg, ErrorType type) {
         std::cerr << general_error_prefix << prefix_from_error_type[type] << msg << std::endl;
     }
 
     // Warning printing methods
-    void print_line_warning(const std::string& msg, WarningType type) {
+    void print_warning(const std::string& msg, WarningType type) {
         std::cerr << general_warning_prefix << prefix_from_warning_type[type] << msg << std::endl;
     }
 };

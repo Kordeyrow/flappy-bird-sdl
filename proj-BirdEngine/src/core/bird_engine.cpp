@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 
+
 class PhysicsSystemComponent {
 
 };
@@ -37,16 +38,19 @@ public:
         : device_interface{ _device_interface } {}
 
     void update(std::vector<RenderSystemComponent*> comps) {
-        device_interface->renderer()->draw_background();
 
-        std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
-        for (RenderSystemComponent* c : comps)
-        {
-            auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
-            device_interface->renderer()->draw_drawable(d);
-        }
+        device_interface->renderer()->draw();
 
-        device_interface->renderer()->apply_draw();
+        //device_interface->renderer()->draw_background();
+
+        //std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
+        //for (RenderSystemComponent* c : comps)
+        //{
+        //    auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
+        //    device_interface->renderer()->draw_drawable(d);
+        //}
+
+        //device_interface->renderer()->apply_draw();
     }
 };
 
@@ -87,13 +91,14 @@ struct BirdEngine::Impl {
         if (state == ProgramState::QUIT) {
             return state;
         }
+
         std::vector<RenderSystemComponent*> comps;
-        for (auto& go : current_scene->gameobject_list) {
-            auto* comp = go->get_component<RenderSystemComponent>();
-            if (comp) {
-                comps.push_back(comp);
-            }
-        }
+        //for (auto& go : current_scene->gameobject_list) {
+        //    auto* comp = go->get_component<RenderSystemComponent>();
+        //    if (comp) {
+        //        comps.push_back(comp);
+        //    }
+        //}
         render_system.update(comps);
         //device_interface->renderer()->draw();
 

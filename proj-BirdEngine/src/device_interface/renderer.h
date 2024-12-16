@@ -41,12 +41,12 @@ public:
 
     bool init() {
         if (initialized) {
-            io_manager->print_line_warning("Renderer", ALREADY_INITIALIZED);
+            io_manager->print_warning("Renderer", ALREADY_INITIALIZED);
             return true;
         }
         _renderer = SDL_CreateRenderer(window->sdl_window(), -1, SDL_RENDERER_ACCELERATED);
         if (!_renderer) {
-            io_manager->print_line_error("Renderer - " + std::string(SDL_GetError()), FAILED_TO_CREATE);
+            io_manager->print_error("Renderer - " + std::string(SDL_GetError()), FAILED_TO_CREATE);
             return false;
         }
         initialized = true;
@@ -57,15 +57,12 @@ public:
         draw_background();
 
         // draw textures
-        std::sort(drawable_list.begin(), drawable_list.end(), less_than_compare_key_Drawable());
-   		for (auto d : drawable_list) {
-            auto rect = SDL_Rect{ d.transform->position.x, d.transform->position.y, d.transform->size.x, d.transform->size.y };
-   			SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
-   		}
-    }
-
-    void apply_draw() {
-
+     //   std::sort(drawable_list.begin(), drawable_list.end(), less_than_compare_key_Drawable());
+   		//for (auto d : drawable_list) {
+     //       auto rect = SDL_Rect{ d.transform->position.x, d.transform->position.y, d.transform->size.x, d.transform->size.y };
+   		//	SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
+   		//}
+        // apply_draw
         SDL_RenderPresent(_renderer);
         SDL_RenderClear(_renderer);
     }
@@ -89,13 +86,15 @@ public:
     }
 
     void draw_background() {
-        SDL_SetRenderDrawColor(_renderer,
+        SDL_SetRenderDrawColor(
+            _renderer,
             background_color.r,
             background_color.g,
             background_color.b,
             background_color.a
         );
-        SDL_Rect r{ 0,
+        SDL_Rect r{ 
+            0,
             0,
             window->rect().size.x,
             window->rect().size.y
@@ -106,7 +105,8 @@ public:
 
 private:
     void reset_render_draw_color() {
-        SDL_SetRenderDrawColor(_renderer, 
+        SDL_SetRenderDrawColor(
+            _renderer, 
             default_renderer_draw_color.r, 
             default_renderer_draw_color.g, 
             default_renderer_draw_color.b, 

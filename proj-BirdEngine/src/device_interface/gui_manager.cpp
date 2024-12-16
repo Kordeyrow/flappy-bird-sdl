@@ -14,11 +14,11 @@ GUIManager::~GUIManager() {
 
 bool GUIManager::init(const GUIManagerInitParams& params) {
     if (initialized) {
-        io_manager->print_line_warning("GUIManager", ALREADY_INITIALIZED);
+        io_manager->print_warning("GUIManager", ALREADY_INITIALIZED);
         return true;
     };
     if ( ! init_imgui(window->sdl_window(), renderer->sdl_renderer())) {
-        io_manager->print_line_error("ImGUI", FAILED_TO_INITIALIZE);
+        io_manager->print_error("ImGUI", FAILED_TO_INITIALIZE);
         return false;
     };;
     initialized = true;
