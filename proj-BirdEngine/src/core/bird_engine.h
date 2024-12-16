@@ -4,28 +4,30 @@
 #include <memory>
 #include "registry.h"
 
-struct EngineInitData {
-public:
-    UserInterfaceInitData device_interface_init_data;
-};
+namespace WING {
+    struct EngineInitData {
+    public:
+        UserInterfaceInitData device_interface_init_data;
+    };
 
-class BirdEngine {
-private:
-    struct Impl;
-    std::unique_ptr<Impl> pImpl;
+    class Wing {
+    private:
+        struct Impl;
+        std::unique_ptr<Impl> pImpl;
 
-public:
-    BirdEngine(const BirdEngine&) = delete;
-    BirdEngine& operator=(const BirdEngine&) = delete;
-    static std::shared_ptr<BirdEngine> instance();
+    public:
+        Wing(const Wing&) = delete;
+        Wing& operator=(const Wing&) = delete;
+        static std::shared_ptr<Wing> instance();
 
-    //bool init(EngineInitData init_data);
-    bool init();
-    ProgramState update();
+        //bool init(EngineInitData init_data);
+        bool init();
+        ProgramState update();
 
-    const std::shared_ptr<DeviceInterface>& device_interface();
+        const std::shared_ptr<DeviceInterface>& device_interface();
 
-private:
-    BirdEngine();
-    ~BirdEngine();
-};
+    private:
+        Wing();
+        ~Wing();
+    };
+}

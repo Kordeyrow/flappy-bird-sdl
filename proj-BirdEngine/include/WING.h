@@ -7,7 +7,7 @@
 //#include "containers.h"
 #include <memory> 
 
-namespace BIRDENGINE_API {
+namespace WING_API {
     struct DECLSPEC Wing {
         Wing(const Wing&) = delete;
         Wing& operator=(const Wing&) = delete;

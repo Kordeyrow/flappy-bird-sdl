@@ -6,7 +6,7 @@
 #include <memory>
 #include <iostream>
 #include <WING.h>
-using namespace BIRDENGINE_API;
+using namespace WING_API;
 
 enum TEXTURE_KEY {
 	TEXTURE_FLAPPY_BIRD_UP_WING,

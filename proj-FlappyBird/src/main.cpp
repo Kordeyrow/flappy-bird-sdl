@@ -80,7 +80,7 @@ bool init_game() {
     );*/
 
     //BIRDENGINE_API::Window::set_rect({});
-    //auto main_scene_id = Registry::instance()->create_new_scene();
+    auto main_scene_id = Registry::create_new_scene();
     //auto pipe = Registry::instance()->create_new_gameobject();
     ///*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     //Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);*/
@@ -110,7 +110,7 @@ void run_game() {
     // TEST
     // ======================
     //
-    /////////////////////*if (input_manager->is_key_down(SHP_K_SPACE)) {
+    /////////////////////*if (input_manager->is_key_down(WING_K_SPACE)) {
     ////////////////////    renderer->set_background_color(Color::RED());
     ////////////////////}
     ////////////////////else {

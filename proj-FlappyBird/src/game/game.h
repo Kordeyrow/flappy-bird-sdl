@@ -829,29 +829,29 @@
 //
 //
 //	//typedef enum {
-//	//	SHP_QUIT,
-//	//	SHP_FINGERTOUCH,
-//	//	SHP_MOUSEBUTTONDOWN,
-//	//	SHP_KEYDOWN,
-//	//	SHP_KEYUP
-//	//} SHP_InputType;
+//	//	WING_QUIT,
+//	//	WING_FINGERTOUCH,
+//	//	WING_MOUSEBUTTONDOWN,
+//	//	WING_KEYDOWN,
+//	//	WING_KEYUP
+//	//} WING_InputType;
 //
 //	//typedef enum {
-//	//	SHP_K_SPACE,
-//	//	SHP_K_b
-//	//} SHP_Keycode;
+//	//	WING_K_SPACE,
+//	//	WING_K_b
+//	//} WING_Keycode;
 //
 //	//// engine input setup
-//	//std::map<SDL_EventType, SHP_InputType> input_type_from_sdl_event {
-//	//	{ SDL_QUIT, SHP_QUIT },
-//	//	{ SDL_FINGERDOWN, SHP_FINGERTOUCH },
-//	//	{ SDL_MOUSEBUTTONDOWN, SHP_MOUSEBUTTONDOWN },
-//	//	{ SDL_KEYDOWN, SHP_KEYDOWN },
-//	//	{ SDL_KEYUP, SHP_KEYUP },
+//	//std::map<SDL_EventType, WING_InputType> input_type_from_sdl_event {
+//	//	{ SDL_QUIT, WING_QUIT },
+//	//	{ SDL_FINGERDOWN, WING_FINGERTOUCH },
+//	//	{ SDL_MOUSEBUTTONDOWN, WING_MOUSEBUTTONDOWN },
+//	//	{ SDL_KEYDOWN, WING_KEYDOWN },
+//	//	{ SDL_KEYUP, WING_KEYUP },
 //	//};
-//	//std::map<SDL_Keycode, SHP_Keycode> input_type_from_sdl_event {
-//	//	{ SDLK_SPACE, SHP_K_SPACE },
-//	//	{ SDLK_b, SHP_K_b },
+//	//std::map<SDL_Keycode, WING_Keycode> input_type_from_sdl_event {
+//	//	{ SDLK_SPACE, WING_K_SPACE },
+//	//	{ SDLK_b, WING_K_b },
 //	//};
 //
 //	//// user input setup
