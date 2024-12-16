@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#include "WING_events.h"
+#include "wing_events.h"
 #include "containers.h"
 #include <vector>
 #include <unordered_map>

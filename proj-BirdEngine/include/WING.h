@@ -4,6 +4,7 @@
 #include "renderer.h"
 #include "registry.h"
 #include "asset_manager.h"
+#include "input_manager.h"
 //#include "containers.h"
 #include <memory> 
 

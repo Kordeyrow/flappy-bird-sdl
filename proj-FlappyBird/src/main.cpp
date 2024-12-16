@@ -11,22 +11,13 @@ using namespace WING_API;
 // runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
-
-//std::shared_ptr<WindowAPI> window;
-////////std::shared_ptr<Renderer> renderer;
-////////std::shared_ptr<InputManager> input_manager;
-////////std::shared_ptr<AssetManager> asset_manager;
 TextureManager* texture_manager;
-//////
+
 void setup_window() {
     int width = 460;
     int height = 640;
     double offset_x = -width * 0.04;
     double offset_y = -offset_x * 0.6;
-    //auto device_interface = BirdEngine::instance()->device_interface();
-    //auto win = device_interface->window();
-    //std::cout << Window::rect().position.x << std::endl;
-    //system("pause");
     Rect display_size = Window::display_rect();
     int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
@@ -62,24 +53,12 @@ bool init_game() {
     texture_manager = new TextureManager();
     texture_manager->init();
 
-
-    // TEST
-    // ======================
-    //
-    //Renderer::add_drawwable (
-    //    Drawable { 
-    //        texture_manager->get_texture_id(TEXTURE_KEY::PIPE),
-    //        Transform { Position{100, 100}, Size{140, 140}, 0 } 
-    //    }
-    //);
-
     auto main_scene_id = Registry::create_new_scene();
     Registry::set_start_scene(main_scene_id); // TODO: could be the first scene created
     auto pipe = Registry::create_new_gameobject();
     pipe->get_component<Transform>()->set(100, 100, 100, 100);
     pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
-    // ======================
     
 
     //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
@@ -104,12 +83,12 @@ void run_game() {
     // TEST
     // ======================
     //
-    /////////////////////*if (input_manager->is_key_down(WING_K_SPACE)) {
-    ////////////////////    renderer->set_background_color(Color::RED());
-    ////////////////////}
-    ////////////////////else {
-    ////////////////////    renderer->set_background_color(Color::BLUE_BIRD());
-    ////////////////////}*/
+    if (InputManager::is_key_down(WING_K_SPACE)) {
+        Renderer::set_background_color(Color::RED());
+    }
+    else {
+        Renderer::set_background_color(Color::BLUE_BIRD());
+    }
     // ======================
 
     //Renderer::set_background_color(Color::BLUE_BIRD());

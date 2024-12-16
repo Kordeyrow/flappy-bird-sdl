@@ -1,4 +1,20 @@
 #include "input_manager.h"
+#include <input_manager.h>
+#include <engine_core.h>
+
+namespace WING_API {
+    bool InputManager::is_key_down(WING_Keycode keycode) {
+        return WING::EngineCore::instance()->device_interface()->input_manager()->is_key_down(keycode);
+    }
+
+    bool InputManager::is_key_just_pressed(WING_Keycode keycode) {
+        return WING::EngineCore::instance()->device_interface()->input_manager()->is_key_just_pressed(keycode);
+    }
+
+    bool InputManager::is_key_just_released(WING_Keycode keycode) {
+        return WING::EngineCore::instance()->device_interface()->input_manager()->is_key_just_released(keycode);
+    }
+}
 
 namespace WING {
     InputManager::InputManager() {
