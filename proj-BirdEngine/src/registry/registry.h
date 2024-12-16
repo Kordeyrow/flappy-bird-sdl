@@ -13,7 +13,7 @@ namespace WING {
 
 		std::vector<Scene*> all_scenes_list;
 		std::map<SceneID, Scene*> id_scene_map;
-		SceneID _starting_scene_id;
+		SceneID _starting_scene_id = -1;
 
 		SceneID current_editing_scene_id;
 		std::vector<SceneID> build_scene_list;

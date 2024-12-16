@@ -71,7 +71,7 @@ namespace WING {
         const Rect& display_rect() {
             SDL_Rect r;
             SDL_GetDisplayBounds(0, &r);
-            return Rect{ Position{r.x, r.y}, Size{r.w, r.h } };
+            return Rect{ Position{(float)r.x, (float)r.y}, Size{(float)r.w, (float)r.h } };
         }
 
         SDL_Window* sdl_window() {

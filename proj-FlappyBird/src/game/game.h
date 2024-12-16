@@ -28,140 +28,6 @@
 //#include <containers/input/input_group.h>
 //
 //
-//struct BoolCondition {
-//	bool& condition;
-//
-//	BoolCondition(bool& cond) : condition(cond) {}
-//
-//	bool evaluate() const {
-//		return condition;
-//	}
-//};
-//
-//enum class ComparisonType {
-//	Greater,
-//	Less,
-//	Equal,
-//	NotEqual,
-//	GreaterOrEqual,
-//	LessOrEqual
-//};
-//
-//template <typename T>
-//struct ValueCondition {
-//	T& lhs;
-//	ComparisonType comparison;
-//	const T* rhsValue = nullptr;
-//	T* rhsVariable = nullptr;
-//
-//	ValueCondition(T& lhs, ComparisonType comp, const T& value)
-//		: lhs(lhs), comparison(comp), rhsValue(&value) {}
-//
-//	ValueCondition(T& lhs, ComparisonType comp, T& rhsVar)
-//		: lhs(lhs), comparison(comp), rhsVariable(&rhsVar) {}
-//
-//	bool evaluate() const {
-//		T rhs = rhsVariable ? *rhsVariable : *rhsValue;
-//		switch (comparison) {
-//		case ComparisonType::Greater: return lhs > rhs;
-//		case ComparisonType::Less: return lhs < rhs;
-//		case ComparisonType::Equal: return lhs == rhs;
-//		case ComparisonType::NotEqual: return lhs != rhs;
-//		case ComparisonType::GreaterOrEqual: return lhs >= rhs;
-//		case ComparisonType::LessOrEqual: return lhs <= rhs;
-//		}
-//		return false;
-//	}
-//};
-//
-//struct TimerCondition {
-//	std::chrono::time_point<std::chrono::steady_clock> startTime;
-//	float duration;
-//
-//	TimerCondition(float durationInSeconds)
-//		: duration(durationInSeconds), startTime(std::chrono::steady_clock::now()) {}
-//
-//	bool evaluate() const {
-//		auto now = std::chrono::steady_clock::now();
-//		std::chrono::duration<float> elapsed = now - startTime;
-//		return elapsed.count() >= duration;
-//	}
-//
-//	void reset() {
-//		startTime = std::chrono::steady_clock::now();
-//	}
-//};
-//
-//struct EventCondition {
-//	bool& eventTriggered;
-//
-//	EventCondition(bool& triggered) : eventTriggered(triggered) {}
-//
-//	bool evaluate() const {
-//		return eventTriggered;
-//	}
-//
-//	void reset() {
-//		eventTriggered = false;
-//	}
-//};
-//
-//class StateTransitionBase {
-//public:
-//	StateTransitionBase() {}
-//
-//	void addBoolCondition(bool& condition) {
-//		conditions.push_back([&condition]() { return BoolCondition(condition).evaluate(); });
-//	}
-//
-//	template <typename T>
-//	void addValueCondition(T& lhs, ComparisonType comp, const T& rhsValue) {
-//		conditions.push_back([&lhs, comp, &rhsValue]() {
-//			return ValueCondition<T>(lhs, comp, rhsValue).evaluate();
-//			});
-//	}
-//
-//	void addTimerCondition(float duration) {
-//		TimerCondition timer(duration);
-//		conditions.push_back([timer]() mutable { return timer.evaluate(); });
-//	}
-//
-//	void addEventCondition(bool& eventTriggered) {
-//		conditions.push_back([&eventTriggered]() { return EventCondition(eventTriggered).evaluate(); });
-//	}
-//
-//	bool isTriggered() const {
-//		for (const auto& condition : conditions) {
-//			if (!condition()) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//private:
-//	std::vector<std::function<bool()>> conditions;
-//};
-//
-//template<typename OriginState, typename TargetState>
-//class StateTransition : public StateTransitionBase {
-//};
-//
-//
-////class GameTransitionsManager {
-////private:
-////	bool player_dead = false;
-////	Game* game;
-////	std::map<std::type_index, StateTransitionBase*> transitions;
-////public:
-////	GameTransitionsManager(Game* game) : game{game} {
-////		auto& t = new StateTransition<Playing, GameOver>();
-////		t->addBoolCondition(player_dead);
-////		transitions[typeid(Playing)] = t;
-////	}
-////};
-//
-//
 //class Game {
 //public:
 //	// SDL
@@ -417,58 +283,58 @@
 //	}
 //
 //	void spawn_player() {
-//		Vector2 player_size = Vector2{ 48, 36 };
-//		Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
-//		double ground_y = _window_h + 3;
-//		_player = new FlappyBird{
-//			_texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
-//			ground_y,
-//			player_start_pos,
-//			player_size,
-//			17
-//		};
+//		//Vector2 player_size = Vector2{ 48, 36 };
+//		//Vector2 player_start_pos = Vector2{ _window_w / 2, _window_h / 2 };
+//		//double ground_y = _window_h + 3;
+//		//_player = new FlappyBird{
+//		//	_texture_manager->get_texture(TextureManager::TEXTURE_FLAPPY_BIRD_UP_WING),
+//		//	ground_y,
+//		//	player_start_pos,
+//		//	player_size,
+//		//	17
+//		//};
 //		_sprites.push_back(_player);
 //		_updatables.push_back(_player);
 //	}
 //
 //	void spawn_pipe(double window_w, double window_h, float speed_x) {
-//		double size_y = 440;
-//		double pair_gap_size = 156;
+//		//double size_y = 440;
+//		//double pair_gap_size = 156;
 //
-//		// random y
-//		double max_y_offset = 128;
-//		double random_y_offset = max_y_offset * generate_biased_random();
+//		//// random y
+//		//double max_y_offset = 128;
+//		//double random_y_offset = max_y_offset * generate_biased_random();
 //
-//		Vector2 pipe_size = Vector2{ pipe_size_x(), size_y };
-//		double x_offset = pipe_size.x / 2;
-//		double y_offset = random_y_offset;
-//		Vector2 pipe_start_pos = Vector2{ window_w + x_offset, window_h /2 + y_offset };
+//		//Vector2 pipe_size = Vector2{ pipe_size_x(), size_y };
+//		//double x_offset = pipe_size.x / 2;
+//		//double y_offset = random_y_offset;
+//		//Vector2 pipe_start_pos = Vector2{ window_w + x_offset, window_h /2 + y_offset };
 //
-//		Pipe* bottom_pipe = new Pipe{
-//			_state_machine,
-//			_texture_manager->get_texture(TextureManager::PIPE),
-//			pipe_start_pos + Vector2{0, +size_y/2 +pair_gap_size / 2},
-//			pipe_size,
-//			speed_x
-//		};
-//		_sprites.push_back(bottom_pipe);
-//		_updatables.push_back(bottom_pipe);
+//		//Pipe* bottom_pipe = new Pipe{
+//		//	_state_machine,
+//		//	_texture_manager->get_texture(TextureManager::PIPE),
+//		//	pipe_start_pos + Vector2{0, +size_y/2 +pair_gap_size / 2},
+//		//	pipe_size,
+//		//	speed_x
+//		//};
+//		//_sprites.push_back(bottom_pipe);
+//		//_updatables.push_back(bottom_pipe);
 //
-//		Pipe* top_pipe = new Pipe{
-//			_state_machine,
-//			_texture_manager->get_texture(TextureManager::PIPE),
-//			pipe_start_pos + Vector2{0, -size_y/2 -pair_gap_size /2},
-//			pipe_size,
-//			speed_x,
-//			SDL_FLIP_VERTICAL
-//		};
-//		_sprites.push_back(top_pipe);
-//		_updatables.push_back(top_pipe);
+//		//Pipe* top_pipe = new Pipe{
+//		//	_state_machine,
+//		//	_texture_manager->get_texture(TextureManager::PIPE),
+//		//	pipe_start_pos + Vector2{0, -size_y/2 -pair_gap_size /2},
+//		//	pipe_size,
+//		//	speed_x,
+//		//	SDL_FLIP_VERTICAL
+//		//};
+//		//_sprites.push_back(top_pipe);
+//		//_updatables.push_back(top_pipe);
 //
-//		pipe_tuple_queue.push({ bottom_pipe, top_pipe });
-//		if ( ! std::get<0>(_next_pipes)) {
-//			update_next_pipes();
-//		}
+//		//pipe_tuple_queue.push({ bottom_pipe, top_pipe });
+//		//if ( ! std::get<0>(_next_pipes)) {
+//		//	update_next_pipes();
+//		//}
 //	}
 //	
 //	double generate_biased_random(double bias_strength = 3.8, double sign_flip_chance = 0.52) {

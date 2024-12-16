@@ -11,7 +11,8 @@ using namespace WING_API;
 // runtime
 //Game game;
 ProgramState program_state = ProgramState::RUNNING;
-TextureManager* texture_manager;
+TextureManager texture_manager;
+GameObject* pipe;
 
 void setup_window() {
     int width = 460;
@@ -23,20 +24,11 @@ void setup_window() {
     int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
     Rect r{ Position{pos_x, pos_y}, Size{width, height} };
     Window::set_rect(r);
+    Window::set_title("Flappy Bird");
     Renderer::set_background_color(Color::BLUE_BIRD());
 }
 
-bool init_engine() {
-    /////////*WindowInitData win_data{ "FlappyBird" };
-    ////////UserInterfaceInitData usin_data{ win_data };
-    ////////EngineInitData eng_data{ usin_data };
-    ////////if (!BirdEngine::instance()->init()) {
-    ////////    return false;
-    ////////}*/
-    return true;
-}
-
-bool init_game() {
+bool init() {
     /*SDL_Rect display_rect;
     SDL_GetDisplayBounds(0, &display_rect);*/
     //	
@@ -50,34 +42,27 @@ bool init_game() {
 
     setup_window();
 
-    texture_manager = new TextureManager();
-    texture_manager->init();
+    texture_manager.init();
 
     auto main_scene_id = Registry::create_new_scene();
-    Registry::set_start_scene(main_scene_id); // TODO: could be the first scene created
-    auto pipe = Registry::create_new_gameobject();
+    Registry::set_start_scene(main_scene_id);
+    pipe = Registry::create_new_gameobject();
     pipe->get_component<Transform>()->set(100, 100, 100, 100);
-    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::PIPE));
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
-    
+
 
     //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
     //return game.init<Playing>();
     return true;
 }
 
-bool init() {
-    if ( ! init_engine()) {
-        return false;
-    }
-    if ( ! init_game()) {
-        return false;
-    }
-    return true;
-}
-
 void run_game() {
     //////////////program_state = BirdEngine::instance()->update();
+
+    // Move
+    auto p = pipe->get_component<Transform>()->position;
+    pipe->get_component<Transform>()->set(p.x + 1, 100, 100, 100);
 
     Wing::run_game();
     // TEST
@@ -90,8 +75,6 @@ void run_game() {
         Renderer::set_background_color(Color::BLUE_BIRD());
     }
     // ======================
-
-    //Renderer::set_background_color(Color::BLUE_BIRD());
 
     //quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__

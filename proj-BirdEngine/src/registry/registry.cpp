@@ -27,6 +27,9 @@ namespace WING {
 		Scene* new_scene = new Scene();
 		all_scenes_list.push_back(new_scene);
 		id_scene_map.insert({ new_scene->id(), new_scene });
+		if (_starting_scene_id == -1) {
+			_starting_scene_id = new_scene->id();
+		}
 		return new_scene->id();
 	}
 

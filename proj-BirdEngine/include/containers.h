@@ -5,11 +5,29 @@
 #include <string>
 #include <map>
 
-struct Vector2 { public: int x, y; };
-struct Direction : public Vector2 { public: Direction(int x = 0, int y = 0) : Vector2{ x, y } {} };
-struct Size : public Vector2 { public: Size(int width = 0, int height = 0) : Vector2{ width, height } {} };
-struct Position : public Vector2 { public: Position(int x = 0, int y = 0) : Vector2{ x, y } {} };
-struct Rect { Position position; Size size; };
+struct Vector2 { 
+public: 
+	float x, y; 
+};
+struct Direction : public Vector2 { 
+public: 
+	Direction(float x = 0, float y = 0) : Vector2{ x, y } {}
+	Direction(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
+};
+struct Size : public Vector2 { 
+public: 
+	Size(float width = 0, float height = 0) : Vector2{ width, height } {}
+	Size(int width = 0, int height = 0) : Vector2{ (float)width, (float)height } {}
+};
+struct Position : public Vector2 { 
+public: 
+	Position(float x = 0, float y = 0) : Vector2{ x, y } {}
+	Position(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
+};
+struct Rect { 
+	Position position; 
+	Size size; 
+};
 
 struct Color {
 	static constexpr Color RED() { return Color(255, 0, 0); }

@@ -72,8 +72,21 @@ namespace WING {
         }
 
         void draw_drawable(Drawable d) {
-            auto rect = SDL_Rect{ d.transform->position.x, d.transform->position.y, d.transform->size.x, d.transform->size.y };
-            SDL_RenderCopyEx(_renderer, asset_manager->get_texture(d.texture_id), NULL, &rect, d.transform->rotation, NULL, SDL_FLIP_NONE);
+            auto rect = SDL_Rect{ 
+                (int) d.transform->position.x, 
+                (int) d.transform->position.y,
+                (int) d.transform->size.x,
+                (int) d.transform->size.y
+            };
+            SDL_RenderCopyEx(
+                _renderer, 
+                asset_manager->get_texture(d.texture_id), 
+                NULL, 
+                &rect, 
+                d.transform->rotation, 
+                NULL, 
+                SDL_FLIP_NONE
+            );
         }
 
         void add_drawable(Drawable drawable) {
