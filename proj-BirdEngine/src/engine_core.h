@@ -2,7 +2,7 @@
 #include <device_interface/device_interface.h>
 #include "containers.h"
 #include <memory>
-#include "registry.h"
+#include <registry/registry.h>
 
 namespace WING {
     struct EngineInitData {
@@ -25,6 +25,7 @@ namespace WING {
         ProgramState update();
 
         const std::shared_ptr<DeviceInterface>& device_interface();
+        const std::shared_ptr<Registry>& registry();
 
     private:
         EngineCore();

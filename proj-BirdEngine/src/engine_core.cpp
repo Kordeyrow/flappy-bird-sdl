@@ -3,6 +3,7 @@
 #include <wing.h>
 #include "engine_core.h"
 #include <device_interface/gui_manager.h>
+#include <registry/registry.h>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -35,7 +36,7 @@ namespace WING_API {
 
     }
 
-    std::thread run_game_t;
+    //std::thread run_game_t;
     bool running = false;
     bool closing = false;
     void Wing::run_game() {
@@ -55,6 +56,7 @@ namespace WING_API {
 }
 
 namespace WING {
+
     class PhysicsSystemComponent {
 
     };
@@ -104,6 +106,7 @@ namespace WING {
 
     struct EngineCore::Impl {
         std::shared_ptr<DeviceInterface> device_interface = std::make_shared<DeviceInterface>();
+        std::shared_ptr<WING::Registry> registry = std::make_shared<WING::Registry>();
         bool initialized = false;
         bool game_initialized = false;
         RenderSystem render_system{ device_interface };
@@ -188,6 +191,7 @@ namespace WING {
     }
 
     const std::shared_ptr<DeviceInterface>& EngineCore::device_interface() { return  pImpl->device_interface; }
+    const std::shared_ptr<WING::Registry>& EngineCore::registry() { return  pImpl->registry; }
 
     bool EngineCore::init() {
         return pImpl->init();

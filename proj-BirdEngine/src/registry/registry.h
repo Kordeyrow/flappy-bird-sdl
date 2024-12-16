@@ -18,9 +18,6 @@ namespace WING {
 		std::vector<SceneID> build_scene_list;*/
 
 	public:
-		Registry(const Registry&) = delete;
-		Registry& operator=(const Registry&) = delete;
-		static std::shared_ptr<Registry> instance();
 
 		SceneID create_new_scene();
 		void set_starting_scene(SceneID id);
@@ -28,13 +25,10 @@ namespace WING {
 		void add_gameobject_to_scene(GameObject* go_id, SceneID scene_id);
 
 		// TODO: internal only
-	public:
+	//public:
 		/*Scene* init_start_scene() {
 			scene_from_id[starting_scene_id]->init();
 			return scene_from_id[starting_scene_id];
 		}*/
-	private:
-		Registry();
-		~Registry();
 	};
 }
