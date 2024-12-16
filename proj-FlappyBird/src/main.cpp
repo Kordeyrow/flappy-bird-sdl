@@ -74,13 +74,9 @@ bool init_game() {
     //);
 
     auto main_scene_id = Registry::create_new_scene();
-    // TODO: could be the first scene created
-    Registry::set_start_scene(main_scene_id);
+    Registry::set_start_scene(main_scene_id); // TODO: could be the first scene created
     auto pipe = Registry::create_new_gameobject();
-    pipe->get_component<Transform>()->position.x = 100;
-    pipe->get_component<Transform>()->position.y = 100;
-    pipe->get_component<Transform>()->size.x = 100;
-    pipe->get_component<Transform>()->size.y = 100;
+    pipe->get_component<Transform>()->set(100, 100, 100, 100);
     pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
     // ======================

@@ -62,6 +62,25 @@ public:
 
 	Transform(GameObjectID owner_id, Position pos, Size sz, float rot)
 		: position(pos), size(sz), rotation(rot), Component { owner_id } {}
+
+	void set(int x) {
+		position.x = x;
+	}
+	void set(int x, int y) {
+		position.x = x;
+		position.y = y;
+	}
+	void set(int x, int y, int w) {
+		position.x = x;
+		position.y = y;
+		size.x = w;
+	}
+	void set(int x, int y, int w, int h) {
+		position.x = x;
+		position.y = y;
+		size.x = w;
+		size.y = h;
+	}
 };
 
 class RenderSystemComponent : public Component {
