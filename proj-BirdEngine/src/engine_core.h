@@ -10,15 +10,15 @@ namespace WING {
         UserInterfaceInitData device_interface_init_data;
     };
 
-    class Wing {
+    class EngineCore {
     private:
         struct Impl;
         std::unique_ptr<Impl> pImpl;
 
     public:
-        Wing(const Wing&) = delete;
-        Wing& operator=(const Wing&) = delete;
-        static std::shared_ptr<Wing> instance();
+        EngineCore(const EngineCore&) = delete;
+        EngineCore& operator=(const EngineCore&) = delete;
+        static std::shared_ptr<EngineCore> instance();
 
         //bool init(EngineInitData init_data);
         bool init();
@@ -27,7 +27,7 @@ namespace WING {
         const std::shared_ptr<DeviceInterface>& device_interface();
 
     private:
-        Wing();
-        ~Wing();
+        EngineCore();
+        ~EngineCore();
     };
 }

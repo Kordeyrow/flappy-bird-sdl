@@ -5,7 +5,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
-#include <WING.h>
+#include <Wing.h>
 using namespace WING_API;
 
 enum TEXTURE_KEY {
@@ -26,13 +26,15 @@ private:
 		static_cast<TEXTURE_KEY>(PIPE)
 	};
 	// dependency
-	std::shared_ptr<AssetManager> asset_manager;
+	//std::shared_ptr<AssetManager> asset_manager;
 	// runtime
-	std::map<TEXTURE_KEY, AssetID> loaded_textures;
+	std::map<TEXTURE_KEY, AssetID> loaded_textures{};
 
 public:
-	TextureManager(std::shared_ptr<AssetManager> asset_manager)
-		: asset_manager{ asset_manager } {
+	//TextureManager(std::shared_ptr<AssetManager> asset_manager)
+	//	: asset_manager{ asset_manager } {
+	//}
+	TextureManager() {
 	}
 
 	void init() {
@@ -40,8 +42,12 @@ public:
 	}
 
 	AssetID get_texture_id(TEXTURE_KEY key)	{
-		if (loaded_textures.find(key) != loaded_textures.end())
-			return loaded_textures[key];
+		if ( ! loaded_textures.empty()) {
+			auto it = loaded_textures.find(key);
+			if (it != loaded_textures.end()) {
+				return it->second;
+			}
+		}
 		return load_texture(key);
 	}
 
@@ -53,7 +59,7 @@ private:
 	}
 
 	AssetID load_texture(TEXTURE_KEY key) {
-		auto id = asset_manager->load_texture(TEXTURE_PATH + path_from_texture_key[key]);
+		auto id = AssetManager::load_texture(TEXTURE_PATH + path_from_texture_key[key]);
 		loaded_textures[key] = id;
 		return id;
 	}

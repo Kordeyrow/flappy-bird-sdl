@@ -1,28 +1,28 @@
 #include "dll/pch.h"
 #include "dll/framework.h"
-#include <WING.h>
-#include "bird_engine.h"
+#include <wing.h>
+#include "engine_core.h"
 #include <device_interface/gui_manager.h>
 #include <iostream>
 #include <memory>
 #include <mutex>
 
 namespace WING_API {
-    Wing::Wing() {};
-    Wing::~Wing() {};
-    std::shared_ptr<Wing> Wing::instance() {
-        static bool initialized = false;
-        static std::shared_ptr<Wing> instance(
-            new Wing(),
-            [](Wing* reg) {
-                delete reg; // Custom deleter to allow destruction of the singleton
-            }
-        );
-        if (!initialized) {
-            instance->init();
-        }
-        return instance;
-    }
+    //Wing::Wing() {};
+    //Wing::~Wing() {};
+    //std::shared_ptr<EngineCore> EngineCore::instance() {
+    //    static bool initialized = false;
+    //    static std::shared_ptr<EngineCore> instance(
+    //        new EngineCore(),
+    //        [](EngineCore* reg) {
+    //            delete reg; // Custom deleter to allow destruction of the singleton
+    //        }
+    //    );
+    //    if (!initialized) {
+    //        instance->init();
+    //    }
+    //    return instance;
+    //}
 
     bool Wing::init() {
         return true;
@@ -39,7 +39,7 @@ namespace WING_API {
     bool running = false;
     bool closing = false;
     void Wing::run_game() {
-        WING::Wing::instance()->update();
+        WING::EngineCore::instance()->update();
         //if (running) return;
         //running = true;
         //run_game_t = std::thread{ run, "Hello" };
@@ -102,7 +102,7 @@ namespace WING {
         }
     };
 
-    struct Wing::Impl {
+    struct EngineCore::Impl {
         std::shared_ptr<DeviceInterface> device_interface = std::make_shared<DeviceInterface>();
         bool initialized = false;
         bool game_initialized = false;
@@ -170,14 +170,14 @@ namespace WING {
         }
     };
 
-    Wing::Wing() : pImpl(std::make_unique<Impl>()) {}
-    Wing::~Wing() {};
+    EngineCore::EngineCore() : pImpl(std::make_unique<Impl>()) {}
+    EngineCore::~EngineCore() {};
 
-    std::shared_ptr<Wing> Wing::instance() {
+    std::shared_ptr<EngineCore> EngineCore::instance() {
         static bool initialized = false;
-        static std::shared_ptr<Wing> instance(
-            new Wing(),
-            [](Wing* engine) {
+        static std::shared_ptr<EngineCore> instance(
+            new EngineCore(),
+            [](EngineCore* engine) {
                 delete engine; // Custom deleter to allow destruction of the singleton
             }
         );
@@ -187,16 +187,16 @@ namespace WING {
         return instance;
     }
 
-    const std::shared_ptr<DeviceInterface>& Wing::device_interface() { return  pImpl->device_interface; }
+    const std::shared_ptr<DeviceInterface>& EngineCore::device_interface() { return  pImpl->device_interface; }
 
-    bool Wing::init() {
+    bool EngineCore::init() {
         return pImpl->init();
     }
     //bool BirdEngine::init(EngineInitData init_data) {
     //    return pImpl->init(init_data);
     //}
 
-    ProgramState Wing::update() {
+    ProgramState EngineCore::update() {
         return pImpl->update();
     }
 }

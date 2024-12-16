@@ -9,17 +9,17 @@
 
 namespace WING_API {
     struct DECLSPEC Wing {
-        Wing(const Wing&) = delete;
-        Wing& operator=(const Wing&) = delete;
-        static std::shared_ptr<Wing> instance();
+        //Wing(const Wing&) = delete;
+        //Wing& operator=(const Wing&) = delete;
+        //static std::shared_ptr<Wing> instance();
 
-        bool init();
-        void lauch();
+        static bool init();
+        static void lauch();
         static void run_game();
         //static void close_game();
 
-    private:
-        Wing();
-        ~Wing();
+    //private:
+    //    Wing();
+    //    ~Wing();
     };
 }

@@ -5,7 +5,7 @@
 namespace WING_API {
 	class DECLSPEC AssetManager {
 	public:
-		AssetID load_texture(AssetPath path);
+		static AssetID load_texture(AssetPath path);
 	};
 }
 

@@ -8,11 +8,11 @@ namespace WING {
 	class Registry {
 	private:
 		std::vector<GameObject*> all_gameobjects_list;
-		std::map<GameObjectID, GameObject*> gameobject_from_id;
+		std::map<GameObjectID, GameObject*> id_gameobject_map;
 		std::map<GameObjectID, GameObject*> gameobject_onscene_list;
 
 		std::vector<Scene*> all_scenes_list;
-		std::map<SceneID, Scene*> scene_from_id;
+		std::map<SceneID, Scene*> id_scene_map;
 		SceneID starting_scene_id;
 		/*SceneID current_editing_scene_id;
 		std::vector<SceneID> build_scene_list;*/
@@ -21,8 +21,6 @@ namespace WING {
 		Registry(const Registry&) = delete;
 		Registry& operator=(const Registry&) = delete;
 		static std::shared_ptr<Registry> instance();
-
-		void test();
 
 		SceneID create_new_scene();
 		void set_starting_scene(SceneID id);

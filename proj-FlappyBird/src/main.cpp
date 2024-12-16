@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include <WING.h>
+#include <wing.h>
 //#include <game/game.h> 
 #include <res_manager/texture_manager.h>
 #ifdef __EMSCRIPTEN__
@@ -55,36 +55,28 @@ bool init_game() {
 #endif*/
 //gui_manager.set_dark_colorstyle();
 
-
-
-    /////////*auto device_interface = BirdEngine::instance()->device_interface();
-    ////////window = device_interface->window();
-    ////////renderer = device_interface->renderer();
-    ////////input_manager = device_interface->input_manager();
-    ////////asset_manager = device_interface->asset_manager();
-
     setup_window();
 
-    /*texture_manager = new TextureManager(asset_manager);
-    texture_manager->init();*/
+    texture_manager = new TextureManager();
+    texture_manager->init();
 
 
     // TEST
     // ======================
     //
-    /*device_interface->renderer()->add_drawwable (
-        Drawable { 
-            texture_manager->get_texture_id(TEXTURE_KEY::PIPE),
-            Transform { Position{100, 100}, Size{140, 140}, 0 } 
-        }
-    );*/
+    //Renderer::add_drawwable (
+    //    Drawable { 
+    //        texture_manager->get_texture_id(TEXTURE_KEY::PIPE),
+    //        Transform { Position{100, 100}, Size{140, 140}, 0 } 
+    //    }
+    //);
 
-    //BIRDENGINE_API::Window::set_rect({});
     auto main_scene_id = Registry::create_new_scene();
-    //auto pipe = Registry::instance()->create_new_gameobject();
-    ///*pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
-    //Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);*/
-    //Registry::instance()->set_starting_scene(main_scene_id);
+    // TODO: could be the first scene created
+    Registry::set_starting_scene(main_scene_id);
+    auto pipe = Registry::create_new_gameobject();
+    pipe->add_component<Sprite>(texture_manager->get_texture_id(TEXTURE_KEY::PIPE));
+    //Registry::instance()->add_gameobject_to_scene(pipe, main_scene_id);
     // ======================
     
 
