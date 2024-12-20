@@ -57,14 +57,6 @@ namespace WING_API {
 
 namespace WING {
 
-    class PhysicsSystemComponent {
-
-    };
-
-    class PhysicsSystem {
-
-    };
-
     class RenderSystem {
     private:
         std::shared_ptr<DeviceInterface> _device_interface;
@@ -89,10 +81,35 @@ namespace WING {
         }
     };
 
+    class PsysicsSystem {
+    private:
+        std::shared_ptr<DeviceInterface> _device_interface;
+    public:
+        PsysicsSystem(std::shared_ptr<DeviceInterface> device_interface_)
+            : _device_interface{ device_interface_ } {}
+
+        void update(std::vector<RenderSystemComponent*> comps) {
+
+            //_device_interface->renderer()->draw();
+
+            _device_interface->renderer()->draw_background();
+
+            std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
+            for (RenderSystemComponent* c : comps)
+            {
+                auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
+                _device_interface->renderer()->draw_drawable(d);
+            }
+
+            _device_interface->renderer()->apply_draw();
+        }
+    };
+
     std::shared_ptr<DeviceInterface> _device_interface = std::make_shared<DeviceInterface>();
     std::shared_ptr<WING::Registry> _registry = std::make_shared<WING::Registry>();
     bool initialized = false;
     bool game_initialized = false;
+    PsysicsSystem psysics_system;
     RenderSystem render_system{ _device_interface };
     Scene* current_scene = nullptr;
 

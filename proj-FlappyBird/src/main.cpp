@@ -1,4 +1,4 @@
-#include <SDL.h>
+//#include <SDL.h>
 #include <wing.h>
 //#include <game/game.h> 
 #include <res_manager/texture_manager.h>
@@ -48,7 +48,7 @@ bool init() {
     Registry::set_start_scene(main_scene_id);
     pipe = Registry::create_new_gameobject();
     pipe->get_component<Transform>()->set(100, 100, 100, 100);
-    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::PIPE));
+    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING));
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
 
 
@@ -61,8 +61,8 @@ void run_game() {
     //////////////program_state = BirdEngine::instance()->update();
 
     // Move
-    auto p = pipe->get_component<Transform>()->position;
-    pipe->get_component<Transform>()->set(p.x + 1, 100, 100, 100);
+    //auto p = pipe->get_component<Transform>()->position;
+    //pipe->get_component<Transform>()->set(p.x + 1, 100, 100, 100);
 
     Wing::run_game();
     // TEST

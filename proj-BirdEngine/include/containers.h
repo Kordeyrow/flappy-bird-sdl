@@ -10,14 +10,16 @@ public:
 	float x, y; 
 };
 struct Direction : public Vector2 { 
-public: 
+public:
+	Direction() = default;
 	Direction(float x = 0, float y = 0) : Vector2{ x, y } {}
 	Direction(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
 };
 struct Size : public Vector2 { 
 public: 
-	Size(float width = 0, float height = 0) : Vector2{ width, height } {}
-	Size(int width = 0, int height = 0) : Vector2{ (float)width, (float)height } {}
+	Size() = default;
+	Size(float width, float height) : Vector2{ width, height } {}
+	Size(int width, int height) : Vector2{ (float)width, (float)height } {}
 };
 struct Position : public Vector2 { 
 public: 
@@ -78,7 +80,7 @@ public:
 	Size size;
 	float rotation = 0;
 
-	Transform(GameObjectID owner_id, Position pos, Size sz, float rot)
+	Transform(GameObjectID owner_id, Position pos, Size sz, float rot = 0)
 		: position(pos), size(sz), rotation(rot), Component { owner_id } {}
 
 	void set(int x) {
@@ -116,6 +118,37 @@ struct less_than_compare_key_RenderSystemComponent {
 	}
 };
 
+		class PhysicsSystemComponent : public Component {
+		public:
+			PhysicsSystemComponent(GameObjectID owner_id)
+				: Component{ owner_id } {}
+			virtual Transform* transform() = 0;
+		};
+
+		class Collider : public Component {
+		private:
+			Transform* _transform;
+			Size _size;
+		public:
+			Collider(GameObjectID owner_id, Transform* transform)
+				: Component{ owner_id }, _transform{ transform } {}
+			const Size& size() { return _size; }
+			Transform* transform() {
+				return _transform;
+			}
+		};
+
+		class Rigidbody : public PhysicsSystemComponent {
+			Vector2 velocity;
+		public:
+			Collider* _collider;
+			Rigidbody(GameObjectID owner_id, Transform* transform)
+				: PhysicsSystemComponent{ owner_id }, _collider{ new Collider{owner_id, transform} } {}
+			Collider* collider() {
+				return _collider;
+			}
+		};
+
 class Sprite : public RenderSystemComponent {
 public:
 	Transform* _transform;
@@ -139,7 +172,15 @@ public:
 class GameObject { 
 private:
 	GameObjectID _id = next_id();
-	std::vector<Component*> _component_list = { new Transform {_id, Position{10, 10}, Size{10, 10}, 0} };
+	std::vector<Component*> _component_list = { 
+		new Transform {
+			_id,
+			Position{10, 10}, 
+			Size{10, 10}, 
+			0
+		}
+	};
+
 public:
 	const GameObjectID& id() { return _id; };
 	const std::vector<Component*>& component_list() { return _component_list; };
@@ -153,7 +194,7 @@ public:
 	T* add_component(Args&&... args) {
 		static_assert(std::is_base_of<Component, T>::value, "T must inherit Component");
 		
-		// Check if a component of type T already exists and is unique
+		// Check if a component of type T already exists and should be unique
 		for (Component* comp : _component_list) {
 			T* t = dynamic_cast<T*>(comp);
 			if (t && t->unique_on_gameobject()) {
