@@ -43,13 +43,17 @@ public:
 	}
 
 	AssetID get_texture_id(TEXTURE_KEY key)	{
-		if ( ! loaded_textures.empty()) {
-			auto it = loaded_textures.find(key);
-			if (it != loaded_textures.end()) {
-				return it->second;
-			}
-		}
-		return load_texture(key);
+		ensure_is_loaded(key);
+		return loaded_textures[key];
+	}
+
+	AssetID get_texture_rect(TEXTURE_KEY key) {
+		ensure_is_loaded(key);
+		return loaded_textures[key];
+	}
+
+	void ensure_is_loaded(TEXTURE_KEY key) {
+		load_texture(key);
 	}
 
 private:

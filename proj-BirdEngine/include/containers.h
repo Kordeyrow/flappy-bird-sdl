@@ -178,6 +178,8 @@ struct less_than_compare_key_RenderSystemComponent {
 			Transform* transform() { return _collider->transform(); }
 			Direction velocity() { return _velocity; }
 			void set_velocity(float x, float y) { _velocity.x = x; _velocity.y = y; }
+
+
 		};
 
 class Sprite : public RenderSystemComponent {

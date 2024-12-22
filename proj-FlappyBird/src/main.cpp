@@ -47,7 +47,7 @@ bool init() {
     auto main_scene_id = Registry::create_new_scene();
     Registry::set_start_scene(main_scene_id);
     pipe = Registry::create_new_gameobject();
-    pipe->get_component<Transform>()->set(100, 100, 100, 100);
+    pipe->get_component<Transform>()->set(100, 100, 100, 80);
     pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING));
     pipe->add_component<Rigidbody>(pipe->get_component<Transform>());
     Registry::add_gameobject_to_scene(pipe, main_scene_id);
@@ -69,8 +69,9 @@ void run_game() {
     // TEST
     // ======================
     //
-    if (InputManager::is_key_down(WING_K_SPACE)) {
+    if (InputManager::is_key_just_pressed(WING_K_SPACE)) {
         Renderer::set_background_color(Color::RED());
+        pipe->get_component<Rigidbody>()->set_velocity(0, -600);
     }
     else {
         Renderer::set_background_color(Color::BLUE_BIRD());

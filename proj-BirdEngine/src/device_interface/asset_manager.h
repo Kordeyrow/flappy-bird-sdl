@@ -77,6 +77,11 @@ namespace WING {
 		//SDL_Renderer* renderer;
 		// runtime
 
+		Rect get_texture_rect(AssetPath path) {
+			ensure_is_loaded(path);
+			return texture_from_id[id_from_assetpath[path]];
+		}
+
 		AssetID load_texture(AssetPath path) {
 			if (id_from_assetpath.find(path) != id_from_assetpath.end()) {
 				return id_from_assetpath[path];
@@ -109,6 +114,10 @@ namespace WING {
 			id_from_assetpath.emplace(path, id);
 			texture_from_id.emplace(id, texture);
 			return id;
+		}
+
+		void ensure_is_loaded(AssetPath path) {
+			load_texture(path);
 		}
 
 	private:
