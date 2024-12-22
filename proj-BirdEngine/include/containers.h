@@ -7,25 +7,55 @@
 
 struct Vector2 { 
 public: 
-	float x, y; 
+	float x, y;
+	Vector2() = default;
+	Vector2(int _x, int _y)
+		: x(_x), y(_y) {}
+	Vector2(float _x, float _y)
+		: x(_x), y(_y) {}
+	Vector2& operator+= (const Vector2& other) {
+		x += other.x;
+		y += other.y;
+		return *this;
+	}
+	Vector2& operator* (float val) {
+		x *= val;
+		y *= val;
+		return *this;
+	}
+	Vector2 operator+ (const Vector2& other) {
+		return { x + other.x, y + other.y};
+	}
 };
-struct Direction : public Vector2 { 
-public:
-	Direction() = default;
-	Direction(float x = 0, float y = 0) : Vector2{ x, y } {}
-	Direction(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
-};
-struct Size : public Vector2 { 
-public: 
-	Size() = default;
-	Size(float width, float height) : Vector2{ width, height } {}
-	Size(int width, int height) : Vector2{ (float)width, (float)height } {}
-};
-struct Position : public Vector2 { 
-public: 
-	Position(float x = 0, float y = 0) : Vector2{ x, y } {}
-	Position(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
-};
+//struct Direction : public Vector2 { 
+//public:
+//	Direction() = default;
+//	Direction(float x = 0, float y = 0) : Vector2{ x, y } {}
+//	Direction(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
+//
+//	std::istream& operator>>(std::istream& is, T& obj)
+//	{
+//		// read obj from stream
+//		if (/* T could not be constructed */)
+//			is.setstate(std::ios::failbit);
+//		return is;
+//	}
+//}
+using Direction = Vector2;
+using Size = Vector2;
+using Position = Vector2;
+
+//struct Size : public Vector2 { 
+//public: 
+//	Size() = default;
+//	Size(float width, float height) : Vector2{ width, height } {}
+//	Size(int width, int height) : Vector2{ (float)width, (float)height } {}
+//};
+//struct Position : public Vector2 { 
+//public: 
+//	Position(float x = 0, float y = 0) : Vector2{ x, y } {}
+//	Position(int x = 0, int y = 0) : Vector2{ (float)x, (float)y } {}
+//};
 struct Rect { 
 	Position position; 
 	Size size; 
@@ -123,6 +153,8 @@ struct less_than_compare_key_RenderSystemComponent {
 			PhysicsSystemComponent(GameObjectID owner_id)
 				: Component{ owner_id } {}
 			virtual Transform* transform() = 0;
+			virtual Vector2 velocity() = 0;
+			virtual void set_velocity(float x, float y) = 0;
 		};
 
 		class Collider : public Component {
@@ -133,20 +165,19 @@ struct less_than_compare_key_RenderSystemComponent {
 			Collider(GameObjectID owner_id, Transform* transform)
 				: Component{ owner_id }, _transform{ transform } {}
 			const Size& size() { return _size; }
-			Transform* transform() {
-				return _transform;
-			}
+			Transform* transform() { return _transform; }
 		};
 
 		class Rigidbody : public PhysicsSystemComponent {
-			Vector2 velocity;
+			Direction _velocity{};
 		public:
 			Collider* _collider;
 			Rigidbody(GameObjectID owner_id, Transform* transform)
 				: PhysicsSystemComponent{ owner_id }, _collider{ new Collider{owner_id, transform} } {}
-			Collider* collider() {
-				return _collider;
-			}
+			Collider* collider() { return _collider; }
+			Transform* transform() { return _collider->transform(); }
+			Direction velocity() { return _velocity; }
+			void set_velocity(float x, float y) { _velocity.x = x; _velocity.y = y; }
 		};
 
 class Sprite : public RenderSystemComponent {

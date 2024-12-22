@@ -64,44 +64,52 @@ namespace WING {
         RenderSystem(std::shared_ptr<DeviceInterface> device_interface_)
             : _device_interface{ device_interface_ } {}
 
-        void update(std::vector<RenderSystemComponent*> comps) {
+        void update(std::vector<RenderSystemComponent*> comps, float elapsed_time_seconds) {
 
             //_device_interface->renderer()->draw();
 
+            // background
             _device_interface->renderer()->draw_background();
 
+            // each Drawable
             std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
-            for (RenderSystemComponent* c : comps)
-            {
+            for (RenderSystemComponent* c : comps) {
                 auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
                 _device_interface->renderer()->draw_drawable(d);
             }
 
+            // apply
             _device_interface->renderer()->apply_draw();
         }
     };
 
     class PsysicsSystem {
     private:
+        const float WORLD_RATIO = 0.068;
+        const float GRAVITY_FORCE = 9.8 * WORLD_RATIO;
+        const float AIR_RESISTANCE = 1.02 * WORLD_RATIO;
         std::shared_ptr<DeviceInterface> _device_interface;
     public:
         PsysicsSystem(std::shared_ptr<DeviceInterface> device_interface_)
             : _device_interface{ device_interface_ } {}
 
-        void update(std::vector<RenderSystemComponent*> comps) {
-
-            //_device_interface->renderer()->draw();
-
-            _device_interface->renderer()->draw_background();
-
-            std::sort(comps.begin(), comps.end(), less_than_compare_key_RenderSystemComponent());
-            for (RenderSystemComponent* c : comps)
-            {
-                auto d = Drawable{ c->texture_id(), c->transform(), c->layer_index() };
-                _device_interface->renderer()->draw_drawable(d);
+        void update(std::vector<PhysicsSystemComponent*> comps, float elapsed_time_seconds) {
+            for (PhysicsSystemComponent* c : comps) {
+                // add gravity
+                auto a = { c->velocity().x, c->velocity().y };
+                c->set_velocity(c->velocity().x / AIR_RESISTANCE, c->velocity().y + GRAVITY_FORCE);
+                // apply velocity
+                auto pos = c->transform()->position;
+                auto vel = c->velocity();
+                 pos = c->transform()->position + c->velocity() * elapsed_time_seconds;
+                c->transform()->position += c->velocity() * elapsed_time_seconds;
             }
+        }
 
-            _device_interface->renderer()->apply_draw();
+        void apply_velocity(std::vector<PhysicsSystemComponent*> comps) {
+            for (PhysicsSystemComponent* c : comps) {
+                c->set_velocity(c->velocity().x / AIR_RESISTANCE, c->velocity().y + GRAVITY_FORCE);
+            }
         }
     };
 
@@ -109,7 +117,7 @@ namespace WING {
     std::shared_ptr<WING::Registry> _registry = std::make_shared<WING::Registry>();
     bool initialized = false;
     bool game_initialized = false;
-    PsysicsSystem psysics_system;
+    PsysicsSystem psysics_system{ _device_interface };
     RenderSystem render_system{ _device_interface };
     Scene* current_scene = nullptr;
 
@@ -140,18 +148,30 @@ namespace WING {
             return state;
         }
 
-        std::vector<RenderSystemComponent*> comps;
+        // physics
+        std::vector<PhysicsSystemComponent*> p_comps;
+        if (current_scene != nullptr) {
+            for (auto& go : current_scene->gameobject_list) {
+                auto* comp = go->get_component<PhysicsSystemComponent>();
+                if (comp) {
+                    p_comps.push_back(comp);
+                }
+            }
+        }
+        psysics_system.update(p_comps, elapsed_time_seconds);
 
+        // render
+        std::vector<RenderSystemComponent*> r_comps;
         if (current_scene != nullptr) {
             for (auto& go : current_scene->gameobject_list) {
                 auto* comp = go->get_component<RenderSystemComponent>();
                 if (comp) {
-                    comps.push_back(comp);
+                    r_comps.push_back(comp);
                 }
             }
         }
+        render_system.update(r_comps, elapsed_time_seconds);
 
-        render_system.update(comps);
         //device_interface->renderer()->draw();
 
         return ProgramState::RUNNING;
