@@ -47,7 +47,8 @@ bool init() {
     auto main_scene_id = Registry::create_new_scene();
     Registry::set_start_scene(main_scene_id);
     pipe = Registry::create_new_gameobject();
-    pipe->get_component<Transform>()->set(100, 100, 100, 80);
+    auto tex_data = texture_manager.get_texture_data(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING);
+    pipe->get_component<Transform>()->set(100, 100, tex_data.original_size().x, tex_data.original_size().y);
     pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING));
     pipe->add_component<Rigidbody>(pipe->get_component<Transform>());
     Registry::add_gameobject_to_scene(pipe, main_scene_id);

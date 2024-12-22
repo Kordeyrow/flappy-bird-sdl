@@ -13,6 +13,7 @@
 #include "irenderer.h"
 #include "io_manager.h"
 
+
 namespace WING {
 	constexpr AssetID INVAL_ID = -1;
 
@@ -25,6 +26,7 @@ namespace WING {
 		// runtime
 		std::map<AssetPath, AssetID> id_from_assetpath;
 		std::map<AssetID, SDL_Texture*> texture_from_id;
+		std::map<AssetID, TextureData> texture_data_from_id;
 
 	public:
 		AssetManager(std::shared_ptr<IOManager> _io_manager, std::shared_ptr<IRendererContainer> _renderer_container)
@@ -77,9 +79,9 @@ namespace WING {
 		//SDL_Renderer* renderer;
 		// runtime
 
-		Rect get_texture_rect(AssetPath path) {
+		TextureData get_texture_data(AssetPath path) {
 			ensure_is_loaded(path);
-			return texture_from_id[id_from_assetpath[path]];
+			return texture_data_from_id[id_from_assetpath[path]];
 		}
 
 		AssetID load_texture(AssetPath path) {
@@ -102,8 +104,6 @@ namespace WING {
 			SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 			//SDL_SetTextureAlphaMod(texture, 140);
 			SDL_SetRenderDrawBlendMode(renderer_container->renderer->sdl_renderer(), SDL_BLENDMODE_BLEND);
-			SDL_FreeSurface(buffer);
-			buffer = nullptr;
 
 			if (!texture) {
 				io_manager->print_error("sprite" + std::string(IMG_GetError()), FAILED_TO_CREATE);
@@ -113,6 +113,11 @@ namespace WING {
 			auto id = get_next_id();
 			id_from_assetpath.emplace(path, id);
 			texture_from_id.emplace(id, texture);
+			texture_data_from_id.insert({ id, TextureData{ Size{buffer->w,buffer->h} } });
+
+			SDL_FreeSurface(buffer);
+			buffer = nullptr;
+
 			return id;
 		}
 

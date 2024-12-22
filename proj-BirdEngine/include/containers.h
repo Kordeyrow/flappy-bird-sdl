@@ -92,6 +92,18 @@ using GameObjectID = uint32_t;
 using SceneID = uint32_t;
 
 
+class TextureData {
+private:
+	Size _original_size;
+public:
+	TextureData() = default;
+	TextureData(Size s) {
+		_original_size = s;
+	}
+	const Size& original_size() { return _original_size; }
+};
+
+
 class Component {
 protected:
 	GameObjectID _owner_id;
