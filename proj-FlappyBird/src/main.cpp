@@ -1,6 +1,4 @@
-//#include <SDL.h>
 #include <wing.h>
-//#include <game/game.h> 
 #include <res_manager/texture_manager.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
@@ -9,23 +7,27 @@
 using namespace WING_API;
 
 // runtime
-//Game game;
 ProgramState program_state = ProgramState::RUNNING;
 TextureManager texture_manager;
-GameObject* pipe;
+GameObject* bird;
+
+// window config
+std::string window_title = "Flappy Bird";
+Color background_color = Color::BLUE_BIRD();
+int window_width = 460;
+int window_height = 640;
+int screen_width = Window::display_rect().size.x;
+int screen_height = Window::display_rect().size.y;
+double offset_x = -window_width * 0.04;
+double offset_y = -offset_x * 0.6;
+int window_pos_x = screen_width/2 -window_width/2 +offset_x;
+int window_pos_y = screen_height/2 -window_height/2 +offset_y;
 
 void setup_window() {
-    int width = 460;
-    int height = 640;
-    double offset_x = -width * 0.04;
-    double offset_y = -offset_x * 0.6;
-    Rect display_size = Window::display_rect();
-    int pos_x = display_size.size.x / 2 - width / 2 + offset_x;
-    int pos_y = display_size.size.y / 2 - height / 2 + offset_y;
-    Rect r{ Position{pos_x, pos_y}, Size{width, height} };
-    Window::set_rect(r);
-    Window::set_title("Flappy Bird");
-    Renderer::set_background_color(Color::BLUE_BIRD());
+    Window::set_rect({ Position{window_pos_x, window_pos_y}, Size{window_width, window_height} });
+    Window::set_title(window_title);
+    // TODO: Window::set_background_color() ??
+    Renderer::set_background_color(background_color);
 }
 
 bool init() {
@@ -46,12 +48,18 @@ bool init() {
 
     auto main_scene_id = Registry::create_new_scene();
     Registry::set_start_scene(main_scene_id);
-    pipe = Registry::create_new_gameobject();
+    bird = Registry::create_new_gameobject();
     auto tex_data = texture_manager.get_texture_data(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING);
-    pipe->get_component<Transform>()->set(100, 100, tex_data.original_size().x, tex_data.original_size().y);
-    pipe->add_component<Sprite>(pipe->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING));
-    pipe->add_component<Rigidbody>(pipe->get_component<Transform>());
-    Registry::add_gameobject_to_scene(pipe, main_scene_id);
+    auto height_to_width_ratio = tex_data.original_size().y / tex_data.original_size().x;
+    float width = 50;
+    float height = width * height_to_width_ratio;
+    bird->get_component<Transform>()->rect() = Rect{ 
+        Position { window_width / 2 - width / 2, window_width / 2 - height/2}, 
+        Size { width, height } 
+    };
+    bird->add_component<Sprite>(bird->get_component<Transform>(), texture_manager.get_texture_id(TEXTURE_KEY::TEXTURE_FLAPPY_BIRD_UP_WING));
+    bird->add_component<Rigidbody>(bird->get_component<Transform>());
+    Registry::add_gameobject_to_scene(bird, main_scene_id);
 
 
     //ImFont* score_font = gui_manager.add_font("assets/fonts/flappy-bird-score-font.ttf", 30.0f);
@@ -67,17 +75,18 @@ void run_game() {
     //pipe->get_component<Transform>()->set(p.x + 1, 100, 100, 100);
 
     Wing::run_game();
-    // TEST
-    // ======================
-    //
-    if (InputManager::is_key_just_pressed(WING_K_SPACE)) {
+
+    // jump
+    if (InputManager::is_key_just_pressed(WING_K_SPACE)
+        || (Window::CheckFOVState(bird->get_component<Transform>()->rect()) == FOVState::PARTIAL
+            && Window::CheckClosestFOVBound(bird->get_component<Transform>()->rect()) == FOVBounds::BOTTOM)) {
         Renderer::set_background_color(Color::RED());
-        pipe->get_component<Rigidbody>()->set_velocity(0, -600);
+        bird->get_component<Rigidbody>()->set_velocity(0, -800);
     }
     else {
         Renderer::set_background_color(Color::BLUE_BIRD());
     }
-    // ======================
+
 
     //quit = game.run_until<Closed>();
 #ifdef __EMSCRIPTEN__

@@ -113,7 +113,7 @@ namespace WING {
 			auto id = get_next_id();
 			id_from_assetpath.emplace(path, id);
 			texture_from_id.emplace(id, texture);
-			texture_data_from_id.insert({ id, TextureData{ Size{buffer->w,buffer->h} } });
+			texture_data_from_id.emplace(id, TextureData{ Vector2{buffer->w,buffer->h }});
 
 			SDL_FreeSurface(buffer);
 			buffer = nullptr;

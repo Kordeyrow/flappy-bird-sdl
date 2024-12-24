@@ -17,4 +17,12 @@ namespace WING_API {
 	const Rect& Window::display_rect() {
 		return WING::EngineCore::instance()->device_interface()->window()->display_rect();
 	}
+
+	FOVState Window::CheckFOVState(const Rect& rect) {
+		return WING::EngineCore::instance()->device_interface()->window()->CheckFOVState(rect);
+	}
+
+	FOVBounds Window::CheckClosestFOVBound(const Rect& rect) {
+		return WING::EngineCore::instance()->device_interface()->window()->CheckClosestFOVBound(rect);
+	}
 }

@@ -18,12 +18,17 @@ public:
 		y += other.y;
 		return *this;
 	}
-	Vector2& operator* (float val) {
+	Vector2& operator*= (float val) {
 		x *= val;
 		y *= val;
 		return *this;
 	}
-	Vector2 operator+ (const Vector2& other) {
+
+	Vector2 operator* (float mult) const {
+		return { x * mult, y * mult };
+	}
+
+	Vector2 operator+ (const Vector2& other) const {
 		return { x + other.x, y + other.y};
 	}
 };
@@ -58,7 +63,8 @@ using Position = Vector2;
 //};
 struct Rect { 
 	Position position; 
-	Size size; 
+	Size size;
+	float rotation = 0;
 };
 
 struct Color {
@@ -117,32 +123,12 @@ public:
 };
 
 class Transform : public Component {
+private:
+	Rect _rect;
 public:
-	Position position;
-	Size size;
-	float rotation = 0;
-
-	Transform(GameObjectID owner_id, Position pos, Size sz, float rot = 0)
-		: position(pos), size(sz), rotation(rot), Component { owner_id } {}
-
-	void set(int x) {
-		position.x = x;
-	}
-	void set(int x, int y) {
-		position.x = x;
-		position.y = y;
-	}
-	void set(int x, int y, int w) {
-		position.x = x;
-		position.y = y;
-		size.x = w;
-	}
-	void set(int x, int y, int w, int h) {
-		position.x = x;
-		position.y = y;
-		size.x = w;
-		size.y = h;
-	}
+	Transform(GameObjectID owner_id, Rect rect)
+		: _rect(rect), Component { owner_id } {}
+	Rect& rect() { return _rect; }
 };
 
 class RenderSystemComponent : public Component {
@@ -220,9 +206,11 @@ private:
 	std::vector<Component*> _component_list = { 
 		new Transform {
 			_id,
-			Position{10, 10}, 
-			Size{10, 10}, 
-			0
+			Rect { 
+				Position{10, 10},
+				Size{10, 10},
+				0,
+			}
 		}
 	};
 
@@ -279,3 +267,16 @@ public:
 
 	}
 };
+
+typedef enum {
+	LEFT,
+	RIGHT,
+	TOP,
+	BOTTOM,
+} FOVBounds;
+
+typedef enum {
+	INSIDE,
+	PARTIAL,
+	OUTSIDE,
+} FOVState;

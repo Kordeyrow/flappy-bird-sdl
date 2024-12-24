@@ -8,5 +8,7 @@ namespace WING_API {
 		static void set_title(std::string title);
 		static const Rect& rect();
 		static const Rect& display_rect();
+		static FOVState CheckFOVState(const Rect& rect);
+		static FOVBounds CheckClosestFOVBound(const Rect& rect);
 	};
 }

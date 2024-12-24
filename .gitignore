@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.userosscache
+*.sln
 *.sln.docstates
 *.vcxproj
 *.vcxproj.filters

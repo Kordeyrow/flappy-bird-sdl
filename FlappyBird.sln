@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlappyBird", "proj-FlappyBird\FlappyBird.vcxproj", "{92D272B5-7E8A-B402-E791-8D5ED3684FF3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DCED76F7-C8A5-B844-31AD-91A01D845335} = {DCED76F7-C8A5-B844-31AD-91A01D845335}

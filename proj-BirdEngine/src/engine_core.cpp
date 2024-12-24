@@ -99,10 +99,7 @@ namespace WING {
                 auto a = { c->velocity().x, c->velocity().y };
                 c->set_velocity(c->velocity().x / AIR_RESISTANCE, c->velocity().y + GRAVITY_FORCE);
                 // apply velocity
-                auto pos = c->transform()->position;
-                auto vel = c->velocity();
-                 pos = c->transform()->position + c->velocity() * elapsed_time_seconds;
-                c->transform()->position += c->velocity() * elapsed_time_seconds;
+                c->transform()->rect().position += c->velocity() * elapsed_time_seconds;
             }
         }
 
